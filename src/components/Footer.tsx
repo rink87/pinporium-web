@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
         }}
         aria-hidden
       />
-      <div className="max-w-7xl w-full mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
+      <div className="max-w-7xl w-full mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 relative z-10">
         <div>
           <Link href="/" className="inline-block w-full max-w-lg">
             <Image
@@ -49,6 +49,20 @@ const Footer: React.FC = () => {
           </h4>
           <ul className="text-cream/75 space-y-2 font-body">
             {footerDetails.quickLinks.map((link) => (
+              <li key={link.text}>
+                <Link href={link.url} className="hover:text-gold transition-colors">
+                  {link.text}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4 className="text-sm uppercase tracking-deco-wide text-gold mb-4 font-body">
+            Legal
+          </h4>
+          <ul className="text-cream/75 space-y-2 font-body">
+            {footerDetails.legalLinks.map((link) => (
               <li key={link.text}>
                 <Link href={link.url} className="hover:text-gold transition-colors">
                   {link.text}
@@ -118,16 +132,13 @@ const Footer: React.FC = () => {
           All rights reserved.
         </p>
         <p className="mt-3 text-cream/35 text-xs max-w-xl mx-auto">
-          Site built on the{" "}
-          <a
-            href="https://vercel.com/templates/next.js/finwise-saas-landing-page"
-            className="underline hover:text-cream/60"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Finwise
-          </a>{" "}
-          template; customized for Pinporium.
+          <Link href="/privacy" className="hover:text-cream/60 underline">
+            Privacy
+          </Link>
+          {" · "}
+          <Link href="/terms" className="hover:text-cream/60 underline">
+            Terms
+          </Link>
         </p>
       </div>
     </footer>

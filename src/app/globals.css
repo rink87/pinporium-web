@@ -81,6 +81,14 @@ h6 {
   @apply mb-10;
 }
 
+.legal-prose a {
+  @apply text-primary underline underline-offset-2 hover:text-primary-accent;
+}
+
+.legal-prose strong {
+  @apply text-navy font-semibold;
+}
+
 .iphone-frame {
   position: relative;
   border-radius: 44px;

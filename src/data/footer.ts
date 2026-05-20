@@ -3,6 +3,7 @@ import { IMenuItem, ISocials } from "@/types";
 export const footerDetails: {
     subheading: string;
     quickLinks: IMenuItem[];
+    legalLinks: IMenuItem[];
     email: string;
     telephone: string;
     socials: ISocials;
@@ -10,9 +11,13 @@ export const footerDetails: {
     subheading:
         'The collector-first home for enamel pins — vault, discover, badges, trades on the way, and a catalog we grow together.',
     quickLinks: [
-        { text: "Features", url: "#features" },
-        { text: "Roadmap", url: "#roadmap" },
-        { text: "FAQ", url: "#faq" },
+        { text: "Features", url: "/#features" },
+        { text: "Roadmap", url: "/#roadmap" },
+        { text: "FAQ", url: "/#faq" },
+    ],
+    legalLinks: [
+        { text: "Privacy Policy", url: "/privacy" },
+        { text: "Terms of Service", url: "/terms" },
     ],
     email: "",
     telephone: "",
