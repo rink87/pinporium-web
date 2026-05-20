@@ -1,0 +1,22 @@
+export const siteDetails = {
+    siteName: 'Pinporium',
+    siteUrl: 'https://pinporium.app',
+    /** Set when you have a public inbox; FAQ and footer hide the link if empty. */
+    supportEmail: '',
+    metadata: {
+        title: 'Pinporium — The pin collection app you’ll actually use',
+        description:
+            'Curate your vault, hunt ISOs and grails, browse Discover, compare with friends, flex badges, share wins, and grow the catalog — built for collectors who treat enamel pins like tiny trophies.',
+    },
+    language: 'en-us',
+    locale: 'en-US',
+    /** Horizontal enamel wordmark (transparent PNG) */
+    siteLogo: `${process.env.BASE_PATH || ''}/images/logo-wordmark.png`,
+    logoWidth: 697,
+    /** Tight-cropped wordmark (reduced vertical padding) */
+    logoHeight: 140,
+    googleAnalyticsId: '',
+    /** Optional: Ko-fi, Buy Me a Coffee, Patreon, etc. — set NEXT_PUBLIC_SUPPORT_TIP_URL */
+    supportTipUrl: process.env.NEXT_PUBLIC_SUPPORT_TIP_URL ?? '',
+    supportTipLabel: 'Buy me a coffee',
+};
