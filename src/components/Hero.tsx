@@ -36,7 +36,7 @@ const Hero: React.FC = () => {
           <PlayStoreButton dark />
         </div>
 
-        <div className="mt-14 md:mt-20 mx-auto w-full max-w-[280px] sm:max-w-[300px]">
+        <div className="mt-14 md:mt-20 mx-auto w-full max-w-[min(92vw,380px)] sm:max-w-[300px]">
           <DeviceFrame
             src={heroDetails.centerImageSrc}
             width={w}

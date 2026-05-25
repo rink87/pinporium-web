@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Image from "next/image";
 
 interface DeviceFrameProps {
@@ -21,38 +22,54 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
   className = "",
   cropTopPercent,
 }) => {
-  const frame = (
-    <div className="iphone-frame">
-      <div className="iphone-screen">
-        <Image
-          src={src}
-          width={width}
-          height={height}
-          quality={100}
-          sizes={sizes}
-          priority={priority}
-          alt={alt}
-          className="block h-auto w-full"
-        />
-      </div>
-    </div>
+  const screenshot = (
+    <Image
+      src={src}
+      width={width}
+      height={height}
+      quality={100}
+      sizes={sizes}
+      priority={priority}
+      alt={alt}
+      className="block h-auto w-full"
+    />
   );
 
-  if (cropTopPercent) {
+  const withCrop = (content: ReactNode) => {
+    if (!cropTopPercent) {
+      return content;
+    }
+
     const clampedCrop = Math.min(Math.max(cropTopPercent, 10), 100);
 
     return (
       <div
-        className={`overflow-hidden ${className}`}
+        className="overflow-hidden"
         style={{ aspectRatio: `${width} / ${(height * clampedCrop) / 100}` }}
       >
-        {frame}
+        {content}
       </div>
     );
-  }
+  };
+
+  const framedDevice = (
+    <div className="iphone-frame">
+      <div className="iphone-screen">{screenshot}</div>
+    </div>
+  );
+
+  const bareDevice = (
+    <div className="device-shot-mobile overflow-hidden rounded-2xl shadow-[0_18px_44px_-22px_rgba(26,26,46,0.45)] ring-1 ring-navy/8">
+      {screenshot}
+    </div>
+  );
 
   return (
-    <div className={className}>{frame}</div>
+    <div className={className}>
+      {/* Phone + tablet: screenshot only (avoids thick CSS bezel on narrow viewports) */}
+      <div className="lg:hidden">{withCrop(bareDevice)}</div>
+      <div className="hidden lg:block">{withCrop(framedDevice)}</div>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import Hero from "@/components/Hero";
-import Testimonials from "@/components/Testimonials";
+// import Testimonials from "@/components/Testimonials"; // TODO: replace with real collector/shop testimonials
 import Pricing from "@/components/Pricing/Pricing";
 import FAQ from "@/components/FAQ";
 import BeliefsStrip from "@/components/BeliefsStrip";
@@ -25,13 +25,14 @@ const HomePage: React.FC = () => {
           <Pricing />
         </Section>
 
-        <Section
+        {/* TODO: add real testimonials from collectors and shops once we have quotes */}
+        {/* <Section
           id="testimonials"
           title="From the community"
           description="Early voices — swap in real quotes from collectors and shops as the beta grows."
         >
           <Testimonials />
-        </Section>
+        </Section> */}
 
         <FAQ />
 
