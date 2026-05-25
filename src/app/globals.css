@@ -89,11 +89,11 @@ h6 {
   @apply text-navy font-semibold;
 }
 
-/* Desktop-only decorative bezel; screenshots already include iOS status bar */
+/* Desktop device mockup */
 .iphone-frame {
   position: relative;
-  border-radius: 36px;
-  padding: 5px;
+  border-radius: 44px;
+  padding: 9px;
   background:
     linear-gradient(145deg, #31333a 0%, #050507 42%, #1a1b20 100%);
   box-shadow:
@@ -102,10 +102,81 @@ h6 {
     inset 0 0 0 1px rgba(255, 255, 255, 0.16);
 }
 
+.iphone-frame::before,
+.iphone-frame::after {
+  content: "";
+  position: absolute;
+  background: #111217;
+  border-radius: 999px;
+}
+
+.iphone-frame::before {
+  top: 86px;
+  left: -3px;
+  width: 3px;
+  height: 48px;
+}
+
+.iphone-frame::after {
+  top: 160px;
+  right: -3px;
+  width: 3px;
+  height: 74px;
+}
+
 .iphone-screen {
   position: relative;
   overflow: hidden;
-  border-radius: 30px;
+  border-radius: 35px;
   background: #fff9f5;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.iphone-screen::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 13px;
+  left: 50%;
+  width: 86px;
+  height: 26px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #050507;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Mobile device mockup — thinner bezel, no side buttons, smaller notch */
+.iphone-frame-mobile {
+  position: relative;
+  border-radius: 28px;
+  padding: 3px;
+  background:
+    linear-gradient(145deg, #31333a 0%, #050507 42%, #1a1b20 100%);
+  box-shadow:
+    0 16px 40px -18px rgba(26, 26, 46, 0.45),
+    0 6px 14px -10px rgba(26, 26, 46, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.iphone-screen-mobile {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #fff9f5;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.iphone-screen-mobile::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 8px;
+  left: 50%;
+  width: 52px;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #050507;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.12);
 }

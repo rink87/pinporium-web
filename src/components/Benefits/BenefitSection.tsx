@@ -94,7 +94,7 @@ const BenefitSection: React.FC<Props> = ({ benefit, imageAtRight }: Props) => {
                             width={472}
                             height={1024}
                             sizes="(max-width: 1024px) 72vw, 320px"
-                            className="lg:ml-0 w-full max-w-[min(92vw,380px)] sm:max-w-[300px] lg:max-w-[320px]"
+                            className="lg:ml-0 max-w-[260px] sm:max-w-[300px] lg:max-w-[320px]"
                         />
                     </div>
                 </div>
