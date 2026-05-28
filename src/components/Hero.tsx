@@ -1,7 +1,9 @@
 import React from "react";
+import clsx from "clsx";
 
 import BetaApplyButton from "./BetaApplyButton";
 import DeviceFrame from "./DeviceFrame";
+import { DEVICE_MOCKUP_IMAGE_SIZES, DEVICE_MOCKUP_WIDTH_CLASS } from "@/lib/deviceFrame";
 
 import { heroDetails } from "@/data/hero";
 
@@ -37,12 +39,12 @@ const Hero: React.FC = () => {
           App Store &amp; Google Play — coming soon
         </p>
 
-        <div className="mt-14 md:mt-20 mx-auto w-full max-w-[280px] sm:max-w-[300px]">
+        <div className={clsx("mt-14 md:mt-20 mx-auto", DEVICE_MOCKUP_WIDTH_CLASS)}>
           <DeviceFrame
             src={heroDetails.centerImageSrc}
             width={w}
             height={h}
-            sizes="(max-width: 640px) 72vw, 300px"
+            sizes={DEVICE_MOCKUP_IMAGE_SIZES}
             priority={true}
             cropTopPercent={60}
             alt="Pinporium: My Collection home screen with pins, value, and collection stats"

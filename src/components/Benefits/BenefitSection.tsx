@@ -6,6 +6,7 @@ import BenefitBullet from "./BenefitBullet";
 import DeviceFrame from "../DeviceFrame";
 import DeviceVideoFrame from "../DeviceVideoFrame";
 import SectionTitle from "../SectionTitle";
+import { DEVICE_MOCKUP_IMAGE_SIZES, DEVICE_MOCKUP_WIDTH_CLASS } from "@/lib/deviceFrame";
 import { IBenefit } from "@/types";
 
 interface Props {
@@ -87,13 +88,18 @@ const BenefitSection: React.FC<Props> = ({ benefit, imageAtRight }: Props) => {
                     </div>
                 </div>
 
-                <div className={clsx("mt-5 lg:mt-0", { "lg:order-2": imageAtRight })}>
-                    <div className={clsx("w-fit flex", { "justify-start": imageAtRight, "justify-end": !imageAtRight })}>
+                <div className={clsx("mt-5 w-full lg:mt-0", { "lg:order-2": imageAtRight })}>
+                    <div
+                        className={clsx(
+                            "mx-auto flex w-full justify-center lg:mx-0 lg:w-fit",
+                            { "lg:justify-start": imageAtRight, "lg:justify-end": !imageAtRight },
+                        )}
+                    >
                         {videoSrc ? (
                             <DeviceVideoFrame
                                 src={videoSrc}
                                 poster={videoPosterSrc}
-                                className="lg:ml-0 max-w-[260px] sm:max-w-[300px] lg:max-w-[320px]"
+                                className={clsx("lg:ml-0", DEVICE_MOCKUP_WIDTH_CLASS)}
                             />
                         ) : (
                             <DeviceFrame
@@ -101,8 +107,8 @@ const BenefitSection: React.FC<Props> = ({ benefit, imageAtRight }: Props) => {
                                 alt={`Pinporium — ${title}`}
                                 width={472}
                                 height={1024}
-                                sizes="(max-width: 1024px) 72vw, 320px"
-                                className="lg:ml-0 max-w-[260px] sm:max-w-[300px] lg:max-w-[320px]"
+                                sizes={DEVICE_MOCKUP_IMAGE_SIZES}
+                                className={clsx("lg:ml-0", DEVICE_MOCKUP_WIDTH_CLASS)}
                             />
                         )}
                     </div>

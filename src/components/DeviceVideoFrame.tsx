@@ -1,5 +1,7 @@
 "use client";
 
+import clsx from "clsx";
+
 interface DeviceVideoFrameProps {
   src: string;
   poster?: string;
@@ -12,7 +14,7 @@ const DeviceVideoFrame: React.FC<DeviceVideoFrameProps> = ({
   className = "",
 }) => {
   return (
-    <div className={className}>
+    <div className={clsx("mx-auto", className)}>
       <div className="lg:hidden overflow-hidden rounded-2xl shadow-[0_18px_44px_-22px_rgba(26,26,46,0.45)] ring-1 ring-navy/8 bg-navy">
         <video
           src={src}

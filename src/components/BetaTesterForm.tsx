@@ -50,9 +50,10 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 
 interface BetaTesterFormProps {
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
+const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const turnstileRef = useRef<TurnstileInstance>(null);
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -140,6 +141,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
       }
 
       setStatus("success");
+      onSuccess?.();
       form.reset();
       setEmailError("");
     } catch {
@@ -152,7 +154,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
 
   if (status === "success") {
     return (
-      <div className="text-center py-4 sm:py-6" role="status">
+      <div className="text-center py-2 sm:py-4" role="status">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-secondary/10 text-secondary">
           <FiCheckCircle className="h-8 w-8" strokeWidth={1.75} />
         </div>

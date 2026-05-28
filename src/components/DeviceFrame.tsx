@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import clsx from "clsx";
 import Image from "next/image";
 
 interface DeviceFrameProps {
@@ -34,8 +35,8 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
   };
 
   const mobileFrame = (
-    <div className="iphone-frame-mobile">
-      <div className="iphone-screen-mobile">
+    <div className="iphone-frame-mobile w-full">
+      <div className="iphone-screen-mobile w-full">
         <Image {...imageProps} />
       </div>
     </div>
@@ -73,7 +74,7 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
     </>
   );
 
-  return <div className={className}>{frames}</div>;
+  return <div className={clsx("mx-auto", className)}>{frames}</div>;
 };
 
 export default DeviceFrame;

@@ -1,6 +1,7 @@
 "use client";
 
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import clsx from "clsx";
 import { FiX } from "react-icons/fi";
 import { createContext, useCallback, useContext, useState } from "react";
 
@@ -22,13 +23,18 @@ export function useBetaApply(): BetaApplyContextValue {
 
 export function BetaApplyProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [formKey, setFormKey] = useState(0);
 
   const openBetaApply = useCallback(() => {
+    setSuccess(false);
+    setFormKey((k) => k + 1);
     setOpen(true);
   }, []);
 
   const handleClose = () => {
     setOpen(false);
+    setSuccess(false);
   };
 
   return (
@@ -42,24 +48,51 @@ export function BetaApplyProvider({ children }: { children: React.ReactNode }) {
               className="shrink-0 h-1 w-full bg-gradient-to-r from-secondary via-gold to-primary"
               aria-hidden
             />
-            <div className="shrink-0 relative px-6 pt-6 pb-4 sm:px-7 border-b border-gold-deco/15 bg-cream/40">
+            <div
+              className={clsx(
+                "shrink-0 relative",
+                success
+                  ? "px-4 pt-4 sm:px-5 sm:pt-5"
+                  : "px-6 pt-6 pb-4 sm:px-7 border-b border-gold-deco/15 bg-cream/40",
+              )}
+            >
               <button
                 type="button"
                 onClick={handleClose}
-                className="absolute right-4 top-4 sm:right-5 sm:top-5 flex h-9 w-9 items-center justify-center rounded-full text-navy/70 hover:text-navy hover:bg-navy/5 transition-colors"
+                className={clsx(
+                  "flex h-9 w-9 items-center justify-center rounded-full text-navy/70 hover:text-navy hover:bg-navy/5 transition-colors",
+                  success
+                    ? "ml-auto"
+                    : "absolute right-4 top-4 sm:right-5 sm:top-5",
+                )}
                 aria-label="Close"
               >
                 <FiX className="h-5 w-5" />
               </button>
-              <DialogTitle className="font-display text-2xl text-navy pr-10">
-                Apply for beta
-              </DialogTitle>
-              <p className="mt-1.5 text-[15px] text-foreground-accent font-body leading-relaxed max-w-sm">
-                A few details and we&apos;ll email you a TestFlight invite when a spot opens.
-              </p>
+              {success ? (
+                <DialogTitle className="sr-only">You&apos;re on the list</DialogTitle>
+              ) : (
+                <>
+                  <DialogTitle className="font-display text-2xl text-navy pr-10">
+                    Apply for beta
+                  </DialogTitle>
+                  <p className="mt-1.5 text-[15px] text-foreground-accent font-body leading-relaxed max-w-sm">
+                    A few details and we&apos;ll email you a TestFlight invite when a spot opens.
+                  </p>
+                </>
+              )}
             </div>
-            <div className="flex-1 overflow-y-auto overscroll-contain px-6 py-5 sm:px-8 sm:py-6 bg-cream/30">
-              <BetaTesterForm onClose={handleClose} />
+            <div
+              className={clsx(
+                "flex-1 overflow-y-auto overscroll-contain bg-cream/30",
+                success ? "px-6 py-4 sm:px-8 sm:py-5" : "px-6 py-5 sm:px-8 sm:py-6",
+              )}
+            >
+              <BetaTesterForm
+                key={formKey}
+                onClose={handleClose}
+                onSuccess={() => setSuccess(true)}
+              />
             </div>
           </DialogPanel>
         </div>
