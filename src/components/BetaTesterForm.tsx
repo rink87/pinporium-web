@@ -2,6 +2,7 @@
 
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import clsx from "clsx";
+import { FiCheckCircle, FiSmartphone } from "react-icons/fi";
 import { FormEvent, useRef, useState } from "react";
 
 import {
@@ -13,6 +14,39 @@ import { siteDetails } from "@/data/siteDetails";
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
 const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+
+const fieldClass =
+  "w-full rounded-lg border border-navy/10 bg-white px-3.5 py-2.5 text-[15px] text-navy font-body shadow-sm placeholder:text-foreground-accent/50 focus:outline-none focus:border-secondary/50 focus:ring-2 focus:ring-secondary/15 disabled:opacity-60 transition-shadow";
+
+const labelClass = "block text-sm font-medium text-navy font-body mb-2";
+
+function FieldLabel({
+  children,
+  required,
+  optional,
+}: {
+  children: React.ReactNode;
+  required?: boolean;
+  optional?: boolean;
+}) {
+  return (
+    <span className={labelClass}>
+      {children}
+      {required ? <span className="text-primary ml-0.5">*</span> : null}
+      {optional ? (
+        <span className="text-foreground-accent font-normal ml-1">(optional)</span>
+      ) : null}
+    </span>
+  );
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-xs font-body font-semibold uppercase tracking-wider text-foreground-accent/90 mb-3">
+      {children}
+    </p>
+  );
+}
 
 interface BetaTesterFormProps {
   onClose: () => void;
@@ -45,7 +79,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
     }
 
     if (data.get("iosConfirmed") !== "on") {
-      setErrorMessage("Please confirm you can test on an iPhone. Android is coming soon.");
+      setErrorMessage("Please confirm you can test on an iPhone.");
       return false;
     }
 
@@ -66,7 +100,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
     }
 
     if (turnstileSiteKey && !turnstileToken) {
-      setErrorMessage("Please complete the security check below.");
+      setErrorMessage("Complete the security check to continue.");
       return;
     }
 
@@ -118,44 +152,54 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
 
   if (status === "success") {
     return (
-      <div role="status">
-        <p className="font-display text-xl text-navy mb-2">You&apos;re on the list</p>
-        <p className="text-foreground-accent font-body leading-relaxed">
-          Thanks for applying. We&apos;ll send a TestFlight invite to the email you provided when a
-          spot opens. Use the same email you use for the App Store on your iPhone. Questions?{" "}
+      <div className="text-center py-4 sm:py-6" role="status">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-secondary/10 text-secondary">
+          <FiCheckCircle className="h-8 w-8" strokeWidth={1.75} />
+        </div>
+        <p className="font-display text-2xl text-navy mb-2">You&apos;re on the list</p>
+        <p className="text-[15px] text-foreground-accent font-body leading-relaxed max-w-xs mx-auto">
+          We&apos;ll email your TestFlight invite when a spot opens. Use the same address as your
+          iPhone App Store account.
+        </p>
+        <p className="mt-3 text-sm text-foreground-accent font-body">
+          Questions?{" "}
           <a
             href={`mailto:${siteDetails.supportEmail}`}
-            className="text-primary underline underline-offset-2 hover:text-primary-accent"
+            className="text-secondary font-medium hover:underline underline-offset-2"
           >
             {siteDetails.supportEmail}
           </a>
-          .
         </p>
         <button
           type="button"
           onClick={onClose}
-          className="mt-6 w-full sm:w-auto min-w-[180px] px-8 h-12 rounded-full text-sm uppercase tracking-deco font-body bg-primary text-cream hover:bg-primary-accent"
+          className="mt-8 w-full h-12 rounded-full text-sm font-semibold font-body bg-navy text-cream hover:bg-deco-dark transition-colors"
         >
-          Close
+          Done
         </button>
       </div>
     );
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="text-left space-y-4" noValidate>
-      <div className="rounded-xl border border-gold-deco/25 bg-cream-warm/80 px-4 py-3">
-        <p className="text-sm text-navy font-body leading-relaxed">
-          <strong className="font-semibold">Beta is iOS only right now</strong> (TestFlight).
-          Android is coming soon.
-        </p>
+    <form ref={formRef} onSubmit={handleSubmit} className="text-left" noValidate>
+      <div className="flex gap-3 rounded-lg border border-secondary/20 bg-secondary/[0.06] px-4 py-3.5 mb-6">
+        <div className="shrink-0 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm text-secondary">
+          <FiSmartphone className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 pt-0.5">
+          <p className="text-sm font-semibold text-navy font-body">iOS beta (TestFlight)</p>
+          <p className="text-sm text-foreground-accent font-body leading-snug mt-0.5">
+            Android is coming soon. You&apos;ll need an iPhone to test for now.
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="space-y-4 mb-6">
+        <SectionHeading>About you</SectionHeading>
+
         <label className="block">
-          <span className="text-xs uppercase tracking-deco-wide text-foreground-accent font-body mb-1.5 block">
-            Name <span className="text-primary">*</span>
-          </span>
+          <FieldLabel required>Name</FieldLabel>
           <input
             type="text"
             name="name"
@@ -164,14 +208,13 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
             maxLength={120}
             autoComplete="name"
             disabled={status === "submitting"}
-            className="w-full rounded-xl border border-gold-deco/25 bg-white px-4 py-3 text-navy font-body placeholder:text-foreground-accent/60 focus:outline-none focus:ring-2 focus:ring-gold/50 disabled:opacity-60"
-            placeholder="Your name"
+            className={fieldClass}
+            placeholder="Chris Collector"
           />
         </label>
+
         <label className="block">
-          <span className="text-xs uppercase tracking-deco-wide text-foreground-accent font-body mb-1.5 block">
-            Email <span className="text-primary">*</span>
-          </span>
+          <FieldLabel required>Email</FieldLabel>
           <input
             type="email"
             name="email"
@@ -181,77 +224,82 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
             disabled={status === "submitting"}
             onBlur={handleEmailBlur}
             aria-invalid={Boolean(emailError)}
-            aria-describedby={emailError ? "beta-email-error" : undefined}
+            aria-describedby={emailError ? "beta-email-error" : "beta-email-hint"}
             className={clsx(
-              "w-full rounded-xl border bg-white px-4 py-3 text-navy font-body placeholder:text-foreground-accent/60 focus:outline-none focus:ring-2 disabled:opacity-60",
-              emailError
-                ? "border-primary focus:ring-primary/40"
-                : "border-gold-deco/25 focus:ring-gold/50",
+              fieldClass,
+              emailError && "border-primary/60 focus:border-primary focus:ring-primary/15",
             )}
             placeholder="you@example.com"
           />
           {emailError ? (
-            <p id="beta-email-error" className="mt-1.5 text-sm text-primary font-body" role="alert">
+            <p id="beta-email-error" className="mt-2 text-sm text-primary font-body" role="alert">
               {emailError}
             </p>
           ) : (
-            <p className="mt-1.5 text-xs text-foreground-accent font-body">
-              Use the email tied to your iPhone App Store account — that&apos;s where we send
-              TestFlight invites.
+            <p id="beta-email-hint" className="mt-2 text-sm text-foreground-accent font-body leading-snug">
+              Use the email on your iPhone&apos;s App Store account — that&apos;s where TestFlight
+              invites go.
             </p>
           )}
         </label>
       </div>
 
-      <label className="flex items-start gap-3 cursor-pointer">
+      <label
+        className={clsx(
+          "flex items-start gap-3.5 rounded-lg border px-4 py-3.5 mb-6 cursor-pointer transition-colors",
+          "border-gold-deco/25 bg-white hover:border-gold-deco/40",
+        )}
+      >
         <input
           type="checkbox"
           name="iosConfirmed"
           required
           disabled={status === "submitting"}
-          className="mt-1 h-4 w-4 rounded border-gold-deco/40 text-primary focus:ring-gold/50"
+          className="mt-0.5 h-[18px] w-[18px] shrink-0 rounded border-navy/20 text-secondary focus:ring-secondary/30"
         />
-        <span className="text-sm text-navy font-body leading-relaxed">
-          I can test Pinporium on an <strong>iPhone</strong> via TestFlight when invited. I
-          understand Android isn&apos;t available yet.
+        <span className="text-[15px] text-navy font-body leading-snug">
+          I have an iPhone and can install Pinporium through TestFlight when invited.
         </span>
       </label>
 
-      <label className="block">
-        <span className="text-xs uppercase tracking-deco-wide text-foreground-accent font-body mb-1.5 block">
-          Approximate number of pins <span className="text-primary">*</span>
-        </span>
-        <select
-          name="pinCount"
-          required
-          defaultValue=""
-          disabled={status === "submitting"}
-          className="w-full rounded-xl border border-gold-deco/25 bg-white px-4 py-3 text-navy font-body focus:outline-none focus:ring-2 focus:ring-gold/50 disabled:opacity-60"
-        >
-          <option value="" disabled>
-            Select a range
-          </option>
-          {PIN_COUNT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+      <div className="space-y-4 mb-6">
+        <SectionHeading>Your collection</SectionHeading>
+
+        <label className="block">
+          <FieldLabel required>How many pins do you collect?</FieldLabel>
+          <select
+            name="pinCount"
+            required
+            defaultValue=""
+            disabled={status === "submitting"}
+            className={clsx(fieldClass, "appearance-none bg-[length:1rem] bg-[right_0.75rem_center] bg-no-repeat")}
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23524e5f'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
+            }}
+          >
+            <option value="" disabled>
+              Choose a range
             </option>
-          ))}
-        </select>
-      </label>
+            {PIN_COUNT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
 
-      <label className="block">
-        <span className="text-xs uppercase tracking-deco-wide text-foreground-accent font-body mb-1.5 block">
-          Why do you want to beta test? <span className="text-foreground-accent/70">(optional)</span>
-        </span>
-        <textarea
-          name="why"
-          rows={3}
-          maxLength={2000}
-          disabled={status === "submitting"}
-          className="w-full rounded-xl border border-gold-deco/25 bg-white px-4 py-3 text-navy font-body placeholder:text-foreground-accent/60 focus:outline-none focus:ring-2 focus:ring-gold/50 disabled:opacity-60 resize-y min-h-[88px]"
-          placeholder="What you collect, whether you trade, what you're hoping Pinporium helps with…"
-        />
-      </label>
+        <label className="block">
+          <FieldLabel optional>Why do you want in?</FieldLabel>
+          <textarea
+            name="why"
+            rows={3}
+            maxLength={2000}
+            disabled={status === "submitting"}
+            className={clsx(fieldClass, "resize-none min-h-[96px]")}
+            placeholder="What you collect, if you trade, what you want from Pinporium…"
+          />
+        </label>
+      </div>
 
       <label className="sr-only" aria-hidden="true">
         Company
@@ -259,7 +307,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
       </label>
 
       {turnstileSiteKey ? (
-        <div className="flex justify-center min-h-[65px]">
+        <div className="rounded-lg border border-navy/8 bg-white px-3 py-4 mb-5 flex justify-center">
           <Turnstile
             ref={turnstileRef}
             siteKey={turnstileSiteKey}
@@ -272,29 +320,33 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
       ) : null}
 
       {errorMessage ? (
-        <p className="text-sm text-primary font-body" role="alert">
+        <div
+          className="rounded-lg border border-primary/25 bg-primary/5 px-4 py-3 mb-4 text-sm text-primary font-body"
+          role="alert"
+        >
           {errorMessage}
-        </p>
+        </div>
       ) : null}
 
-      <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
-        <button
-          type="button"
-          disabled={status === "submitting"}
-          onClick={onClose}
-          className="px-6 py-3 rounded-full text-sm font-body text-navy border border-gold-deco/40 hover:bg-cream-warm disabled:opacity-60"
-        >
-          Cancel
-        </button>
+      <div className="space-y-3 pt-1 border-t border-gold-deco/15">
         <button
           type="submit"
           disabled={status === "submitting" || (Boolean(turnstileSiteKey) && !turnstileToken)}
           className={clsx(
-            "px-8 py-3 rounded-full text-sm uppercase tracking-deco font-body",
-            "bg-primary text-cream hover:bg-primary-accent disabled:opacity-60 disabled:cursor-not-allowed",
+            "w-full h-12 rounded-full text-sm font-semibold font-body transition-colors",
+            "bg-navy text-cream hover:bg-deco-dark",
+            "disabled:opacity-50 disabled:cursor-not-allowed",
           )}
         >
           {status === "submitting" ? "Sending…" : "Submit application"}
+        </button>
+        <button
+          type="button"
+          disabled={status === "submitting"}
+          onClick={onClose}
+          className="w-full py-2 text-sm font-body text-foreground-accent hover:text-navy transition-colors disabled:opacity-60"
+        >
+          Cancel
         </button>
       </div>
     </form>
