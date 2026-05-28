@@ -23,9 +23,8 @@ export interface IPricing {
     name: string;
     price: number | string;
     features: string[];
-    /** Shown under the feature list heading (roadmap vs subscription) */
-    featuresBlurb?: string;
-    cta?: string;
+    /** Short intro above the feature list */
+    summary?: string;
 }
 
 export interface IFAQ {

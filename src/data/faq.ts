@@ -3,38 +3,38 @@ import { siteDetails } from "./siteDetails";
 
 export const faqs: IFAQ[] = [
     {
-        question: `Is ${siteDetails.siteName} only for “indie” or artist-made pins?`,
+        question: `Is ${siteDetails.siteName} only for artist-made pins?`,
         answer:
-            "In the community people usually say pin artists, small shops, studios, or limited drops — “indie” shows up, but it isn’t how most collectors label their whole hobby. Pinporium is for your entire enamel collection: artist releases, licensed pins, LEs and chases, con tables, and whatever else lives on your board — together in one vault.",
+            `${siteDetails.siteName} is for your whole enamel pin collection — artist releases, licensed and pop-culture pins, limited editions, chases, and con pickups. If you collect it, you can catalog it here.`,
     },
     {
         question: `Can I track Disney or park trading pins in ${siteDetails.siteName}?`,
         answer:
-            "If it’s part of your collection, it can live in your vault. We’re not trying to replace park trading rituals — we’re giving cross-fandom collectors one home that isn’t locked to a single franchise or official app ecosystem.",
+            "Yes, if they’re part of your collection. Park trading can stay its own thing; Pinporium is the home for everything else you collect across fandoms and artists.",
     },
     {
         question: "What’s a vault? Isn’t that just a collection?",
         answer:
-            "Same idea, collector vocabulary: your vault is everything in Pinporium — what you own, what you’d trade, and what you’re hunting — organized the way pin people actually talk in groups and at shows.",
+            "Your vault is your collection in Pinporium — what you own, what you’d trade, and what you’re still looking for — organized with boards, search, and hunt lists.",
     },
     {
         question: "What does the catalog cover?",
         answer:
-            "We’re building for breadth: small shops and studio drops, licensed and pop-culture releases, limited editions, chases, grails — anything collectors want to name, variant, and trade with confidence. The catalog grows with collector submissions and moderation.",
+            "We’re building a broad pin catalog: studio and shop releases, licensed pins, limited editions, chases, and more. It grows as collectors submit pins and our team reviews them.",
     },
     {
         question: "How does the catalog stay accurate?",
         answer:
-            "Collectors submit entries; our team reviews and normalizes them. The goal is a shared reference that gets better as more people contribute — without turning into a noisy free-for-all.",
+            "Collectors submit pins with photos and details; our team reviews and approves entries before they’re shared. That keeps names and variants consistent for everyone.",
     },
     {
-        question: "Can pin artists and studios partner with you?",
+        question: "Can pin artists and studios work with you?",
         answer:
-            "We’re building toward verified studio pages and clearer listings — reach out at help@pinporium.app if you’d like to be an early partner. Makers shouldn’t have to fight mystery titles and copycats alone.",
+            "We’re inviting artists and shops to claim verified listings. Email help@pinporium.app if you’d like to partner early.",
     },
     {
         question: "When can I download the app?",
         answer:
-            "App Store and Google Play listings are coming soon. For now, apply to be a beta tester below — we’ll email you when TestFlight or Android early access opens. Already in the beta? Use in-app feedback (shake on iOS) or email help@pinporium.app.",
+            "App Store and Google Play listings are coming soon. Apply to be a beta tester below — we’ll email you when TestFlight or Android early access opens. Already in the beta? Use in-app feedback (shake on iOS) or email help@pinporium.app.",
     },
 ];

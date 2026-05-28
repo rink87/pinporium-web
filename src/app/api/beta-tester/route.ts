@@ -4,6 +4,7 @@ import {
   formatBetaTesterSlackMessage,
   parseBetaTesterBody,
 } from "@/lib/betaTester";
+import { turnstileRequired, verifyTurnstileToken } from "@/lib/turnstile";
 
 export async function POST(request: Request) {
   const webhookUrl = process.env.SLACK_BETA_WEBHOOK_URL;
@@ -28,7 +29,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
 
-  const text = formatBetaTesterSlackMessage(parsed.data);
+  const { turnstileToken, ...payload } = parsed.data;
+
+  if (turnstileRequired()) {
+    if (!turnstileToken) {
+      return NextResponse.json(
+        { error: "Please complete the security check and try again." },
+        { status: 400 },
+      );
+    }
+
+    const valid = await verifyTurnstileToken(turnstileToken);
+    if (!valid) {
+      return NextResponse.json(
+        { error: "Security check failed. Please try again." },
+        { status: 400 },
+      );
+    }
+  }
+
+  const text = formatBetaTesterSlackMessage(payload);
 
   try {
     const slackRes = await fetch(webhookUrl, {

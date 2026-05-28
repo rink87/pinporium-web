@@ -33,9 +33,11 @@ export function formatBetaTesterSlackMessage(data: BetaTesterPayload): string {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+export type ParsedBetaTesterRequest = BetaTesterPayload & { turnstileToken: string };
+
 export function parseBetaTesterBody(
   body: unknown,
-): { ok: true; data: BetaTesterPayload } | { ok: false; error: string } {
+): { ok: true; data: ParsedBetaTesterRequest } | { ok: false; error: string } {
   if (!body || typeof body !== "object") {
     return { ok: false, error: "Invalid request." };
   }
@@ -50,6 +52,8 @@ export function parseBetaTesterBody(
   const email = typeof raw.email === "string" ? raw.email.trim() : "";
   const pinCount = raw.pinCount;
   const why = typeof raw.why === "string" ? raw.why.trim() : undefined;
+  const turnstileToken =
+    typeof raw.turnstileToken === "string" ? raw.turnstileToken.trim() : "";
 
   if (name.length < 2 || name.length > 120) {
     return { ok: false, error: "Please enter your name." };
@@ -75,6 +79,7 @@ export function parseBetaTesterBody(
       email,
       pinCount: pinCount as PinCountValue,
       why: why || undefined,
+      turnstileToken,
     },
   };
 }

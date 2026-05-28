@@ -20,7 +20,7 @@ const FAQ: React.FC = () => {
             </h2>
           </SectionTitle>
           <p className="lg:mt-8 text-foreground-accent text-center lg:text-left font-body">
-            Straight answers — no hedge fund vibes.
+            Straight answers about how Pinporium works.
           </p>
           {siteDetails.supportEmail ? (
             <a

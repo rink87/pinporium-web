@@ -1,41 +1,39 @@
 import { IPricing } from "@/types";
 
-/** Product phases — repurposes the Finwise pricing grid as a roadmap. */
+/** Roadmap cards — what’s live, what’s next, what’s later */
 export const tiers: IPricing[] = [
     {
-        name: "Now — Beta",
-        price: "Live",
-        featuresBlurb: "In the app today",
+        name: "In the app now",
+        price: "Beta",
+        summary: "Available to beta testers today.",
         features: [
-            "Vault, pin boards, collector score & achievements",
-            "Discover, catalog search, moderated submissions",
-            "The Hunt: ISOs, DISOs, grails & series tracking",
-            "Trade matching, proposals & trade history",
-            "Add-pin flow with 3D viewer from your photos",
+            "Your vault, pin boards, and collection stats",
+            "Discover and search the pin catalog",
+            "The Hunt: ISOs, DISOs, grails, and series tracking",
+            "Trade matching, proposals, and trade history",
+            "Add pins with photos and a 3D viewer",
+            "Achievements and collector score",
         ],
-        cta: "Apply for beta",
     },
     {
-        name: "Next — Community pulse",
+        name: "Coming next",
         price: "Soon",
-        featuresBlurb: "Where the hobby gets louder",
+        summary: "On deck after the core beta.",
         features: [
-            "Drop zone & release reminders",
-            "Shareable cards & activity feeds",
-            "Convention mode for the floor",
-            "Verified artist & studio partnerships",
+            "Drop reminders when artists release new pins",
+            "Shareable collection cards",
+            "Activity from collectors you follow",
+            "Convention mode for pin shows",
         ],
-        cta: "Apply for beta",
     },
     {
-        name: "Later — Marketplace",
-        price: "Roadmap",
-        featuresBlurb: "When the rails are ready",
+        name: "Further out",
+        price: "Later",
+        summary: "When buying and selling need more trust built in.",
         features: [
-            "Buy/sell with trusted seller reputation",
-            "Market pricing from real transactions",
-            "Deeper tools for artists and shops",
+            "Buy and sell with seller reputation",
+            "Price history from real sales",
+            "More tools for artists and pin shops",
         ],
-        cta: "Apply for beta",
     },
 ];

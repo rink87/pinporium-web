@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import Link from "next/link";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 
 import { IPricing } from "@/types";
@@ -10,13 +9,8 @@ interface Props {
 }
 
 const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
-  const { name, price, features, featuresBlurb, cta } = tier;
+  const { name, price, features, summary } = tier;
   const isNumericPrice = typeof price === "number";
-  const blurb =
-    featuresBlurb ??
-    (isNumericPrice
-      ? "Everything in basic, plus…"
-      : "Highlights");
 
   return (
     <div
@@ -29,7 +23,7 @@ const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
         <h3 className="text-xl font-display font-semibold text-navy mb-3">
           {name}
         </h3>
-        <p className="text-3xl md:text-4xl font-display font-semibold mb-6 text-navy">
+        <p className="text-3xl md:text-4xl font-display font-semibold text-navy">
           <span className={clsx({ "text-secondary": highlight })}>
             {isNumericPrice ? `$${price}` : price}
           </span>
@@ -39,25 +33,13 @@ const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
             </span>
           )}
         </p>
-        <Link
-          href="#beta"
-          className={clsx(
-            "block text-center w-full py-3 px-4 rounded-full transition-colors text-sm uppercase tracking-deco font-body",
-            {
-              "bg-primary text-cream hover:bg-primary-accent": highlight,
-              "bg-cream-warm text-navy hover:bg-gold-light border border-gold-deco/30":
-                !highlight,
-            },
-          )}
-        >
-          {cta ?? "Learn more"}
-        </Link>
       </div>
       <div className="p-6 mt-1 bg-cream/80">
-        <p className="font-body text-xs uppercase tracking-deco-wide text-foreground-accent mb-1">
-          Focus
-        </p>
-        <p className="text-foreground-accent mb-5 text-sm font-body">{blurb}</p>
+        {summary ? (
+          <p className="text-foreground-accent mb-5 text-sm font-body leading-relaxed">
+            {summary}
+          </p>
+        ) : null}
         <ul className="space-y-4 mb-2">
           {features.map((feature, index) => (
             <li key={index} className="flex items-start gap-2">
