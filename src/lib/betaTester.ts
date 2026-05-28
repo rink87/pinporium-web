@@ -8,11 +8,48 @@ export const PIN_COUNT_OPTIONS = [
 
 export type PinCountValue = (typeof PIN_COUNT_OPTIONS)[number]["value"];
 
+/** Practical RFC-style check — local part, domain, and TLD */
+const EMAIL_RE =
+  /^[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]{0,62}[a-zA-Z0-9])?@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$/;
+
+export function normalizeBetaEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
+export function validateBetaEmail(email: string): string | null {
+  const normalized = normalizeBetaEmail(email);
+
+  if (!normalized) {
+    return "Please enter your email address.";
+  }
+
+  if (normalized.length > 254) {
+    return "Email address is too long.";
+  }
+
+  if (normalized.includes("..") || normalized.startsWith(".") || normalized.includes("@.")) {
+    return "Please enter a valid email address.";
+  }
+
+  if (!EMAIL_RE.test(normalized)) {
+    return "Please enter a valid email address (e.g. you@gmail.com).";
+  }
+
+  const domain = normalized.split("@")[1];
+  const tld = domain?.split(".").pop() ?? "";
+  if (tld.length < 2) {
+    return "Please enter a valid email address.";
+  }
+
+  return null;
+}
+
 export interface BetaTesterPayload {
   name: string;
   email: string;
   pinCount: PinCountValue;
   why?: string;
+  iosConfirmed: boolean;
 }
 
 export function pinCountLabel(value: PinCountValue): string {
@@ -27,11 +64,10 @@ export function formatBetaTesterSlackMessage(data: BetaTesterPayload): string {
     `Name: ${data.name}`,
     `Email: ${data.email}`,
     `Approximate pins: ${pinCountLabel(data.pinCount)}`,
+    `Can test on iPhone: Yes`,
     `Why they want to be a tester: ${why || "(not provided)"}`,
   ].join("\n");
 }
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export type ParsedBetaTesterRequest = BetaTesterPayload & { turnstileToken: string };
 
@@ -49,18 +85,28 @@ export function parseBetaTesterBody(
   }
 
   const name = typeof raw.name === "string" ? raw.name.trim() : "";
-  const email = typeof raw.email === "string" ? raw.email.trim() : "";
+  const emailRaw = typeof raw.email === "string" ? raw.email : "";
+  const emailError = validateBetaEmail(emailRaw);
+  const email = normalizeBetaEmail(emailRaw);
   const pinCount = raw.pinCount;
   const why = typeof raw.why === "string" ? raw.why.trim() : undefined;
   const turnstileToken =
     typeof raw.turnstileToken === "string" ? raw.turnstileToken.trim() : "";
+  const iosConfirmed = raw.iosConfirmed === true;
 
   if (name.length < 2 || name.length > 120) {
     return { ok: false, error: "Please enter your name." };
   }
 
-  if (!EMAIL_RE.test(email) || email.length > 254) {
-    return { ok: false, error: "Please enter a valid email address." };
+  if (emailError) {
+    return { ok: false, error: emailError };
+  }
+
+  if (!iosConfirmed) {
+    return {
+      ok: false,
+      error: "Please confirm you can test on an iPhone. Android is coming soon.",
+    };
   }
 
   const validPinCounts = PIN_COUNT_OPTIONS.map((o) => o.value);
@@ -79,6 +125,7 @@ export function parseBetaTesterBody(
       email,
       pinCount: pinCount as PinCountValue,
       why: why || undefined,
+      iosConfirmed: true,
       turnstileToken,
     },
   };

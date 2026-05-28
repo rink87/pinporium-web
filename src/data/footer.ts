@@ -13,7 +13,7 @@ export const footerDetails: {
     quickLinks: [
         { text: "Features", url: "/#features" },
         { text: "Roadmap", url: "/#roadmap" },
-        { text: "Apply for beta", url: "/#beta" },
+        { text: "Apply for beta", url: "#" },
         { text: "FAQ", url: "/#faq" },
     ],
     legalLinks: [

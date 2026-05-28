@@ -1,6 +1,6 @@
 import { ctaDetails } from "@/data/cta";
 
-import BetaTesterForm from "./BetaTesterForm";
+import BetaApplyButton from "./BetaApplyButton";
 
 const CTA: React.FC = () => {
   return (
@@ -43,7 +43,9 @@ const CTA: React.FC = () => {
 
             <p className="mt-4 text-sm text-cream/60 font-body">{ctaDetails.storeNote}</p>
 
-            <BetaTesterForm />
+            <div className="mt-8">
+              <BetaApplyButton label="Apply to be a beta tester" />
+            </div>
           </div>
         </div>
       </div>

@@ -6,11 +6,14 @@ import React, { useState } from "react";
 import { Transition } from "@headlessui/react";
 import { HiOutlineXMark, HiBars3 } from "react-icons/hi2";
 
+import BetaApplyButton from "./BetaApplyButton";
+import { useBetaApply } from "./BetaApplyProvider";
 import Container from "./Container";
 import { siteDetails } from "@/data/siteDetails";
 import { menuItems } from "@/data/menuItems";
 
 const Header: React.FC = () => {
+  const { openBetaApply } = useBetaApply();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -47,12 +50,7 @@ const Header: React.FC = () => {
               </li>
             ))}
             <li>
-              <Link
-                href="#beta"
-                className="text-cream bg-navy hover:bg-deco-dark px-7 py-2.5 rounded-full text-sm uppercase tracking-deco font-body transition-colors border border-gold-deco/30"
-              >
-                Apply for beta
-              </Link>
+              <BetaApplyButton dark compact label="Apply for beta" />
             </li>
           </ul>
 
@@ -98,13 +96,16 @@ const Header: React.FC = () => {
               </li>
             ))}
             <li>
-              <Link
-                href="#beta"
-                className="text-cream bg-navy px-5 py-2.5 rounded-full block w-fit text-sm uppercase tracking-deco"
-                onClick={toggleMenu}
+              <button
+                type="button"
+                className="text-cream bg-navy px-5 py-2.5 rounded-full block w-fit text-sm uppercase tracking-deco font-body border border-gold-deco/30"
+                onClick={() => {
+                  setIsOpen(false);
+                  openBetaApply();
+                }}
               >
                 Apply for beta
-              </Link>
+              </button>
             </li>
           </ul>
         </div>

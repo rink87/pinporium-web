@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Nunito, Playfair_Display } from "next/font/google";
 
+import { BetaApplyProvider } from "@/components/BetaApplyProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteDetails } from "@/data/siteDetails";
@@ -57,9 +58,11 @@ export default function RootLayout({
         {siteDetails.googleAnalyticsId && (
           <GoogleAnalytics gaId={siteDetails.googleAnalyticsId} />
         )}
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <BetaApplyProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </BetaApplyProvider>
       </body>
     </html>
   );

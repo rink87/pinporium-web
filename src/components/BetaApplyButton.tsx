@@ -1,25 +1,43 @@
+"use client";
+
 import clsx from "clsx";
-import Link from "next/link";
+
+import { useBetaApply } from "./BetaApplyProvider";
 
 interface BetaApplyButtonProps {
   dark?: boolean;
   className?: string;
+  label?: string;
+  /** Smaller padding for nav bar */
+  compact?: boolean;
 }
 
-const BetaApplyButton: React.FC<BetaApplyButtonProps> = ({ dark, className }) => {
+const BetaApplyButton: React.FC<BetaApplyButtonProps> = ({
+  dark,
+  className,
+  label = "Apply to be a beta tester",
+  compact,
+}) => {
+  const { openBetaApply } = useBetaApply();
+
   return (
-    <Link href="#beta" className={className}>
+    <button
+      type="button"
+      onClick={openBetaApply}
+      className={className}
+    >
       <span
         className={clsx(
-          "inline-flex items-center justify-center min-w-[220px] px-8 h-14 rounded-full w-full sm:w-fit text-sm uppercase tracking-deco font-body transition-colors border",
+          "inline-flex items-center justify-center rounded-full w-full sm:w-fit text-sm uppercase tracking-deco font-body transition-colors border cursor-pointer",
+          compact ? "min-w-0 px-7 py-2.5 h-auto" : "min-w-[220px] px-8 h-14",
           dark
             ? "text-cream bg-navy hover:bg-deco-dark border-gold-deco/30"
             : "text-cream bg-primary hover:bg-primary-accent border-transparent",
         )}
       >
-        Apply to be a beta tester
+        {label}
       </span>
-    </Link>
+    </button>
   );
 };
 

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 
+import FooterQuickLinks from "./FooterQuickLinks";
 import { siteDetails } from "@/data/siteDetails";
 import { footerDetails } from "@/data/footer";
 import { getPlatformIconByName } from "@/utils";
@@ -47,15 +48,7 @@ const Footer: React.FC = () => {
           <h4 className="text-sm uppercase tracking-deco-wide text-gold mb-4 font-body">
             Explore
           </h4>
-          <ul className="text-cream/75 space-y-2 font-body">
-            {footerDetails.quickLinks.map((link) => (
-              <li key={link.text}>
-                <Link href={link.url} className="hover:text-gold transition-colors">
-                  {link.text}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <FooterQuickLinks />
         </div>
         <div>
           <h4 className="text-sm uppercase tracking-deco-wide text-gold mb-4 font-body">
