@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import clsx from "clsx";
 import Image from "next/image";
 
 interface DeviceFrameProps {
@@ -47,7 +47,7 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
     </div>
   );
 
-  const wrapCrop = (content: ReactNode) => {
+  const wrapCrop = (content: React.ReactNode) => {
     if (!cropTopPercent) {
       return content;
     }
@@ -56,7 +56,7 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
 
     return (
       <div
-        className="overflow-hidden"
+        className="overflow-hidden max-w-full"
         style={{ aspectRatio: `${width} / ${(height * clampedCrop) / 100}` }}
       >
         {content}
@@ -64,14 +64,15 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
     );
   };
 
-  const frames = (
-    <>
-      <div className="lg:hidden w-full">{wrapCrop(mobileFrame)}</div>
-      <div className="hidden lg:block w-[320px] max-w-full">{wrapCrop(desktopFrame)}</div>
-    </>
-  );
+  const frames = wrapCrop(mobileFrame);
+  const desktopFrames = wrapCrop(desktopFrame);
 
-  return <div className={className}>{frames}</div>;
+  return (
+    <div className={clsx("min-w-0 max-w-full overflow-hidden", className)}>
+      <div className="lg:hidden w-full max-w-full">{frames}</div>
+      <div className="hidden lg:block w-[320px] max-w-full mx-auto">{desktopFrames}</div>
+    </div>
+  );
 };
 
 export default DeviceFrame;

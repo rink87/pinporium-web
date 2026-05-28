@@ -60,7 +60,7 @@ export default function RootLayout({
         )}
         <BetaApplyProvider>
           <Header />
-          <main>{children}</main>
+          <main className="overflow-x-hidden">{children}</main>
           <Footer />
         </BetaApplyProvider>
       </body>
