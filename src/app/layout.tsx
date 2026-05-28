@@ -30,20 +30,13 @@ export const metadata: Metadata = {
     description: siteDetails.metadata.description,
     url: siteDetails.siteUrl,
     type: "website",
-    images: [
-      {
-        url: "/images/hero-home.png",
-        width: 472,
-        height: 1024,
-        alt: "Pinporium app — My Collection",
-      },
-    ],
+    // og:image from app/opengraph-image.tsx (1200×630 hero-style card)
   },
   twitter: {
     card: "summary_large_image",
     title: siteDetails.metadata.title,
     description: siteDetails.metadata.description,
-    images: ["/images/hero-home.png"],
+    // twitter:image from app/twitter-image.tsx (same as Open Graph)
   },
 };
 
