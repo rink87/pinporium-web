@@ -1,8 +1,7 @@
 import React from "react";
 
-import AppStoreButton from "./AppStoreButton";
+import BetaApplyButton from "./BetaApplyButton";
 import DeviceFrame from "./DeviceFrame";
-import PlayStoreButton from "./PlayStoreButton";
 
 import { heroDetails } from "@/data/hero";
 
@@ -31,10 +30,12 @@ const Hero: React.FC = () => {
         <p className="mt-5 text-foreground-accent max-w-xl mx-auto font-body leading-relaxed">
           {heroDetails.subheading}
         </p>
-        <div className="mt-8 flex flex-col sm:flex-row items-center sm:gap-4 w-fit mx-auto">
-          <AppStoreButton dark />
-          <PlayStoreButton dark />
+        <div className="mt-8 flex justify-center w-fit mx-auto">
+          <BetaApplyButton dark />
         </div>
+        <p className="mt-4 text-sm text-foreground-accent font-body">
+          App Store &amp; Google Play — coming soon
+        </p>
 
         <div className="mt-14 md:mt-20 mx-auto w-full max-w-[280px] sm:max-w-[300px]">
           <DeviceFrame

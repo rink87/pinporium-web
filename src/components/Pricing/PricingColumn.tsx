@@ -40,7 +40,7 @@ const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
           )}
         </p>
         <Link
-          href="#cta"
+          href="#beta"
           className={clsx(
             "block text-center w-full py-3 px-4 rounded-full transition-colors text-sm uppercase tracking-deco font-body",
             {

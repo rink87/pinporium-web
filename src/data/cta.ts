@@ -1,7 +1,7 @@
 export const ctaDetails = {
+    eyebrow: 'Join the beta',
     heading: 'Ready to flex the vault you’ve built?',
     subheading:
-        'Join collectors who want one beautiful home for pins — discover, compare, share, and help the catalog grow. Grab Pinporium when it hits your platform.',
-    appStoreUrl: '#',
-    googlePlayUrl: '#',
+        'Apply for early access — we’re onboarding collectors who want one home for their whole pin collection and will help stress-test vault, catalog, and trades.',
+    storeNote: 'iOS (TestFlight) and Android are rolling out in waves. App Store and Google Play listings coming soon.',
 };

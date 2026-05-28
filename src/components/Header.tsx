@@ -48,10 +48,10 @@ const Header: React.FC = () => {
             ))}
             <li>
               <Link
-                href="#cta"
+                href="#beta"
                 className="text-cream bg-navy hover:bg-deco-dark px-7 py-2.5 rounded-full text-sm uppercase tracking-deco font-body transition-colors border border-gold-deco/30"
               >
-                Get the app
+                Apply for beta
               </Link>
             </li>
           </ul>
@@ -99,11 +99,11 @@ const Header: React.FC = () => {
             ))}
             <li>
               <Link
-                href="#cta"
+                href="#beta"
                 className="text-cream bg-navy px-5 py-2.5 rounded-full block w-fit text-sm uppercase tracking-deco"
                 onClick={toggleMenu}
               >
-                Get the app
+                Apply for beta
               </Link>
             </li>
           </ul>

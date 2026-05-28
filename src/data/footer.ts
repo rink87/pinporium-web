@@ -13,13 +13,14 @@ export const footerDetails: {
     quickLinks: [
         { text: "Features", url: "/#features" },
         { text: "Roadmap", url: "/#roadmap" },
+        { text: "Apply for beta", url: "/#beta" },
         { text: "FAQ", url: "/#faq" },
     ],
     legalLinks: [
         { text: "Privacy Policy", url: "/privacy" },
         { text: "Terms of Service", url: "/terms" },
     ],
-    email: "",
+    email: "help@pinporium.app",
     telephone: "",
     socials: {
         // instagram: 'https://www.instagram.com/pinporium',

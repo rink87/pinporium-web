@@ -12,7 +12,7 @@ export const tiers: IPricing[] = [
             "Pin boards & set-style tracking",
             "Discover: search, browse, partner studios",
         ],
-        cta: "See features",
+        cta: "Apply for beta",
     },
     {
         name: "Next — Community pulse",
@@ -24,7 +24,7 @@ export const tiers: IPricing[] = [
             "Achievements, collector score, shareable cards",
             "Convention mode for the floor",
         ],
-        cta: "Join the waitlist",
+        cta: "Apply for beta",
     },
     {
         name: "Later — Marketplace",
@@ -35,6 +35,6 @@ export const tiers: IPricing[] = [
             "Market pricing from real transactions",
             "Deeper search & tools for artists and shops",
         ],
-        cta: "Get notified",
+        cta: "Apply for beta",
     },
 ];

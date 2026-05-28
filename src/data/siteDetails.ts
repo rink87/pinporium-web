@@ -2,7 +2,7 @@ export const siteDetails = {
     siteName: 'Pinporium',
     siteUrl: 'https://pinporium.app',
     /** Set when you have a public inbox; FAQ and footer hide the link if empty. */
-    supportEmail: '',
+    supportEmail: 'help@pinporium.app',
     metadata: {
         title: 'Pinporium — The pin collection app you’ll actually use',
         description:

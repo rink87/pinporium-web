@@ -1,11 +1,10 @@
 import { ctaDetails } from "@/data/cta";
 
-import AppStoreButton from "./AppStoreButton";
-import PlayStoreButton from "./PlayStoreButton";
+import BetaTesterForm from "./BetaTesterForm";
 
 const CTA: React.FC = () => {
   return (
-    <section id="cta" className="mt-10 mb-5 lg:my-20">
+    <section id="beta" className="mt-10 mb-5 lg:my-20 scroll-mt-28">
       <div className="relative h-full w-full z-10 mx-auto py-12 sm:py-20 px-4">
         <div className="h-full w-full">
           <div className="rounded-deco opacity-[0.98] absolute inset-0 -z-10 h-full w-full bg-deco-dark overflow-hidden border border-gold-deco/25">
@@ -32,7 +31,7 @@ const CTA: React.FC = () => {
 
           <div className="h-full flex flex-col items-center justify-center text-cream text-center max-w-2xl mx-auto">
             <p className="text-xs uppercase tracking-deco-wide text-gold/90 mb-3 font-body">
-              Join the beta
+              {ctaDetails.eyebrow}
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl md:leading-tight font-display font-semibold mb-4 text-balance">
               {ctaDetails.heading}
@@ -42,10 +41,9 @@ const CTA: React.FC = () => {
               {ctaDetails.subheading}
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row items-center sm:gap-4">
-              <AppStoreButton />
-              <PlayStoreButton />
-            </div>
+            <p className="mt-4 text-sm text-cream/60 font-body">{ctaDetails.storeNote}</p>
+
+            <BetaTesterForm />
           </div>
         </div>
       </div>
