@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import clsx from "clsx";
 import Image from "next/image";
 
 interface DeviceFrameProps {
@@ -23,30 +22,28 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
   className = "",
   cropTopPercent,
 }) => {
-  const imageProps = {
-    src,
-    width,
-    height,
-    quality: 100 as const,
-    sizes,
-    priority,
-    alt,
-    className: "block h-auto w-full",
-  };
+  const renderScreenImage = () => (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      quality={100}
+      sizes={sizes}
+      priority={priority}
+      className="block h-auto w-full"
+    />
+  );
 
   const mobileFrame = (
     <div className="iphone-frame-mobile w-full">
-      <div className="iphone-screen-mobile w-full">
-        <Image {...imageProps} />
-      </div>
+      <div className="iphone-screen-mobile w-full">{renderScreenImage()}</div>
     </div>
   );
 
   const desktopFrame = (
     <div className="iphone-frame">
-      <div className="iphone-screen">
-        <Image {...imageProps} />
-      </div>
+      <div className="iphone-screen">{renderScreenImage()}</div>
     </div>
   );
 
