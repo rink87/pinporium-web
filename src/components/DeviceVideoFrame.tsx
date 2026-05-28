@@ -1,7 +1,5 @@
 "use client";
 
-import clsx from "clsx";
-
 interface DeviceVideoFrameProps {
   src: string;
   poster?: string;
@@ -14,8 +12,8 @@ const DeviceVideoFrame: React.FC<DeviceVideoFrameProps> = ({
   className = "",
 }) => {
   return (
-    <div className={clsx("mx-auto", className)}>
-      <div className="lg:hidden overflow-hidden rounded-2xl shadow-[0_18px_44px_-22px_rgba(26,26,46,0.45)] ring-1 ring-navy/8 bg-navy">
+    <div className={className}>
+      <div className="lg:hidden w-full overflow-hidden rounded-2xl shadow-[0_18px_44px_-22px_rgba(26,26,46,0.45)] ring-1 ring-navy/8 bg-navy">
         <video
           src={src}
           poster={poster}
@@ -28,7 +26,7 @@ const DeviceVideoFrame: React.FC<DeviceVideoFrameProps> = ({
           aria-label="Pinporium 3D pin viewer demo"
         />
       </div>
-      <div className="hidden lg:block iphone-frame">
+      <div className="hidden lg:block w-[320px] max-w-full iphone-frame">
         <div className="iphone-screen">
           <video
             src={src}

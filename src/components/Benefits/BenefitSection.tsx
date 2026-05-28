@@ -88,10 +88,10 @@ const BenefitSection: React.FC<Props> = ({ benefit, imageAtRight }: Props) => {
                     </div>
                 </div>
 
-                <div className={clsx("mt-5 w-full lg:mt-0", { "lg:order-2": imageAtRight })}>
+                <div className={clsx("mt-5 max-lg:w-full lg:mt-0", { "lg:order-2": imageAtRight })}>
                     <div
                         className={clsx(
-                            "mx-auto flex w-full justify-center lg:mx-0 lg:w-fit",
+                            "flex justify-center max-lg:mx-auto max-lg:w-full lg:w-fit",
                             { "lg:justify-start": imageAtRight, "lg:justify-end": !imageAtRight },
                         )}
                     >

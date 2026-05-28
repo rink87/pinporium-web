@@ -69,12 +69,12 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
 
   const frames = (
     <>
-      <div className="lg:hidden">{wrapCrop(mobileFrame)}</div>
-      <div className="hidden lg:block">{wrapCrop(desktopFrame)}</div>
+      <div className="lg:hidden w-full">{wrapCrop(mobileFrame)}</div>
+      <div className="hidden lg:block w-[320px] max-w-full">{wrapCrop(desktopFrame)}</div>
     </>
   );
 
-  return <div className={clsx("mx-auto", className)}>{frames}</div>;
+  return <div className={className}>{frames}</div>;
 };
 
 export default DeviceFrame;
