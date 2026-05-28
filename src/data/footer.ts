@@ -9,7 +9,7 @@ export const footerDetails: {
     socials: ISocials;
 } = {
     subheading:
-        'The collector-first home for enamel pins — vault, discover, badges, trades on the way, and a catalog we grow together.',
+        'The collector-first home for enamel pins — vault, discover, the hunt, trades, achievements, and a catalog we grow together.',
     quickLinks: [
         { text: "Features", url: "/#features" },
         { text: "Roadmap", url: "/#roadmap" },

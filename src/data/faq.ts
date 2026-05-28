@@ -20,7 +20,7 @@ export const faqs: IFAQ[] = [
     {
         question: "What does the catalog cover?",
         answer:
-            "We’re building for breadth: small shops and studio drops, licensed and pop-culture releases, limited editions, chases, grails — anything collectors want to name, variant, and trade with confidence. The catalog grows with submissions and verified partners.",
+            "We’re building for breadth: small shops and studio drops, licensed and pop-culture releases, limited editions, chases, grails — anything collectors want to name, variant, and trade with confidence. The catalog grows with collector submissions and moderation.",
     },
     {
         question: "How does the catalog stay accurate?",
@@ -30,7 +30,7 @@ export const faqs: IFAQ[] = [
     {
         question: "Can pin artists and studios partner with you?",
         answer:
-            "Yes. Verified partners, clearer listings, and better context for fans are central — makers shouldn’t have to fight mystery titles and copycats alone.",
+            "We’re building toward verified studio pages and clearer listings — reach out at help@pinporium.app if you’d like to be an early partner. Makers shouldn’t have to fight mystery titles and copycats alone.",
     },
     {
         question: "When can I download the app?",

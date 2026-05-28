@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
         <Section
           id="roadmap"
           title="Where we’re headed"
-          description="Foundation first — vault and catalog you’ll love using. Then trades, drops, and marketplace when the rails match how collectors actually behave."
+          description="Vault, catalog, hunt, trades, and achievements are in beta now. Drops, partnerships, and marketplace come next when the rails match how collectors actually behave."
         >
           <Pricing />
         </Section>

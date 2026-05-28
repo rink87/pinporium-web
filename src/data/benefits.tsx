@@ -1,4 +1,12 @@
-import { FiBookOpen, FiLayers, FiSearch } from "react-icons/fi";
+import {
+    FiAward,
+    FiBookOpen,
+    FiLayers,
+    FiRepeat,
+    FiRotateCw,
+    FiSearch,
+    FiTarget,
+} from "react-icons/fi";
 
 import { IBenefit } from "@/types";
 
@@ -6,7 +14,7 @@ export const benefits: IBenefit[] = [
     {
         title: "Your vault — every pin, one gorgeous home",
         description:
-            "Boards, filters, value, and collector shorthand (ISO, grail, DISO) so your shelf reads as clearly online as it does on cork. Finally an excuse to open the app just to admire what you’ve pulled.",
+            "Boards, filters, and collector shorthand (ISO, grail, DISO) so your shelf reads as clearly online as it does on cork. Collector score and stats that make opening the app feel like flexing the board.",
         bullets: [
             {
                 title: "Pin boards",
@@ -17,7 +25,7 @@ export const benefits: IBenefit[] = [
             {
                 title: "Stats that flex",
                 description:
-                    "Pins, value, momentum — see the collection grow like it deserves.",
+                    "Pins, collector score, momentum — see the collection grow like it deserves.",
                 icon: <FiLayers size={26} className="text-primary" />,
             },
             {
@@ -32,25 +40,25 @@ export const benefits: IBenefit[] = [
     {
         title: "Discover the next pin to obsess over",
         description:
-            "Browse categories, spot partner artists, search the catalog, and keep ISOs and grails where you’ll actually see them — the hunt stays fun instead of scattered across screenshots.",
+            "Browse categories, search the growing catalog, and explore what collectors are hunting — the aisle at your favorite show, without leaving the couch.",
         bullets: [
             {
                 title: "Browse & search",
                 description:
-                    "Trending, new drops, themes — scroll like it’s the aisle at your favorite show.",
+                    "Trending, themes, full catalog grid — find the pin you didn’t know you needed.",
                 icon: <FiSearch size={26} className="text-primary" />,
             },
             {
-                title: "ISOs & grails",
+                title: "Community catalog",
                 description:
-                    "Tier the chase so alerts match how badly you want it.",
-                icon: <FiLayers size={26} className="text-primary" />,
+                    "Every entry is moderated so names and variants stay searchable.",
+                icon: <FiBookOpen size={26} className="text-primary" />,
             },
             {
-                title: "Trades on the roadmap",
+                title: "Mixed collections welcome",
                 description:
-                    "Match traders with reputation in mind — not lost DMs.",
-                icon: <FiBookOpen size={26} className="text-primary" />,
+                    "Star Wars, parks, artist drops, LEs — one Discover for how you actually collect.",
+                icon: <FiLayers size={26} className="text-primary" />,
             },
         ],
         imageSrc: "/images/feature-discover.png",
@@ -69,7 +77,7 @@ export const benefits: IBenefit[] = [
             {
                 title: "Recognition",
                 description:
-                    "Score and badges for collectors who level up the canon.",
+                    "Score and badges when your submissions are approved.",
                 icon: <FiBookOpen size={26} className="text-primary" />,
             },
             {
@@ -80,5 +88,111 @@ export const benefits: IBenefit[] = [
             },
         ],
         imageSrc: "/images/feature-pin-detail.png",
+    },
+    {
+        title: "The Hunt — ISOs, grails, and the chase",
+        description:
+            "Your wishlist isn’t a spreadsheet row. Tier wants as ISO, DISO, or Grail, track series, and keep the hunt where you’ll actually see it.",
+        bullets: [
+            {
+                title: "Collector tiers",
+                description:
+                    "ISO, DISO, Grail — the same slang you use in groups and at shows.",
+                icon: <FiTarget size={26} className="text-primary" />,
+            },
+            {
+                title: "Series tracking",
+                description:
+                    "Follow variant sets from pin detail and watch completion grow.",
+                icon: <FiLayers size={26} className="text-primary" />,
+            },
+            {
+                title: "One hunt board",
+                description:
+                    "Wants, trades, and series — everything you’re still chasing in one tab.",
+                icon: <FiBookOpen size={26} className="text-primary" />,
+            },
+        ],
+        imageSrc: "/images/feature-hunt.png",
+    },
+    {
+        title: "Trades — matches, proposals, and follow-through",
+        description:
+            "Mark pins for trade, find mutual ISO ↔ trader matches on the same catalog variant, and negotiate swaps in-app — not buried in DMs.",
+        bullets: [
+            {
+                title: "Mutual matches",
+                description:
+                    "See when your ISO lines up with someone else’s for-trade pin on the same variant.",
+                icon: <FiRepeat size={26} className="text-primary" />,
+            },
+            {
+                title: "Active trades",
+                description:
+                    "Waiting, in progress, and history — know where every swap stands.",
+                icon: <FiLayers size={26} className="text-primary" />,
+            },
+            {
+                title: "Catalog-linked",
+                description:
+                    "Both sides on verified variants — fewer “which glitter LE?” mix-ups.",
+                icon: <FiSearch size={26} className="text-primary" />,
+            },
+        ],
+        imageSrc: "/images/feature-trades.png",
+    },
+    {
+        title: "Achievements & collector score",
+        description:
+            "Vault milestones, catalog contributions, trades, and hunt wins feed a collector score and award cards that actually reflect how deep you are in the hobby.",
+        bullets: [
+            {
+                title: "Milestone awards",
+                description:
+                    "Vault, boards, variants, submissions — level up as you collect.",
+                icon: <FiAward size={26} className="text-primary" />,
+            },
+            {
+                title: "Collector score",
+                description:
+                    "One number that grows with pins, catalog help, and community participation.",
+                icon: <FiLayers size={26} className="text-primary" />,
+            },
+            {
+                title: "Hunt & trade goals",
+                description:
+                    "ISO, DISO, grail, and trusted trader awards for the chase and the swap.",
+                icon: <FiTarget size={26} className="text-primary" />,
+            },
+        ],
+        imageSrc: "/images/feature-achievements.png",
+    },
+    {
+        title: "Add a pin — photos, 3D viewer, catalog credit",
+        description:
+            "Snap front and back, fine-tune alignment, and get a pinchable 3D model in your vault. Suggest new entries for the community catalog and earn score when they’re approved.",
+        bullets: [
+            {
+                title: "Guided capture",
+                description:
+                    "Front/back photos with crop, tilt, and duplicate detection before you save.",
+                icon: <FiBookOpen size={26} className="text-primary" />,
+            },
+            {
+                title: "3D pin viewer",
+                description:
+                    "Interactive model from your photos — auto-rotate or drag to admire the enamel.",
+                icon: <FiRotateCw size={26} className="text-primary" />,
+            },
+            {
+                title: "Suggest for catalog",
+                description:
+                    "Optional submission after add — help the community and earn collector score.",
+                icon: <FiAward size={26} className="text-primary" />,
+            },
+        ],
+        imageSrc: "/images/feature-pin-added.png",
+        videoSrc: "/images/pin-3d-viewer.mp4",
+        videoPosterSrc: "/images/feature-pin-added.png",
     },
 ];

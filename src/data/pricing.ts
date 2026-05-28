@@ -3,26 +3,27 @@ import { IPricing } from "@/types";
 /** Product phases — repurposes the Finwise pricing grid as a roadmap. */
 export const tiers: IPricing[] = [
     {
-        name: "Now — Foundation",
-        price: "MVP",
-        featuresBlurb: "What we’re shipping first",
+        name: "Now — Beta",
+        price: "Live",
+        featuresBlurb: "In the app today",
         features: [
-            "Community catalog with moderated submissions",
-            "Vault: owns, traders, ISOs, grails, DISOs",
-            "Pin boards & set-style tracking",
-            "Discover: search, browse, partner studios",
+            "Vault, pin boards, collector score & achievements",
+            "Discover, catalog search, moderated submissions",
+            "The Hunt: ISOs, DISOs, grails & series tracking",
+            "Trade matching, proposals & trade history",
+            "Add-pin flow with 3D viewer from your photos",
         ],
         cta: "Apply for beta",
     },
     {
         name: "Next — Community pulse",
         price: "Soon",
-        featuresBlurb: "Where the hobby gets networked",
+        featuresBlurb: "Where the hobby gets louder",
         features: [
-            "Trade matching & trade board",
             "Drop zone & release reminders",
-            "Achievements, collector score, shareable cards",
+            "Shareable cards & activity feeds",
             "Convention mode for the floor",
+            "Verified artist & studio partnerships",
         ],
         cta: "Apply for beta",
     },
@@ -33,7 +34,7 @@ export const tiers: IPricing[] = [
         features: [
             "Buy/sell with trusted seller reputation",
             "Market pricing from real transactions",
-            "Deeper search & tools for artists and shops",
+            "Deeper tools for artists and shops",
         ],
         cta: "Apply for beta",
     },

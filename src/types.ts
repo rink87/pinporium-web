@@ -8,6 +8,9 @@ export interface IBenefit {
     description: string;
     imageSrc: string;
     bullets: IBenefitBullet[];
+    /** Optional demo video instead of a static screenshot in the device frame */
+    videoSrc?: string;
+    videoPosterSrc?: string;
 }
 
 export interface IBenefitBullet {

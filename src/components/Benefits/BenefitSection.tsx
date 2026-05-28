@@ -4,6 +4,7 @@ import { motion, Variants } from "framer-motion"
 
 import BenefitBullet from "./BenefitBullet";
 import DeviceFrame from "../DeviceFrame";
+import DeviceVideoFrame from "../DeviceVideoFrame";
 import SectionTitle from "../SectionTitle";
 import { IBenefit } from "@/types";
 
@@ -47,7 +48,7 @@ export const childVariants = {
 };
 
 const BenefitSection: React.FC<Props> = ({ benefit, imageAtRight }: Props) => {
-    const { title, description, imageSrc, bullets } = benefit;
+    const { title, description, imageSrc, bullets, videoSrc, videoPosterSrc } = benefit;
 
     return (
         <section className="benefit-section">
@@ -88,14 +89,22 @@ const BenefitSection: React.FC<Props> = ({ benefit, imageAtRight }: Props) => {
 
                 <div className={clsx("mt-5 lg:mt-0", { "lg:order-2": imageAtRight })}>
                     <div className={clsx("w-fit flex", { "justify-start": imageAtRight, "justify-end": !imageAtRight })}>
-                        <DeviceFrame
-                            src={imageSrc}
-                            alt={`Pinporium — ${title}`}
-                            width={472}
-                            height={1024}
-                            sizes="(max-width: 1024px) 72vw, 320px"
-                            className="lg:ml-0 max-w-[260px] sm:max-w-[300px] lg:max-w-[320px]"
-                        />
+                        {videoSrc ? (
+                            <DeviceVideoFrame
+                                src={videoSrc}
+                                poster={videoPosterSrc}
+                                className="lg:ml-0 max-w-[260px] sm:max-w-[300px] lg:max-w-[320px]"
+                            />
+                        ) : (
+                            <DeviceFrame
+                                src={imageSrc}
+                                alt={`Pinporium — ${title}`}
+                                width={472}
+                                height={1024}
+                                sizes="(max-width: 1024px) 72vw, 320px"
+                                className="lg:ml-0 max-w-[260px] sm:max-w-[300px] lg:max-w-[320px]"
+                            />
+                        )}
                     </div>
                 </div>
             </motion.div>
