@@ -182,13 +182,8 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
   }
 
   return (
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit}
-      className="text-left sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-5"
-      noValidate
-    >
-      <div className="sm:col-span-2 flex gap-3 rounded-lg border border-secondary/20 bg-secondary/[0.06] px-4 py-3.5 mb-1 sm:mb-0">
+    <form ref={formRef} onSubmit={handleSubmit} className="text-left space-y-6" noValidate>
+      <div className="flex gap-3 rounded-lg border border-secondary/20 bg-secondary/[0.06] px-4 py-3.5">
         <div className="shrink-0 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm text-secondary">
           <FiSmartphone className="h-5 w-5" />
         </div>
@@ -200,11 +195,9 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
         </div>
       </div>
 
-      <div className="sm:col-span-2">
+      <div className="space-y-4">
         <SectionHeading>About you</SectionHeading>
-      </div>
 
-      <div className="space-y-4 mb-2 sm:mb-0 sm:contents">
         <label className="block">
           <FieldLabel required>Name</FieldLabel>
           <input
@@ -253,7 +246,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
 
       <label
         className={clsx(
-          "sm:col-span-2 flex items-start gap-3.5 rounded-lg border px-4 py-3.5 mb-2 sm:mb-0 cursor-pointer transition-colors",
+          "flex items-start gap-3.5 rounded-lg border px-4 py-3.5 cursor-pointer transition-colors",
           "border-gold-deco/25 bg-white hover:border-gold-deco/40",
         )}
       >
@@ -269,11 +262,9 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
         </span>
       </label>
 
-      <div className="sm:col-span-2">
+      <div className="space-y-4">
         <SectionHeading>Your collection</SectionHeading>
-      </div>
 
-      <div className="space-y-4 mb-2 sm:mb-0 sm:contents">
         <label className="block">
           <FieldLabel required>How many pins do you collect?</FieldLabel>
           <select
@@ -310,34 +301,35 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose }) => {
         </label>
       </div>
 
-      <label className="sr-only sm:col-span-2" aria-hidden="true">
+      <label className="sr-only" aria-hidden="true">
         Company
         <input type="text" name="company" tabIndex={-1} autoComplete="off" />
       </label>
 
       {turnstileSiteKey ? (
-        <div className="sm:col-span-2 rounded-lg border border-navy/8 bg-white px-3 py-4 mb-1 sm:mb-0 flex justify-center">
+        <div className="w-full min-h-[65px] [&_iframe]:w-full">
           <Turnstile
             ref={turnstileRef}
             siteKey={turnstileSiteKey}
             onSuccess={setTurnstileToken}
             onExpire={() => setTurnstileToken("")}
             onError={() => setTurnstileToken("")}
-            options={{ theme: "light", size: "normal" }}
+            options={{ theme: "light", size: "flexible" }}
+            className="w-full"
           />
         </div>
       ) : null}
 
       {errorMessage ? (
         <div
-          className="sm:col-span-2 rounded-lg border border-primary/25 bg-primary/5 px-4 py-3 mb-1 sm:mb-0 text-sm text-primary font-body"
+          className="rounded-lg border border-primary/25 bg-primary/5 px-4 py-3 text-sm text-primary font-body"
           role="alert"
         >
           {errorMessage}
         </div>
       ) : null}
 
-      <div className="sm:col-span-2 space-y-3 pt-4 mt-1 sm:mt-2 border-t border-gold-deco/15">
+      <div className="space-y-3 pt-4 border-t border-gold-deco/15">
         <button
           type="submit"
           disabled={status === "submitting" || (Boolean(turnstileSiteKey) && !turnstileToken)}
