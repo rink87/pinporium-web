@@ -35,9 +35,9 @@ export function BetaApplyProvider({ children }: { children: React.ReactNode }) {
     <BetaApplyContext.Provider value={{ openBetaApply }}>
       {children}
       <Dialog open={open} onClose={handleClose} className="relative z-[60]">
-        <div className="fixed inset-0 bg-navy/50 backdrop-blur-[2px]" aria-hidden="true" />
-        <div className="fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
-          <DialogPanel className="relative w-full sm:max-w-[440px] rounded-t-deco sm:rounded-deco bg-white border border-gold-deco/20 shadow-[0_24px_80px_-12px_rgba(44,51,69,0.35)] sm:my-8 max-h-[92vh] sm:max-h-[min(90vh,820px)] flex flex-col overflow-hidden">
+        <div className="fixed inset-0 bg-black/55" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-stretch sm:items-center justify-center p-0 sm:p-6">
+          <DialogPanel className="relative flex h-[100dvh] max-h-[100dvh] w-full flex-col overflow-hidden rounded-none bg-white sm:h-auto sm:max-h-[min(90vh,820px)] sm:max-w-[640px] sm:rounded-deco sm:border sm:border-gold-deco/20 sm:shadow-[0_24px_80px_-12px_rgba(44,51,69,0.35)]">
             <div
               className="shrink-0 h-1 w-full bg-gradient-to-r from-secondary via-gold to-primary"
               aria-hidden
@@ -58,7 +58,7 @@ export function BetaApplyProvider({ children }: { children: React.ReactNode }) {
                 A few details and we&apos;ll email you a TestFlight invite when a spot opens.
               </p>
             </div>
-            <div className="flex-1 overflow-y-auto px-6 py-5 sm:px-7 sm:py-6 bg-cream/30">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-6 py-5 sm:px-8 sm:py-6 bg-cream/30">
               <BetaTesterForm onClose={handleClose} />
             </div>
           </DialogPanel>
