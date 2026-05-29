@@ -77,7 +77,8 @@ export function BetaApplyProvider({ children }: { children: React.ReactNode }) {
                     Apply for beta
                   </DialogTitle>
                   <p className="mt-1.5 text-[15px] text-foreground-accent font-body leading-relaxed max-w-sm">
-                    A few details and we&apos;ll email you a TestFlight invite when a spot opens.
+                    A few details and we&apos;ll email an install link when a spot opens (iPhone
+                    TestFlight or Android Play internal testing).
                   </p>
                 </>
               )}

@@ -2,11 +2,13 @@
 
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import clsx from "clsx";
-import { FiCheckCircle, FiSmartphone } from "react-icons/fi";
+import { FiCheckCircle } from "react-icons/fi";
 import { FormEvent, useRef, useState } from "react";
 
 import {
+  BETA_PLATFORM_OPTIONS,
   PIN_COUNT_OPTIONS,
+  type BetaPlatform,
   validateBetaEmail,
 } from "@/lib/betaTester";
 import { siteDetails } from "@/data/siteDetails";
@@ -48,6 +50,25 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
+function successCopy(platform: BetaPlatform): { body: string; detail?: string } {
+  if (platform === "android") {
+    return {
+      body: "We'll email your Google Play internal testing invite when a spot opens.",
+      detail: "Use the same Gmail address on your Android device.",
+    };
+  }
+  if (platform === "both") {
+    return {
+      body: "We'll email install links for TestFlight and Google Play when spots open.",
+      detail: "Use the same email on your iPhone App Store account and Android Gmail.",
+    };
+  }
+  return {
+    body: "We'll email your TestFlight invite when a spot opens.",
+    detail: "Use the same address as your iPhone App Store account.",
+  };
+}
+
 interface BetaTesterFormProps {
   onClose: () => void;
   onSuccess?: () => void;
@@ -60,6 +81,8 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
   const [errorMessage, setErrorMessage] = useState("");
   const [emailError, setEmailError] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [platform, setPlatform] = useState<BetaPlatform>("ios");
+  const [successPlatform, setSuccessPlatform] = useState<BetaPlatform>("ios");
 
   function validateForm(): boolean {
     const form = formRef.current;
@@ -79,8 +102,9 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
       return false;
     }
 
-    if (data.get("iosConfirmed") !== "on") {
-      setErrorMessage("Please confirm you can test on an iPhone.");
+    const selected = data.get("platform");
+    if (typeof selected !== "string" || !BETA_PLATFORM_OPTIONS.some((o) => o.value === selected)) {
+      setErrorMessage("Please choose how you'll test the app.");
       return false;
     }
 
@@ -92,6 +116,10 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
     const err = validateBetaEmail(event.target.value);
     setEmailError(err ?? "");
   }
+
+  const platformHint =
+    BETA_PLATFORM_OPTIONS.find((o) => o.value === platform)?.hint ??
+    "We'll send install instructions for your platform.";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -114,6 +142,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
     setErrorMessage("");
 
     const data = new FormData(form);
+    const submittedPlatform = String(data.get("platform")) as BetaPlatform;
 
     try {
       const res = await fetch("/api/beta-tester", {
@@ -124,8 +153,8 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
           email: data.get("email"),
           pinCount: data.get("pinCount"),
           why: data.get("why"),
+          platform: submittedPlatform,
           company: data.get("company"),
-          iosConfirmed: data.get("iosConfirmed") === "on",
           turnstileToken,
         }),
       });
@@ -140,9 +169,11 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
         return;
       }
 
+      setSuccessPlatform(submittedPlatform);
       setStatus("success");
       onSuccess?.();
       form.reset();
+      setPlatform("ios");
       setEmailError("");
     } catch {
       setErrorMessage("Something went wrong. Please try again.");
@@ -153,6 +184,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
   }
 
   if (status === "success") {
+    const copy = successCopy(successPlatform);
     return (
       <div className="text-center py-2 sm:py-4" role="status">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-secondary/10 text-secondary">
@@ -160,9 +192,13 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
         </div>
         <p className="font-display text-2xl text-navy mb-2">You&apos;re on the list</p>
         <p className="text-[15px] text-foreground-accent font-body leading-relaxed max-w-xs mx-auto">
-          We&apos;ll email your TestFlight invite when a spot opens. Use the same address as your
-          iPhone App Store account.
+          {copy.body}
         </p>
+        {copy.detail ? (
+          <p className="mt-2 text-sm text-foreground-accent font-body leading-relaxed max-w-xs mx-auto">
+            {copy.detail}
+          </p>
+        ) : null}
         <p className="mt-3 text-sm text-foreground-accent font-body">
           Questions?{" "}
           <a
@@ -185,18 +221,6 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="text-left space-y-6" noValidate>
-      <div className="flex gap-3 rounded-lg border border-secondary/20 bg-secondary/[0.06] px-4 py-3.5">
-        <div className="shrink-0 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm text-secondary">
-          <FiSmartphone className="h-5 w-5" />
-        </div>
-        <div className="min-w-0 pt-0.5">
-          <p className="text-sm font-semibold text-navy font-body">iOS beta (TestFlight)</p>
-          <p className="text-sm text-foreground-accent font-body leading-snug mt-0.5">
-            Android is coming soon. You&apos;ll need an iPhone to test for now.
-          </p>
-        </div>
-      </div>
-
       <div className="space-y-4">
         <SectionHeading>About you</SectionHeading>
 
@@ -231,7 +255,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
               fieldClass,
               emailError && "border-primary/60 focus:border-primary focus:ring-primary/15",
             )}
-            placeholder="you@example.com"
+            placeholder="you@gmail.com"
           />
           {emailError ? (
             <p id="beta-email-error" className="mt-2 text-sm text-primary font-body" role="alert">
@@ -239,30 +263,47 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
             </p>
           ) : (
             <p id="beta-email-hint" className="mt-2 text-sm text-foreground-accent font-body leading-snug">
-              Use the email on your iPhone&apos;s App Store account — that&apos;s where TestFlight
-              invites go.
+              {platformHint}
             </p>
           )}
         </label>
       </div>
 
-      <label
-        className={clsx(
-          "flex items-start gap-3.5 rounded-lg border px-4 py-3.5 cursor-pointer transition-colors",
-          "border-gold-deco/25 bg-white hover:border-gold-deco/40",
-        )}
-      >
-        <input
-          type="checkbox"
-          name="iosConfirmed"
-          required
-          disabled={status === "submitting"}
-          className="mt-0.5 h-[18px] w-[18px] shrink-0 rounded border-navy/20 text-secondary focus:ring-secondary/30"
-        />
-        <span className="text-[15px] text-navy font-body leading-snug">
-          I have an iPhone and can install Pinporium through TestFlight when invited.
-        </span>
-      </label>
+      <fieldset className="space-y-2">
+        <SectionHeading>How will you test?</SectionHeading>
+        <div className="space-y-2">
+          {BETA_PLATFORM_OPTIONS.map((option) => (
+            <label
+              key={option.value}
+              className={clsx(
+                "flex items-start gap-3 rounded-lg border px-4 py-3 cursor-pointer transition-colors",
+                platform === option.value
+                  ? "border-secondary/40 bg-secondary/[0.06]"
+                  : "border-gold-deco/25 bg-white hover:border-gold-deco/40",
+              )}
+            >
+              <input
+                type="radio"
+                name="platform"
+                value={option.value}
+                checked={platform === option.value}
+                onChange={() => setPlatform(option.value)}
+                required
+                disabled={status === "submitting"}
+                className="mt-1 h-4 w-4 shrink-0 border-navy/20 text-secondary focus:ring-secondary/30"
+              />
+              <span className="min-w-0">
+                <span className="block text-[15px] font-semibold text-navy font-body">
+                  {option.label}
+                </span>
+                <span className="block text-sm text-foreground-accent font-body leading-snug mt-0.5">
+                  {option.hint}
+                </span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
 
       <div className="space-y-4">
         <SectionHeading>Your collection</SectionHeading>

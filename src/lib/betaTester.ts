@@ -8,6 +8,26 @@ export const PIN_COUNT_OPTIONS = [
 
 export type PinCountValue = (typeof PIN_COUNT_OPTIONS)[number]["value"];
 
+export const BETA_PLATFORM_OPTIONS = [
+  {
+    value: "ios",
+    label: "iPhone (TestFlight)",
+    hint: "Invite goes to the email on your App Store account.",
+  },
+  {
+    value: "android",
+    label: "Android (Google Play internal)",
+    hint: "Invite goes to your Gmail — install from the Play Store testing link.",
+  },
+  {
+    value: "both",
+    label: "Both iPhone and Android",
+    hint: "We'll send the right install link for each platform.",
+  },
+] as const;
+
+export type BetaPlatform = (typeof BETA_PLATFORM_OPTIONS)[number]["value"];
+
 /** Practical RFC-style check — local part, domain, and TLD */
 const EMAIL_RE =
   /^[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]{0,62}[a-zA-Z0-9])?@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$/;
@@ -49,24 +69,35 @@ export interface BetaTesterPayload {
   email: string;
   pinCount: PinCountValue;
   why?: string;
-  iosConfirmed: boolean;
+  platform: BetaPlatform;
 }
 
-export function pinCountLabel(value: PinCountValue): string {
-  return PIN_COUNT_OPTIONS.find((o) => o.value === value)?.label ?? value;
+export function platformLabel(value: BetaPlatform): string {
+  return BETA_PLATFORM_OPTIONS.find((o) => o.value === value)?.label ?? value;
 }
 
 export function formatBetaTesterSlackMessage(data: BetaTesterPayload): string {
   const why = data.why?.trim();
+  const platformLine =
+    data.platform === "ios"
+      ? "Platform: iOS (TestFlight)"
+      : data.platform === "android"
+        ? "Platform: Android (Play internal)"
+        : "Platform: iOS + Android";
+
   return [
     "Beta Tester Request",
     "",
     `Name: ${data.name}`,
     `Email: ${data.email}`,
+    platformLine,
     `Approximate pins: ${pinCountLabel(data.pinCount)}`,
-    `Can test on iPhone: Yes`,
     `Why they want to be a tester: ${why || "(not provided)"}`,
   ].join("\n");
+}
+
+export function pinCountLabel(value: PinCountValue): string {
+  return PIN_COUNT_OPTIONS.find((o) => o.value === value)?.label ?? value;
 }
 
 export type ParsedBetaTesterRequest = BetaTesterPayload & { turnstileToken: string };
@@ -92,7 +123,7 @@ export function parseBetaTesterBody(
   const why = typeof raw.why === "string" ? raw.why.trim() : undefined;
   const turnstileToken =
     typeof raw.turnstileToken === "string" ? raw.turnstileToken.trim() : "";
-  const iosConfirmed = raw.iosConfirmed === true;
+  const platform = raw.platform;
 
   if (name.length < 2 || name.length > 120) {
     return { ok: false, error: "Please enter your name." };
@@ -102,11 +133,9 @@ export function parseBetaTesterBody(
     return { ok: false, error: emailError };
   }
 
-  if (!iosConfirmed) {
-    return {
-      ok: false,
-      error: "Please confirm you can test on an iPhone. Android is coming soon.",
-    };
+  const validPlatforms = BETA_PLATFORM_OPTIONS.map((o) => o.value);
+  if (typeof platform !== "string" || !validPlatforms.includes(platform as BetaPlatform)) {
+    return { ok: false, error: "Please choose how you'll test (iPhone, Android, or both)." };
   }
 
   const validPinCounts = PIN_COUNT_OPTIONS.map((o) => o.value);
@@ -125,7 +154,7 @@ export function parseBetaTesterBody(
       email,
       pinCount: pinCount as PinCountValue,
       why: why || undefined,
-      iosConfirmed: true,
+      platform: platform as BetaPlatform,
       turnstileToken,
     },
   };
