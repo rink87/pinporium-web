@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/react";
 import { Nunito, Playfair_Display } from "next/font/google";
 
 import { BetaApplyProvider } from "@/components/BetaApplyProvider";
@@ -56,6 +57,7 @@ export default function RootLayout({
           <main className="overflow-x-hidden">{children}</main>
           <Footer />
         </BetaApplyProvider>
+        <Analytics />
       </body>
     </html>
   );
