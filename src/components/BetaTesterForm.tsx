@@ -50,22 +50,14 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
-function successCopy(platform: BetaPlatform): { body: string; detail?: string } {
+function successCopy(platform: BetaPlatform): { body: string } {
   if (platform === "android") {
     return {
-      body: "We'll email your Google Play internal testing invite when a spot opens.",
-      detail: "Use the same Gmail address on your Android device.",
-    };
-  }
-  if (platform === "both") {
-    return {
-      body: "We'll email install links for TestFlight and Google Play when spots open.",
-      detail: "Use the same email on your iPhone App Store account and Android Gmail.",
+      body: "Android testing is coming soon. We'll email you at the address you provided when it's available for testing.",
     };
   }
   return {
-    body: "We'll email your TestFlight invite when a spot opens.",
-    detail: "Use the same address as your iPhone App Store account.",
+    body: "We'll send a TestFlight download link to the email you provided when a spot opens.",
   };
 }
 
@@ -194,11 +186,6 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
         <p className="text-[15px] text-foreground-accent font-body leading-relaxed max-w-xs mx-auto">
           {copy.body}
         </p>
-        {copy.detail ? (
-          <p className="mt-2 text-sm text-foreground-accent font-body leading-relaxed max-w-xs mx-auto">
-            {copy.detail}
-          </p>
-        ) : null}
         <p className="mt-3 text-sm text-foreground-accent font-body">
           Questions?{" "}
           <a

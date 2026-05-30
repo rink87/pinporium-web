@@ -11,18 +11,13 @@ export type PinCountValue = (typeof PIN_COUNT_OPTIONS)[number]["value"];
 export const BETA_PLATFORM_OPTIONS = [
   {
     value: "ios",
-    label: "iPhone (TestFlight)",
-    hint: "Invite goes to the email on your App Store account.",
+    label: "iPhone",
+    hint: "We'll send a TestFlight download link to the email you provide.",
   },
   {
     value: "android",
-    label: "Android (Google Play internal)",
-    hint: "Invite goes to your Gmail — install from the Play Store testing link.",
-  },
-  {
-    value: "both",
-    label: "Both iPhone and Android",
-    hint: "We'll send the right install link for each platform.",
+    label: "Android",
+    hint: "Coming soon — we'll email you when Android testing is available.",
   },
 ] as const;
 
@@ -80,10 +75,8 @@ export function formatBetaTesterSlackMessage(data: BetaTesterPayload): string {
   const why = data.why?.trim();
   const platformLine =
     data.platform === "ios"
-      ? "Platform: iOS (TestFlight)"
-      : data.platform === "android"
-        ? "Platform: Android (Play internal)"
-        : "Platform: iOS + Android";
+      ? "Platform: iPhone (TestFlight)"
+      : "Platform: Android (waitlist — coming soon)";
 
   return [
     "Beta Tester Request",
@@ -135,7 +128,7 @@ export function parseBetaTesterBody(
 
   const validPlatforms = BETA_PLATFORM_OPTIONS.map((o) => o.value);
   if (typeof platform !== "string" || !validPlatforms.includes(platform as BetaPlatform)) {
-    return { ok: false, error: "Please choose how you'll test (iPhone, Android, or both)." };
+    return { ok: false, error: "Please choose iPhone or Android." };
   }
 
   const validPinCounts = PIN_COUNT_OPTIONS.map((o) => o.value);
