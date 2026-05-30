@@ -52,7 +52,7 @@ Before starting, make sure you have the following installed:
 
 1. **Install dependencies**: Run `npm install`
 2. **Run the development server**: `npm run dev`
-3. **View your project**: Open [localhost:3000](http://localhost:3000)
+3. **View your project**: Open [localhost:3001](http://localhost:3001) (port 3001 avoids clashing with local admin on 3000)
 
 ---
 
