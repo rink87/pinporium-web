@@ -1,8 +1,21 @@
 import type { BetaPlatform } from "@/lib/betaTester";
 import { siteDetails } from "@/data/siteDetails";
 
+import {
+  emailAppleTestFlightButton,
+  emailChecklist,
+  emailImageLink,
+  emailSectionHeading,
+  escapeHtml,
+} from "../blocks";
+import { BETA_DISCORD_URL, BETA_TESTFLIGHT_URL } from "../constants";
 import { emailLayout } from "../layout";
-import { emailTheme } from "../theme";
+import {
+  EMAIL_DISCORD_BUTTON_HEIGHT,
+  EMAIL_DISCORD_BUTTON_WIDTH,
+  emailTheme,
+  getEmailAssetUrls,
+} from "../theme";
 
 function firstName(fullName: string) {
   const trimmed = fullName.trim();
@@ -12,33 +25,86 @@ function firstName(fullName: string) {
   return trimmed.split(/\s+/)[0] ?? trimmed;
 }
 
-function bodyCopy(platform: BetaPlatform, name: string) {
+const IOS_CORE_CHECKLIST = [
+  "Add a pin to your <strong>vault</strong> with photos, then link it to an existing catalog entry.",
+  "If you can’t find a match, <strong>suggest the pin for catalog</strong> (the catalog is community-built, so coverage starts smaller and grows fast).",
+  "Use <strong>Browse / Discover</strong> to find pins and add a few to <strong>ISO, DISO, or Grail</strong> in The Hunt.",
+  "Explore <strong>trade functionality</strong>: mark a pin for trade and walk through matches/proposals.",
+  "Visit your <strong>profile</strong>, then check <strong>achievements</strong> and your <strong>collector score</strong>.",
+  "Create a <strong>pin board</strong> and organize a few pins into it.",
+  "Open a pin and tap <strong>Share</strong> to test sharing flow and output.",
+  "Request a feature or report any bugs (in-app shake, Discord, or email).",
+];
+
+function iosBetaWelcomeBody(name: string, assetsBaseUrl?: string) {
   const greeting = `Hi ${escapeHtml(firstName(name))},`;
   const t = emailTheme;
-
-  if (platform === "android") {
-    return `
-      <p style="margin:0 0 16px;font-family:${t.fontDisplay};font-size:20px;color:${t.foreground};">${greeting}</p>
-      <p style="margin:0 0 16px;color:${t.foreground};">Thanks for your interest in the Pinporium beta.</p>
-      <p style="margin:0 0 16px;color:${t.foreground};">Android testing is <strong>coming soon</strong>. We'll email you at this address when it's available for testing — no action needed right now.</p>
-      <p style="margin:0;color:${t.foregroundAccent};font-size:15px;">Questions? Reply to this email or write to <a href="mailto:${siteDetails.supportEmail}" style="color:${t.secondary};font-weight:600;">${siteDetails.supportEmail}</a>.</p>
-    `;
-  }
+  const support = siteDetails.supportEmail;
+  const assets = getEmailAssetUrls(assetsBaseUrl);
 
   return `
     <p style="margin:0 0 16px;font-family:${t.fontDisplay};font-size:20px;color:${t.foreground};">${greeting}</p>
-    <p style="margin:0 0 16px;color:${t.foreground};">Thanks for expressing interest in being a Pinporium beta tester.</p>
-    <p style="margin:0 0 16px;color:${t.foreground};">We'll send a <strong>TestFlight</strong> download link to the email you provided in the next few days.</p>
-    <p style="margin:0;color:${t.foregroundAccent};font-size:15px;">Questions? Reply to this email or write to <a href="mailto:${siteDetails.supportEmail}" style="color:${t.secondary};font-weight:600;">${siteDetails.supportEmail}</a>.</p>
+    <p style="margin:0 0 16px;color:${t.foreground};">Welcome to the <strong>Pinporium beta</strong> — thank you for helping us build the pin collection app collectors actually want to use.</p>
+    <p style="margin:0 0 12px;color:${t.foreground};">Install the beta on your iPhone via <strong>TestFlight</strong> (get the TestFlight app from the App Store first if you don’t have it). Open this link on your phone:</p>
+    ${emailAppleTestFlightButton(BETA_TESTFLIGHT_URL)}
+    <p style="margin:0 0 20px;color:${t.foregroundAccent};font-size:14px;line-height:1.5;">No rush — skip anything that doesn’t fit your collection. Partial walkthroughs are still useful.</p>
+
+    ${emailSectionHeading("Core checklist to try")}
+    ${emailChecklist(IOS_CORE_CHECKLIST)}
+
+    <p style="margin:4px 0 0;color:${t.foregroundAccent};font-size:14px;line-height:1.5;">Note: the catalog is community-built, so there won’t be a lot of pins to start — your contributions to the catalog help us grow!</p>
+
+    ${emailSectionHeading("Share any feedback")}
+    <p style="margin:0 0 12px;color:${t.foreground};font-size:15px;line-height:1.6;">We want the real stuff — there are no wrong answers:</p>
+    <ul style="margin:0 0 16px;padding-left:20px;color:${t.foreground};font-size:15px;line-height:1.6;">
+      <li style="margin-bottom:8px;"><strong>Bugs</strong> — crashes, broken flows, wrong data</li>
+      <li style="margin-bottom:8px;"><strong>Features</strong> — what you wish the app did</li>
+      <li style="margin-bottom:8px;"><strong>Confusing</strong> — what was hard to find or understand</li>
+      <li style="margin-bottom:8px;"><strong>Delightful</strong> — what felt easy, fast, or fun</li>
+    </ul>
+    <p style="margin:0 0 8px;color:${t.foreground};font-size:15px;">Our beta Discord is the best place to post screenshots and thoughts:</p>
+    ${emailImageLink({
+      href: BETA_DISCORD_URL,
+      imageUrl: assets.discordJoinButtonUrl,
+      alt: "Join us on Discord",
+      width: EMAIL_DISCORD_BUTTON_WIDTH,
+      height: EMAIL_DISCORD_BUTTON_HEIGHT,
+    })}
+    <p style="margin:0;color:${t.foregroundAccent};font-size:14px;line-height:1.5;">In the app: <strong>shake your iPhone</strong> to send feedback. You can also reply to this email or write to <a href="mailto:${support}" style="color:${t.secondary};font-weight:600;">${support}</a>.</p>
   `;
 }
 
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+function androidWaitlistBody(name: string, assetsBaseUrl?: string) {
+  const greeting = `Hi ${escapeHtml(firstName(name))},`;
+  const t = emailTheme;
+  const support = siteDetails.supportEmail;
+  const assets = getEmailAssetUrls(assetsBaseUrl);
+
+  return `
+    <p style="margin:0 0 16px;font-family:${t.fontDisplay};font-size:20px;color:${t.foreground};">${greeting}</p>
+    <p style="margin:0 0 16px;color:${t.foreground};">Thanks for your interest in the Pinporium beta.</p>
+    <p style="margin:0 0 16px;color:${t.foreground};">Android testing is <strong>coming soon</strong>. We'll email you at this address when it's available — no action needed right now.</p>
+    <p style="margin:0 0 16px;color:${t.foreground};font-size:15px;">Want to follow along or share ideas early? You're welcome in our community Discord:</p>
+    ${emailImageLink({
+      href: BETA_DISCORD_URL,
+      imageUrl: assets.discordJoinButtonUrl,
+      alt: "Join us on Discord",
+      width: EMAIL_DISCORD_BUTTON_WIDTH,
+      height: EMAIL_DISCORD_BUTTON_HEIGHT,
+    })}
+    <p style="margin:0;color:${t.foregroundAccent};font-size:15px;">Questions? Reply to this email or write to <a href="mailto:${support}" style="color:${t.secondary};font-weight:600;">${support}</a>.</p>
+  `;
+}
+
+function bodyCopy(
+  platform: BetaPlatform,
+  name: string,
+  assetsBaseUrl?: string,
+) {
+  if (platform === "android") {
+    return androidWaitlistBody(name, assetsBaseUrl);
+  }
+  return iosBetaWelcomeBody(name, assetsBaseUrl);
 }
 
 export function betaThanksEmailHtml({
@@ -54,10 +120,12 @@ export function betaThanksEmailHtml({
 }) {
   const isIos = platform === "ios";
   const previewText = isIos
-    ? "Thanks for applying — your TestFlight invite is on the way."
+    ? "Welcome to the Pinporium beta — TestFlight link, core checklist, and Discord feedback."
     : "Thanks for applying — we'll email you when Android testing opens.";
 
-  const title = isIos ? "You're on the Pinporium beta list" : "Thanks — Android beta coming soon";
+  const title = isIos
+    ? "Welcome to the Pinporium beta"
+    : "Thanks — Android beta coming soon";
 
   const footerHtml = `
     <p style="margin:20px 0 0;padding-top:20px;font-size:13px;line-height:1.5;color:${emailTheme.foregroundAccent};">
@@ -68,7 +136,7 @@ export function betaThanksEmailHtml({
   return emailLayout({
     previewText,
     title,
-    bodyHtml: bodyCopy(platform, name),
+    bodyHtml: bodyCopy(platform, name, assetsBaseUrl),
     footerHtml,
     assetsBaseUrl,
     wordmarkSrc,
@@ -77,6 +145,6 @@ export function betaThanksEmailHtml({
 
 export function betaThanksEmailSubject(platform: BetaPlatform) {
   return platform === "ios"
-    ? "Thanks for applying to the Pinporium beta"
+    ? "Welcome to the Pinporium beta"
     : "Thanks for your interest in Pinporium (Android)";
 }

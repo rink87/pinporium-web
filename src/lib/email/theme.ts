@@ -21,6 +21,11 @@ export const EMAIL_WORDMARK_WIDTH = 280;
 export const EMAIL_WORDMARK_HEIGHT = 56;
 
 const WORDMARK_PATH = "/images/logo-wordmark.png";
+const DISCORD_JOIN_BUTTON_PATH = "/images/discord-join-button.png";
+
+/** discord-join-button.png intrinsic size (800×272) — display size in email */
+export const EMAIL_DISCORD_BUTTON_WIDTH = 260;
+export const EMAIL_DISCORD_BUTTON_HEIGHT = 88;
 
 /**
  * Public HTTPS origin for email images (must be absolute — not a filesystem path).
@@ -46,6 +51,7 @@ export function getEmailAssetUrls(
   return {
     wordmarkUrl:
       options?.wordmarkSrc ?? `${origin}${WORDMARK_PATH}`,
+    discordJoinButtonUrl: `${origin}${DISCORD_JOIN_BUTTON_PATH}`,
     siteUrl: siteDetails.siteUrl.replace(/\/$/, ""),
   };
 }

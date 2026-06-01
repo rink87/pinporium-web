@@ -57,7 +57,7 @@ function successCopy(platform: BetaPlatform): { body: string } {
     };
   }
   return {
-    body: "We'll send a TestFlight download link to the email you provided when a spot opens.",
+    body: "You're on the list. We'll review your request and email you when you're approved for TestFlight.",
   };
 }
 

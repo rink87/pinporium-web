@@ -1,0 +1,37 @@
+{
+  "_metadata": {
+    "major_version": 2,
+    "minor_version": 1
+  },
+  "display_information": {
+    "name": "Pinporium Beta",
+    "description": "Send beta welcome emails when you react :incoming_envelope: on signup messages.",
+    "long_description": "Pinporium Beta connects your beta signup Slack channel to Resend. When someone applies on pinporium.app, a formatted signup message appears in Slack. After you review it, react with :incoming_envelope: on that message. The app reads the signup's name, email, and platform (iPhone or Android), sends the matching welcome email (TestFlight checklist for iOS, waitlist message for Android), and posts a confirmation in the thread. Requires pinporium-web deployed at pinporium.app with Resend configured.",
+    "background_color": "#2d8b75"
+  },
+  "features": {
+    "bot_user": {
+      "display_name": "Pinporium Beta",
+      "always_online": false
+    }
+  },
+  "oauth_config": {
+    "scopes": {
+      "bot": [
+        "channels:history",
+        "groups:history",
+        "chat:write",
+        "reactions:read"
+      ]
+    }
+  },
+  "settings": {
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false,
+    "event_subscriptions": {
+      "request_url": "https://www.pinporium.app/api/slack/events",
+      "bot_events": ["reaction_added"]
+    }
+  }
+}

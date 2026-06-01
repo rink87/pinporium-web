@@ -35,6 +35,6 @@ export const faqs: IFAQ[] = [
     {
         question: "When can I download the app?",
         answer:
-            "Beta is on iOS (TestFlight) for now; Android is coming soon. Use Apply for beta on this site — we’ll email your TestFlight invite to the address you provide. App Store and Google Play listings are coming later. Already in the beta? Use in-app feedback (shake on iOS) or email help@pinporium.app.",
+            "Beta is on iOS (TestFlight) for now; Android is coming soon. Apply on this site — we’ll email you a welcome message with the TestFlight link after we review your request. App Store and Google Play listings are coming later. Already in the beta? Use in-app feedback (shake on iOS), our Discord, or email help@pinporium.app.",
     },
 ];

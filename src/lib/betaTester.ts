@@ -12,7 +12,7 @@ export const BETA_PLATFORM_OPTIONS = [
   {
     value: "ios",
     label: "iPhone",
-    hint: "We'll send a TestFlight download link to the email you provide.",
+    hint: "We'll email you after we review your request.",
   },
   {
     value: "android",
@@ -71,6 +71,51 @@ export function platformLabel(value: BetaPlatform): string {
   return BETA_PLATFORM_OPTIONS.find((o) => o.value === value)?.label ?? value;
 }
 
+export const BETA_SLACK_SIGNUP_HEADER = "Beta Tester Request";
+
+export function parseBetaTesterSlackMessage(
+  text: string,
+): Pick<BetaTesterPayload, "name" | "email" | "platform"> | null {
+  if (!text.includes(BETA_SLACK_SIGNUP_HEADER)) {
+    return null;
+  }
+
+  const nameLine = text.match(/^Name:\s*(.+)$/m);
+  const emailLine = text.match(/^Email:\s*(.+)$/m);
+  const platformLine = text.match(/^Platform:\s*(.+)$/m);
+
+  const name = nameLine?.[1]?.trim() ?? "";
+  const emailRaw = emailLine?.[1]?.trim() ?? "";
+  const platform = platformLine?.[1]
+    ? parsePlatformFromSlackLine(platformLine[1])
+    : null;
+
+  if (!name || !emailRaw || !platform) {
+    return null;
+  }
+
+  if (validateBetaEmail(emailRaw)) {
+    return null;
+  }
+
+  return {
+    name,
+    email: normalizeBetaEmail(emailRaw),
+    platform,
+  };
+}
+
+function parsePlatformFromSlackLine(line: string): BetaPlatform | null {
+  const lower = line.toLowerCase();
+  if (lower.includes("iphone") || lower.includes("testflight")) {
+    return "ios";
+  }
+  if (lower.includes("android")) {
+    return "android";
+  }
+  return null;
+}
+
 export function formatBetaTesterSlackMessage(data: BetaTesterPayload): string {
   const why = data.why?.trim();
   const platformLine =
@@ -79,7 +124,7 @@ export function formatBetaTesterSlackMessage(data: BetaTesterPayload): string {
       : "Platform: Android (waitlist — coming soon)";
 
   return [
-    "Beta Tester Request",
+    BETA_SLACK_SIGNUP_HEADER,
     "",
     `Name: ${data.name}`,
     `Email: ${data.email}`,

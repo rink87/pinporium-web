@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 import {
@@ -17,6 +18,10 @@ export default function EmailPreviewPage() {
   }
 
   const wordmarkSrc = getWordmarkDataUri();
+  const host = headers().get("host");
+  const assetsBaseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+    (host ? `http://${host}` : "http://localhost:3001");
   const liveWordmarkUrl = `${getEmailAssetsOrigin()}/images/logo-wordmark.png`;
 
   const samples = [
@@ -28,8 +33,8 @@ export default function EmailPreviewPage() {
     <div className="min-h-screen bg-[#f1e5d8] p-8 font-body">
       <h1 className="font-display text-2xl text-navy mb-2">Email preview</h1>
       <p className="text-foreground-accent text-sm mb-8 max-w-xl">
-        Preview inlines the wordmark so it always shows here. Real emails sent via
-        Resend load the same file from{" "}
+        Preview inlines the wordmark; Discord button and other images load from this
+        dev server. Production emails use{" "}
         <a href={liveWordmarkUrl} className="text-secondary underline">
           {liveWordmarkUrl}
         </a>{" "}
@@ -48,8 +53,9 @@ export default function EmailPreviewPage() {
                 name: sample.name,
                 platform: sample.platform,
                 wordmarkSrc,
+                assetsBaseUrl,
               })}
-              className="w-full min-h-[520px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
+              className="w-full min-h-[720px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
             />
           </section>
         ))}
