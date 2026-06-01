@@ -1,8 +1,11 @@
 import {
   formatReleaseNotesEmailBodyHtml,
+  formatReleaseNotesDiscord,
+  formatReleaseNotesPlaintext,
   getLatestReleaseNotes,
+  RELEASE_NOTES,
   type ReleaseNotesEntry,
-} from "../../../../../pinporium/content/release-notes";
+} from "@/content/release-notes";
 
 import { emailLayout } from "../layout";
 import { emailTheme } from "../theme";
@@ -14,9 +17,12 @@ export {
   formatReleaseNotesPlaintext,
   getLatestReleaseNotes,
   RELEASE_NOTES,
-} from "../../../../../pinporium/content/release-notes";
+};
 
-export function releaseNotesEmailHtml(entry: ReleaseNotesEntry, options?: { assetsBaseUrl?: string }) {
+export function releaseNotesEmailHtml(
+  entry: ReleaseNotesEntry,
+  options?: { assetsBaseUrl?: string },
+) {
   const headline = entry.headline ?? "What's new";
   const previewText = entry.summary ?? `What's new in Pinporium v${entry.version}`;
 
@@ -42,11 +48,10 @@ export function releaseNotesEmailSubject(entry: ReleaseNotesEntry): string {
   return `${headline} in Pinporium v${entry.version}`;
 }
 
-/** Convenience for beta / release announcement emails. */
 export function latestReleaseNotesEmailHtml(options?: { assetsBaseUrl?: string }) {
   const entry = getLatestReleaseNotes();
   if (!entry) {
-    throw new Error("No release notes defined in pinporium/content/release-notes.ts");
+    throw new Error("No release notes defined in src/content/release-notes.ts");
   }
   return releaseNotesEmailHtml(entry, options);
 }
