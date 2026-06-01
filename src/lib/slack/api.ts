@@ -30,7 +30,10 @@ export async function fetchSlackMessageText(
   messageTs: string,
 ): Promise<string | null> {
   const data = await slackApi<{
-    messages?: { text?: string }[];
+    messages?: {
+      text?: string;
+      attachments?: { text?: string; fallback?: string; pretext?: string }[];
+    }[];
   }>("conversations.history", {
     channel,
     latest: messageTs,
@@ -38,7 +41,24 @@ export async function fetchSlackMessageText(
     limit: "1",
   });
 
-  return data.messages?.[0]?.text ?? null;
+  const message = data.messages?.[0];
+  if (!message) {
+    return null;
+  }
+
+  const parts: string[] = [];
+  if (message.text?.trim()) {
+    parts.push(message.text);
+  }
+  for (const attachment of message.attachments ?? []) {
+    for (const field of [attachment.pretext, attachment.text, attachment.fallback]) {
+      if (field?.trim()) {
+        parts.push(field);
+      }
+    }
+  }
+
+  return parts.length > 0 ? parts.join("\n") : null;
 }
 
 export async function postSlackThreadReply({

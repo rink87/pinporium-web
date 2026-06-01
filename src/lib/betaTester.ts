@@ -1,3 +1,5 @@
+import { normalizeSlackMessageText } from "@/lib/slack/normalizeMessageText";
+
 export const PIN_COUNT_OPTIONS = [
   { value: "under-25", label: "Fewer than 25" },
   { value: "25-100", label: "25–100" },
@@ -76,13 +78,16 @@ export const BETA_SLACK_SIGNUP_HEADER = "Beta Tester Request";
 export function parseBetaTesterSlackMessage(
   text: string,
 ): Pick<BetaTesterPayload, "name" | "email" | "platform"> | null {
-  if (!text.includes(BETA_SLACK_SIGNUP_HEADER)) {
+  const normalized = text.replace(/\r\n/g, "\n").trim();
+  const body = normalizeSlackMessageText(normalized);
+
+  if (!body.includes(BETA_SLACK_SIGNUP_HEADER)) {
     return null;
   }
 
-  const nameLine = text.match(/^Name:\s*(.+)$/m);
-  const emailLine = text.match(/^Email:\s*(.+)$/m);
-  const platformLine = text.match(/^Platform:\s*(.+)$/m);
+  const nameLine = body.match(/^Name:\s*(.+)$/m);
+  const emailLine = body.match(/^Email:\s*(.+)$/m);
+  const platformLine = body.match(/^Platform:\s*(.+)$/m);
 
   const name = nameLine?.[1]?.trim() ?? "";
   const emailRaw = emailLine?.[1]?.trim() ?? "";
