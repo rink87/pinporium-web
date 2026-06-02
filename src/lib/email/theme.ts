@@ -22,10 +22,15 @@ export const EMAIL_WORDMARK_HEIGHT = 56;
 
 const WORDMARK_PATH = "/images/logo-wordmark.png";
 const DISCORD_JOIN_BUTTON_PATH = "/images/discord-join-button.png";
+const GOOGLE_PLAY_BADGE_PATH = "/images/get-it-on-google-play.png";
 
 /** discord-join-button.png intrinsic size (800×272) — display size in email */
 export const EMAIL_DISCORD_BUTTON_WIDTH = 260;
 export const EMAIL_DISCORD_BUTTON_HEIGHT = 88;
+
+/** Official “Get it on Google Play” badge (646×250) */
+export const EMAIL_GOOGLE_PLAY_BADGE_WIDTH = 200;
+export const EMAIL_GOOGLE_PLAY_BADGE_HEIGHT = 77;
 
 /**
  * Public HTTPS origin for email images (must be absolute — not a filesystem path).
@@ -52,6 +57,7 @@ export function getEmailAssetUrls(
     wordmarkUrl:
       options?.wordmarkSrc ?? `${origin}${WORDMARK_PATH}`,
     discordJoinButtonUrl: `${origin}${DISCORD_JOIN_BUTTON_PATH}`,
+    googlePlayBadgeUrl: `${origin}${GOOGLE_PLAY_BADGE_PATH}`,
     siteUrl: siteDetails.siteUrl.replace(/\/$/, ""),
   };
 }

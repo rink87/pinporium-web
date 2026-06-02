@@ -5,7 +5,7 @@ import {
   emailAppleTestFlightButton,
   emailChecklist,
   emailImageLink,
-  emailPlayInternalButton,
+  emailGooglePlayBadgeButton,
   emailSectionHeading,
   escapeHtml,
 } from "../blocks";
@@ -18,6 +18,8 @@ import { emailLayout } from "../layout";
 import {
   EMAIL_DISCORD_BUTTON_HEIGHT,
   EMAIL_DISCORD_BUTTON_WIDTH,
+  EMAIL_GOOGLE_PLAY_BADGE_HEIGHT,
+  EMAIL_GOOGLE_PLAY_BADGE_WIDTH,
   emailTheme,
   getEmailAssetUrls,
 } from "../theme";
@@ -90,12 +92,18 @@ function iosBetaWelcomeBody(name: string, assetsBaseUrl?: string) {
 function androidBetaWelcomeBody(name: string, assetsBaseUrl?: string) {
   const greeting = `Hi ${escapeHtml(firstName(name))},`;
   const t = emailTheme;
+  const assets = getEmailAssetUrls(assetsBaseUrl);
 
   return `
     <p style="margin:0 0 16px;font-family:${t.fontDisplay};font-size:20px;color:${t.foreground};">${greeting}</p>
     <p style="margin:0 0 16px;color:${t.foreground};">Welcome to the <strong>Pinporium beta</strong> on Android — thank you for helping us build the pin collection app collectors actually want to use.</p>
     <p style="margin:0 0 12px;color:${t.foreground};">Install the beta from <strong>Google Play</strong> (internal testing). On your Android phone, open this link, sign in with the <strong>same Google account</strong> as this email if you can, accept the invite, then install <strong>Pinporium</strong> from the Play Store:</p>
-    ${emailPlayInternalButton(BETA_PLAY_INTERNAL_URL)}
+    ${emailGooglePlayBadgeButton(
+      BETA_PLAY_INTERNAL_URL,
+      assets.googlePlayBadgeUrl,
+      EMAIL_GOOGLE_PLAY_BADGE_WIDTH,
+      EMAIL_GOOGLE_PLAY_BADGE_HEIGHT,
+    )}
     <p style="margin:0 0 20px;color:${t.foregroundAccent};font-size:14px;line-height:1.5;">No rush — skip anything that doesn’t fit your collection. Partial walkthroughs are still useful.</p>
 
     ${emailSectionHeading("Core checklist to try")}
