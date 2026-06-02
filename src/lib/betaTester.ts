@@ -14,12 +14,12 @@ export const BETA_PLATFORM_OPTIONS = [
   {
     value: "ios",
     label: "iPhone",
-    hint: "We'll email you after we review your request.",
+    hint: "via TestFlight",
   },
   {
     value: "android",
     label: "Android",
-    hint: "You'll get a welcome email with the Google Play internal testing link.",
+    hint: "via Play Internal Testing",
   },
 ] as const;
 

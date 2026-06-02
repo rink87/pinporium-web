@@ -109,10 +109,6 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
     setEmailError(err ?? "");
   }
 
-  const platformHint =
-    BETA_PLATFORM_OPTIONS.find((o) => o.value === platform)?.hint ??
-    "We'll send install instructions for your platform.";
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -237,7 +233,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
             disabled={status === "submitting"}
             onBlur={handleEmailBlur}
             aria-invalid={Boolean(emailError)}
-            aria-describedby={emailError ? "beta-email-error" : "beta-email-hint"}
+            aria-describedby={emailError ? "beta-email-error" : undefined}
             className={clsx(
               fieldClass,
               emailError && "border-primary/60 focus:border-primary focus:ring-primary/15",
@@ -248,11 +244,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
             <p id="beta-email-error" className="mt-2 text-sm text-primary font-body" role="alert">
               {emailError}
             </p>
-          ) : (
-            <p id="beta-email-hint" className="mt-2 text-sm text-foreground-accent font-body leading-snug">
-              {platformHint}
-            </p>
-          )}
+          ) : null}
         </label>
       </div>
 
@@ -279,17 +271,21 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
                 disabled={status === "submitting"}
                 className="mt-1 h-4 w-4 shrink-0 border-navy/20 text-secondary focus:ring-secondary/30"
               />
-              <span className="min-w-0">
-                <span className="block text-[15px] font-semibold text-navy font-body">
+              <span className="min-w-0 flex flex-col">
+                <span className="text-[15px] font-semibold text-navy font-body">
                   {option.label}
                 </span>
-                <span className="block text-sm text-foreground-accent font-body leading-snug mt-0.5">
+                <span className="text-sm text-foreground-accent font-body leading-snug mt-0.5">
                   {option.hint}
                 </span>
               </span>
             </label>
           ))}
         </div>
+        <p className="rounded-lg border border-gold-deco/25 bg-white/80 px-4 py-3 text-sm text-foreground-accent font-body leading-relaxed">
+          After your request is approved, you will receive an email with a link to download
+          the app (TestFlight for iOS, Play internal testing for Android).
+        </p>
       </fieldset>
 
       <div className="space-y-4">
