@@ -53,11 +53,11 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 function successCopy(platform: BetaPlatform): { body: string } {
   if (platform === "android") {
     return {
-      body: "Android testing is coming soon. We'll email you at the address you provided when it's available for testing.",
+      body: "You're on the list. We'll review your request and email you the Google Play internal testing link.",
     };
   }
   return {
-    body: "You're on the list. We'll review your request and email you when you're approved for TestFlight.",
+    body: "You're on the list. We'll review your request and email you the TestFlight install link.",
   };
 }
 

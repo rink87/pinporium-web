@@ -19,7 +19,7 @@ export const BETA_PLATFORM_OPTIONS = [
   {
     value: "android",
     label: "Android",
-    hint: "Coming soon — we'll email you when Android testing is available.",
+    hint: "You'll get a welcome email with the Google Play internal testing link.",
   },
 ] as const;
 
@@ -126,7 +126,7 @@ export function formatBetaTesterSlackMessage(data: BetaTesterPayload): string {
   const platformLine =
     data.platform === "ios"
       ? "Platform: iPhone (TestFlight)"
-      : "Platform: Android (waitlist — coming soon)";
+      : "Platform: Android (Play internal testing)";
 
   return [
     BETA_SLACK_SIGNUP_HEADER,

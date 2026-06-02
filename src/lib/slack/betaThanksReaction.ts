@@ -31,7 +31,7 @@ function isAllowedReactionUser(userId: string): boolean {
 }
 
 function emailPlatformLabel(platform: BetaPlatform): string {
-  return platform === "ios" ? "iPhone / TestFlight welcome" : "Android waitlist";
+  return platform === "ios" ? "iPhone / TestFlight welcome" : "Android / Play welcome";
 }
 
 export async function handleBetaThanksReactionAdded({

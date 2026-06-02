@@ -82,6 +82,19 @@ export function emailImageLink({
     </table>`;
 }
 
+/** Google Play–style CTA for internal testing (email-safe table layout). */
+export function emailPlayInternalButton(href: string) {
+  const safeHref = escapeHtml(href);
+  return `
+    <table role="presentation" cellpadding="0" cellspacing="0" align="center" style="margin:20px auto;">
+      <tr>
+        <td align="center" style="border-radius:6px;background-color:#01875f;">
+          <a href="${safeHref}" style="display:block;padding:14px 28px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:17px;font-weight:600;line-height:1.2;color:#ffffff;text-decoration:none;white-space:nowrap;">Get Pinporium on Google Play</a>
+        </td>
+      </tr>
+    </table>`;
+}
+
 /** Sign in with Apple–style CTA for TestFlight (email-safe table layout). */
 export function emailAppleTestFlightButton(href: string) {
   const safeHref = escapeHtml(href);
