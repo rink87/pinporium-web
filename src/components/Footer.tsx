@@ -132,6 +132,10 @@ const Footer: React.FC = () => {
           <Link href="/terms" className="hover:text-cream/60 underline">
             Terms
           </Link>
+          {" · "}
+          <Link href="/delete-account" className="hover:text-cream/60 underline">
+            Delete account
+          </Link>
         </p>
       </div>
     </footer>

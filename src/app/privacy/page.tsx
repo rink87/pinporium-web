@@ -183,7 +183,10 @@ const sections: LegalSection[] = [
                     <li>Lodge a complaint with a supervisory authority</li>
                 </ul>
                 <p>
-                    To exercise these rights, contact{" "}
+                    To delete your account and associated personal data, follow the steps
+                    on our{" "}
+                    <a href="/delete-account">account deletion page</a>. For other rights,
+                    contact{" "}
                     <a href={`mailto:${legal.contactEmail}`}>{legal.contactEmail}</a>.
                     We may need to verify your identity before responding.
                 </p>

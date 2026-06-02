@@ -61,6 +61,10 @@ const LegalDocument: React.FC<LegalDocumentProps> = ({
                     <Link href="/terms" className="hover:text-primary">
                         Terms of Service
                     </Link>
+                    {" · "}
+                    <Link href="/delete-account" className="hover:text-primary">
+                        Delete account
+                    </Link>
                 </p>
             </Container>
         </article>
