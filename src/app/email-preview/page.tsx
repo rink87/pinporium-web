@@ -3,6 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import {
+  betaSignupReceivedEmailHtml,
+  betaSignupReceivedEmailSubject,
+} from "@/lib/email/templates/betaSignupReceived";
+import {
   betaThanksEmailHtml,
   betaThanksEmailSubject,
 } from "@/lib/email/templates/betaThanks";
@@ -22,46 +26,71 @@ export default function EmailPreviewPage() {
   const assetsBaseUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
     (host ? `http://${host}` : "http://localhost:3001");
-  const samples = [
-    { platform: "ios" as const, name: "Chris" },
-    { platform: "android" as const, name: "Chris" },
-  ];
+
+  const name = "Chris";
+  const platforms = ["ios", "android"] as const;
 
   return (
     <div className="min-h-screen bg-[#f1e5d8] p-8 font-body">
-      <h1 className="font-display text-2xl text-navy mb-2">Beta welcome email preview</h1>
+      <h1 className="font-display text-2xl text-navy mb-2">Beta email preview</h1>
 
-      <div className="mb-8 max-w-2xl space-y-3 rounded-lg border border-gold-deco/40 bg-cream/80 p-4 text-sm text-foreground-accent">
-        <p className="text-navy font-medium">When does the tester get this email?</p>
-        <p>
-          <strong>Not</strong> automatically when they submit the form on the site. After
-          signup, they only see the on-site success message. You send this welcome email by
-          reacting with <strong>:incoming_envelope:</strong> on their Slack signup post.
-        </p>
-        <p>
-          Right after the form they see: &ldquo;You&apos;re on the list. We&apos;ll review
-          your request and email you the TestFlight / Google Play link.&rdquo;
-        </p>
+      <div className="mb-10 max-w-2xl space-y-3 rounded-lg border border-gold-deco/40 bg-cream/80 p-4 text-sm text-foreground-accent">
+        <p className="text-navy font-medium">Two emails</p>
+        <ol className="list-decimal pl-5 space-y-2">
+          <li>
+            <strong>On form submit</strong> — short &ldquo;thanks, you&apos;re on the
+            list&rdquo; (below, first row).
+          </li>
+          <li>
+            <strong>After you react :incoming_envelope: on Slack</strong> — full welcome
+            with install link, checklist, and Discord (second row).
+          </li>
+        </ol>
         <p>
           <Link href="/" className="text-secondary underline">
             Open site
           </Link>{" "}
-          to try the form · images load from this dev server in preview only.
+          to try the form.
         </p>
       </div>
 
-      <div className="grid gap-10 lg:grid-cols-2">
-        {samples.map((sample) => (
-          <section key={sample.platform} className="space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-accent">
-              {sample.platform === "ios" ? "iPhone" : "Android"} —{" "}
-              {betaThanksEmailSubject(sample.platform)}
-            </h2>
+      <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-accent mb-4">
+        1 — Immediately after signup · {betaSignupReceivedEmailSubject()}
+      </h2>
+      <div className="grid gap-10 lg:grid-cols-2 mb-12">
+        {platforms.map((platform) => (
+          <section key={`received-${platform}`} className="space-y-3">
+            <h3 className="text-sm font-medium text-navy">
+              {platform === "ios" ? "iPhone" : "Android"}
+            </h3>
             <iframe
-              title={`Beta thanks — ${sample.platform}`}
+              title={`Signup received — ${platform}`}
+              srcDoc={betaSignupReceivedEmailHtml({
+                name,
+                platform,
+                wordmarkSrc,
+                assetsBaseUrl,
+              })}
+              className="w-full min-h-[420px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
+            />
+          </section>
+        ))}
+      </div>
+
+      <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-accent mb-4">
+        2 — After Slack :incoming_envelope: approval
+      </h2>
+      <div className="grid gap-10 lg:grid-cols-2">
+        {platforms.map((platform) => (
+          <section key={`welcome-${platform}`} className="space-y-3">
+            <h3 className="text-sm font-medium text-navy">
+              {platform === "ios" ? "iPhone" : "Android"} — {betaThanksEmailSubject(platform)}
+            </h3>
+            <iframe
+              title={`Beta welcome — ${platform}`}
               srcDoc={betaThanksEmailHtml({
-                name: sample.name,
-                platform: sample.platform,
+                name,
+                platform,
                 wordmarkSrc,
                 assetsBaseUrl,
               })}

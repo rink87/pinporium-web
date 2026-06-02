@@ -4,6 +4,7 @@ import {
   formatBetaTesterSlackMessage,
   parseBetaTesterBody,
 } from "@/lib/betaTester";
+import { sendBetaSignupReceivedEmail } from "@/lib/email/sendBetaEmails";
 import { turnstileRequired, verifyTurnstileToken } from "@/lib/turnstile";
 
 export async function POST(request: Request) {
@@ -70,6 +71,16 @@ export async function POST(request: Request) {
       { error: "Could not submit your request. Please try again or email help@pinporium.app." },
       { status: 502 },
     );
+  }
+
+  const emailResult = await sendBetaSignupReceivedEmail({
+    name: payload.name,
+    email: payload.email,
+    platform: payload.platform,
+  });
+
+  if (!emailResult.sent && !emailResult.skipped) {
+    console.error("Beta signup received email failed after Slack success", emailResult.error);
   }
 
   return NextResponse.json({ ok: true });

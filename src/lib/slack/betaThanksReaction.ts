@@ -3,7 +3,7 @@ import {
   platformLabel,
   type BetaPlatform,
 } from "@/lib/betaTester";
-import { sendBetaThanksEmail } from "@/lib/email/sendBetaThanks";
+import { sendBetaWelcomeEmail } from "@/lib/email/sendBetaEmails";
 
 import { fetchSlackMessageText, postSlackThreadReply } from "./api";
 
@@ -101,7 +101,7 @@ export async function handleBetaThanksReactionAdded({
     return;
   }
 
-  const emailResult = await sendBetaThanksEmail({
+  const emailResult = await sendBetaWelcomeEmail({
     name: signup.name,
     email: signup.email,
     platform: signup.platform,
