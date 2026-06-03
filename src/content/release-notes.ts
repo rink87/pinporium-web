@@ -1,11 +1,23 @@
 /**
- * Release notes for marketing emails / Discord.
+ * Release notes for site changelog, marketing emails, and Discord.
  * Keep in sync with pinporium/content/release-notes.ts when shipping app builds.
  */
+
+/** Lucide icon key — matches in-app What's new modal. */
+export type ReleaseNoteIcon =
+  | "layers"
+  | "truck"
+  | "arrow-left-right"
+  | "shield"
+  | "sparkles"
+  | "map-pin"
+  | "medal"
+  | "circle-user";
 
 export type ReleaseNoteItem = {
   title: string;
   body: string;
+  icon?: ReleaseNoteIcon;
 };
 
 export type ReleaseNotesEntry = {
@@ -16,7 +28,42 @@ export type ReleaseNotesEntry = {
   highlights: ReleaseNoteItem[];
 };
 
+/** Newest first. */
 export const RELEASE_NOTES: ReleaseNotesEntry[] = [
+  {
+    version: "1.0.2",
+    date: "2026-06-02",
+    headline: "What's new",
+    summary:
+      "Richer pin details, public profiles, collector leaderboards, smoother onboarding, and US & Canada shipping.",
+    highlights: [
+      {
+        title: "Expanded pin details",
+        icon: "layers",
+        body: "New attributes of pin type — **mechanism** (spinners, sliders, etc.) and pin features — **effects** (glow, glitter, stained glass) available on catalog and vault pins.",
+      },
+      {
+        title: "Public profile",
+        icon: "circle-user",
+        body: "Choose what other collectors see on your profile — **stats**, **trade pins**, **vault pins**, and **boards**.",
+      },
+      {
+        title: "Collector leaderboards",
+        icon: "medal",
+        body: "See where you rank — **collector score**, **vault size**, and **catalog contributions**.",
+      },
+      {
+        title: "US & Canada shipping",
+        icon: "truck",
+        body: "Shipping addresses support both countries with formatted **ZIP** and **postal codes** on your trade profile.",
+      },
+      {
+        title: "Onboarding refresh",
+        icon: "sparkles",
+        body: "Follow artists during setup, set profile visibility, and review your choices on a **welcome recap** with quick edits.",
+      },
+    ],
+  },
   {
     version: "1.0.1",
     date: "2026-06-01",
@@ -25,18 +72,22 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
     highlights: [
       {
         title: "Pin type & features",
+        icon: "layers",
         body: "Catalog and vault pins now separate **mechanism** (spinners, sliders, etc.) from **effects** (glow, glitter, stained glass).",
       },
       {
         title: "US & Canada shipping",
+        icon: "truck",
         body: "Shipping addresses support both countries with formatted ZIP and postal codes on your trade profile.",
       },
       {
         title: "Trade settings in onboarding",
+        icon: "arrow-left-right",
         body: "New collectors set **trade policy** and shipping during setup so trades are ready sooner.",
       },
       {
         title: "Collection items in vault",
+        icon: "shield",
         body: "Promote series and collection-aware vault flows for organizing drops and sets.",
       },
     ],

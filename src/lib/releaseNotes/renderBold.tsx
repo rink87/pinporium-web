@@ -6,7 +6,11 @@ export function renderBoldMarkdown(text: string): React.ReactNode {
   return parts.map((part, index) => {
     const bold = part.match(/^\*\*(.+)\*\*$/);
     if (bold) {
-      return <strong key={index}>{bold[1]}</strong>;
+      return (
+        <strong key={index} className="font-bold text-navy">
+          {bold[1]}
+        </strong>
+      );
     }
     return <Fragment key={index}>{part}</Fragment>;
   });
