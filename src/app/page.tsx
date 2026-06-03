@@ -1,18 +1,34 @@
-import Hero from "@/components/Hero";
-// import Testimonials from "@/components/Testimonials"; // TODO: replace with real collector/shop testimonials
-import Pricing from "@/components/Pricing/Pricing";
-import FAQ from "@/components/FAQ";
 import BeliefsStrip from "@/components/BeliefsStrip";
 import Benefits from "@/components/Benefits/Benefits";
 import Container from "@/components/Container";
+import CTA from "@/components/CTA";
+import FAQ from "@/components/FAQ";
+import Hero from "@/components/Hero";
+import JsonLd from "@/components/JsonLd";
+import ProductIntro from "@/components/ProductIntro";
+import Pricing from "@/components/Pricing/Pricing";
 import Section from "@/components/Section";
 import Stats from "@/components/Stats";
-import CTA from "@/components/CTA";
+import { faqs } from "@/data/faq";
+import {
+  faqPageJsonLd,
+  mobileApplicationJsonLd,
+} from "@/lib/seo/jsonLd";
+// import Testimonials from "@/components/Testimonials"; // TODO: replace with real collector/shop testimonials
 
 const HomePage: React.FC = () => {
   return (
     <>
+      <JsonLd
+        data={[
+          mobileApplicationJsonLd(),
+          faqPageJsonLd(
+            faqs.map(({ question, answer }) => ({ question, answer })),
+          ),
+        ]}
+      />
       <Hero />
+      <ProductIntro />
       <BeliefsStrip />
       <Container>
         <Benefits />

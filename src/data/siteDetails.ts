@@ -15,7 +15,7 @@ export const siteDetails = {
     logoWidth: 697,
     /** Tight-cropped wordmark (reduced vertical padding) */
     logoHeight: 140,
-    googleAnalyticsId: '',
+    /** Set NEXT_PUBLIC_GA_MEASUREMENT_ID or GOOGLE_ANALYTICS_ID in env (wired in app/layout.tsx). */
     /** Optional: Ko-fi, Buy Me a Coffee, Patreon, etc. — set NEXT_PUBLIC_SUPPORT_TIP_URL */
     supportTipUrl: process.env.NEXT_PUBLIC_SUPPORT_TIP_URL ?? '',
     supportTipLabel: 'Buy me a coffee',

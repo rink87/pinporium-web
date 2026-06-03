@@ -1,0 +1,20 @@
+# Pinporium
+
+> Pinporium is a mobile app for enamel pin collectors: vault your collection, browse Discover, track ISOs and grails, trade in-app, earn achievements, and contribute to a shared pin catalog.
+
+- Website: https://pinporium.app
+- Changelog: https://pinporium.app/changelog
+- Beta: Apply at https://pinporium.app (iOS via TestFlight, Android via Google Play internal testing after approval)
+- Support: help@pinporium.app
+- Privacy: https://pinporium.app/privacy
+- Terms: https://pinporium.app/terms
+
+## Product
+
+- Platforms: iOS and Android (beta)
+- Audience: Enamel pin collectors (artist pins, licensed pins, limited editions, chases, convention pickups)
+- Core features: Collection vault, pin boards, shared catalog, Discover browse/search, The Hunt (ISO/DISO/Grail), in-app trades, achievements and collector score, 3D pin viewer from photos
+
+## Optional
+
+For release history, see /changelog.

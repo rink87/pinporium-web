@@ -4,9 +4,11 @@ import { Analytics } from "@vercel/analytics/react";
 import { Nunito, Playfair_Display } from "next/font/google";
 
 import { BetaApplyProvider } from "@/components/BetaApplyProvider";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import JsonLd from "@/components/JsonLd";
 import { siteDetails } from "@/data/siteDetails";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/jsonLd";
 
 import "./globals.css";
 
@@ -26,6 +28,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteDetails.siteUrl),
   title: siteDetails.metadata.title,
   description: siteDetails.metadata.description,
+  alternates: {
+    canonical: siteDetails.siteUrl,
+  },
   openGraph: {
     title: siteDetails.metadata.title,
     description: siteDetails.metadata.description,
@@ -41,6 +46,11 @@ export const metadata: Metadata = {
   },
 };
 
+const gaMeasurementId =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() ||
+  process.env.GOOGLE_ANALYTICS_ID?.trim() ||
+  "";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -49,9 +59,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${playfair.variable} ${nunito.variable} font-body`}>
-        {siteDetails.googleAnalyticsId && (
-          <GoogleAnalytics gaId={siteDetails.googleAnalyticsId} />
-        )}
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
+        {gaMeasurementId ? <GoogleAnalytics gaId={gaMeasurementId} /> : null}
         <BetaApplyProvider>
           <Header />
           <main className="overflow-x-hidden">{children}</main>

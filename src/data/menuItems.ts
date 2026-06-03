@@ -9,6 +9,10 @@ export const menuItems: IMenuItem[] = [
         text: "Roadmap",
         url: "#roadmap",
     },
+    {
+        text: "Changelog",
+        url: "/changelog",
+    },
     // TODO: re-enable when real testimonials section ships
     // {
     //     text: "Stories",
