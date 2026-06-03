@@ -32,7 +32,7 @@ export default function ChangelogPage() {
       />
 
       <article className="pt-28 md:pt-32 pb-20 md:pb-24">
-        <Container className="max-w-4xl">
+        <Container className="max-w-3xl">
           <div className="text-center max-w-2xl mx-auto">
             <p className="text-xs uppercase tracking-deco-wide text-foreground-accent font-body mb-3">
               Updates
@@ -45,7 +45,7 @@ export default function ChangelogPage() {
             </p>
           </div>
 
-          <div className="mt-12 md:mt-16 flex flex-col items-stretch gap-10 md:gap-14 w-full">
+          <div className="mt-12 md:mt-16 flex flex-col items-center gap-10 md:gap-14">
             {RELEASE_NOTES.length === 0 ? (
               <p className="text-foreground-accent font-body text-center">
                 No release notes yet — check back after the next build.
