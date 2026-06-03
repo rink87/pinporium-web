@@ -33,8 +33,8 @@ const Header: React.FC = () => {
               alt="Pinporium"
               width={siteDetails.logoWidth}
               height={siteDetails.logoHeight}
+              sizes="(max-width: 768px) 160px, 240px"
               className="h-9 w-auto object-contain object-left sm:h-10 md:h-11 lg:h-12"
-              priority
             />
           </Link>
 

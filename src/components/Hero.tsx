@@ -45,7 +45,8 @@ const Hero: React.FC = () => {
             width={w}
             height={h}
             sizes={DEVICE_MOCKUP_IMAGE_SIZES}
-            priority={true}
+            priority
+            quality={82}
             cropTopPercent={60}
             alt="Pinporium: My Collection home screen with pins, value, and collection stats"
           />

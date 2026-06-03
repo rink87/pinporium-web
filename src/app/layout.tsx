@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { Analytics } from "@vercel/analytics/react";
+import dynamic from "next/dynamic";
+
+const Analytics = dynamic(
+  () => import("@vercel/analytics/react").then((m) => m.Analytics),
+  { ssr: false },
+);
 import { Nunito, Playfair_Display } from "next/font/google";
 
 import { BetaApplyProvider } from "@/components/BetaApplyProvider";
@@ -15,13 +20,17 @@ import "./globals.css";
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-display",
-  display: "swap",
+  display: "optional",
+  weight: ["600", "700"],
+  adjustFontFallback: true,
 });
 
 const nunito = Nunito({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
+  weight: ["400", "600", "700"],
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {

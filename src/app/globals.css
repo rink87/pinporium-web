@@ -87,6 +87,32 @@ h6 {
   @apply mb-10;
 }
 
+/* Scroll-driven reveal (no JS); static fallback when unsupported */
+@keyframes benefit-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .benefit-reveal {
+    animation: benefit-fade-in linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 22%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .benefit-reveal {
+    animation: none;
+  }
+}
+
 .legal-prose a {
   @apply text-primary-ink underline underline-offset-2 hover:text-primary-accent;
 }

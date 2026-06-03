@@ -10,6 +10,8 @@ interface DeviceFrameProps {
   sizes?: string;
   className?: string;
   cropTopPercent?: number;
+  /** Next/Image quality 1–100; default 80 for smaller mobile payloads */
+  quality?: number;
 }
 
 const DeviceFrame: React.FC<DeviceFrameProps> = ({
@@ -21,6 +23,7 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
   sizes,
   className = "",
   cropTopPercent,
+  quality = 80,
 }) => {
   const renderScreenImage = () => (
     <Image
@@ -28,9 +31,11 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
       alt={alt}
       width={width}
       height={height}
-      quality={100}
+      quality={quality}
       sizes={sizes}
       priority={priority}
+      loading={priority ? undefined : "lazy"}
+      fetchPriority={priority ? "high" : "auto"}
       className="block h-auto w-full"
     />
   );

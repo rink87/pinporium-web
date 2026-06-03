@@ -2,10 +2,18 @@
 
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import clsx from "clsx";
+import dynamic from "next/dynamic";
 import { FiX } from "react-icons/fi";
 import { createContext, useCallback, useContext, useState } from "react";
 
-import BetaTesterForm from "./BetaTesterForm";
+const BetaTesterForm = dynamic(() => import("./BetaTesterForm"), {
+  ssr: false,
+  loading: () => (
+    <p className="py-10 text-center text-sm text-foreground-accent font-body">
+      Loading form…
+    </p>
+  ),
+});
 
 type BetaApplyContextValue = {
   openBetaApply: () => void;
@@ -88,11 +96,13 @@ export function BetaApplyProvider({ children }: { children: React.ReactNode }) {
                 success ? "px-6 py-4 sm:px-8 sm:py-5" : "px-6 py-5 sm:px-8 sm:py-6",
               )}
             >
-              <BetaTesterForm
-                key={formKey}
-                onClose={handleClose}
-                onSuccess={() => setSuccess(true)}
-              />
+              {open ? (
+                <BetaTesterForm
+                  key={formKey}
+                  onClose={handleClose}
+                  onSuccess={() => setSuccess(true)}
+                />
+              ) : null}
             </div>
           </DialogPanel>
         </div>
