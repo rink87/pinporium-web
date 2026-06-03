@@ -47,7 +47,7 @@ export default function EmailPreviewPage() {
           </li>
         </ol>
         <p>
-          <Link href="/" className="text-secondary underline">
+          <Link href="/" className="text-secondary-ink underline">
             Open site
           </Link>{" "}
           to try the form.

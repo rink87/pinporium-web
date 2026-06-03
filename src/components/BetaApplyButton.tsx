@@ -32,7 +32,7 @@ const BetaApplyButton: React.FC<BetaApplyButtonProps> = ({
           compact ? "min-w-0 px-7 py-2.5 h-auto" : "min-w-[220px] px-8 h-14",
           dark
             ? "text-cream bg-navy hover:bg-deco-dark border-gold-deco/30"
-            : "text-cream bg-primary hover:bg-primary-accent border-transparent",
+            : "text-white bg-primary-ink hover:bg-primary-accent border-transparent",
         )}
       >
         {label}

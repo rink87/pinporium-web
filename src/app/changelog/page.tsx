@@ -64,7 +64,7 @@ export default function ChangelogPage() {
           <p className="mt-14 text-center font-body text-foreground-accent">
             <Link
               href="/"
-              className="text-secondary font-semibold hover:underline"
+              className="text-secondary-ink font-semibold hover:underline"
             >
               ← Back to home
             </Link>

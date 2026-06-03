@@ -50,19 +50,19 @@ const LegalDocument: React.FC<LegalDocumentProps> = ({
                 </div>
 
                 <p className="mt-14 pt-8 border-t border-gold-deco/25 text-sm font-body text-foreground-accent">
-                    <Link href="/" className="text-primary hover:underline">
+                    <Link href="/" className="text-primary-ink hover:underline">
                         Back to home
                     </Link>
                     {" · "}
-                    <Link href="/privacy" className="hover:text-primary">
+                    <Link href="/privacy" className="text-primary-ink hover:text-primary-accent">
                         Privacy Policy
                     </Link>
                     {" · "}
-                    <Link href="/terms" className="hover:text-primary">
+                    <Link href="/terms" className="text-primary-ink hover:text-primary-accent">
                         Terms of Service
                     </Link>
                     {" · "}
-                    <Link href="/delete-account" className="hover:text-primary">
+                    <Link href="/delete-account" className="text-primary-ink hover:text-primary-accent">
                         Delete account
                     </Link>
                 </p>

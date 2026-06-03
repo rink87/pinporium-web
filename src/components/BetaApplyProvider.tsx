@@ -60,7 +60,7 @@ export function BetaApplyProvider({ children }: { children: React.ReactNode }) {
                 type="button"
                 onClick={handleClose}
                 className={clsx(
-                  "flex h-9 w-9 items-center justify-center rounded-full text-navy/70 hover:text-navy hover:bg-navy/5 transition-colors",
+                  "flex h-9 w-9 items-center justify-center rounded-full text-navy hover:text-navy hover:bg-navy/5 transition-colors",
                   success
                     ? "ml-auto"
                     : "absolute right-4 top-4 sm:right-5 sm:top-5",

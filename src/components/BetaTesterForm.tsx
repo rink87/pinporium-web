@@ -19,7 +19,7 @@ type FormStatus = "idle" | "submitting" | "success" | "error";
 const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
 const fieldClass =
-  "w-full rounded-lg border border-navy/10 bg-white px-3.5 py-2.5 text-[15px] text-navy font-body shadow-sm placeholder:text-foreground-accent/50 focus:outline-none focus:border-secondary/50 focus:ring-2 focus:ring-secondary/15 disabled:opacity-60 transition-shadow";
+  "w-full rounded-lg border border-navy/10 bg-white px-3.5 py-2.5 text-[15px] text-navy font-body shadow-sm placeholder:text-foreground-accent/75 focus:outline-none focus:border-secondary/50 focus:ring-2 focus:ring-secondary/15 disabled:opacity-60 transition-shadow";
 
 const labelClass = "block text-sm font-medium text-navy font-body mb-2";
 
@@ -35,7 +35,7 @@ function FieldLabel({
   return (
     <span className={labelClass}>
       {children}
-      {required ? <span className="text-primary ml-0.5">*</span> : null}
+      {required ? <span className="text-primary-ink ml-0.5">*</span> : null}
       {optional ? (
         <span className="text-foreground-accent font-normal ml-1">(optional)</span>
       ) : null}
@@ -177,7 +177,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
     const copy = successCopy(successPlatform);
     return (
       <div className="text-center py-2 sm:py-4" role="status">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-secondary/10 text-secondary">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-secondary/10 text-secondary-ink">
           <FiCheckCircle className="h-8 w-8" strokeWidth={1.75} />
         </div>
         <p className="font-display text-2xl text-navy mb-2">You&apos;re on the list</p>
@@ -188,7 +188,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
           Questions?{" "}
           <a
             href={`mailto:${siteDetails.supportEmail}`}
-            className="text-secondary font-medium hover:underline underline-offset-2"
+            className="text-secondary-ink font-medium hover:underline underline-offset-2"
           >
             {siteDetails.supportEmail}
           </a>
@@ -243,7 +243,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
             placeholder="you@gmail.com"
           />
           {emailError ? (
-            <p id="beta-email-error" className="mt-2 text-sm text-primary font-body" role="alert">
+            <p id="beta-email-error" className="mt-2 text-sm text-primary-ink font-body" role="alert">
               {emailError}
             </p>
           ) : null}
@@ -350,7 +350,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
 
       {errorMessage ? (
         <div
-          className="rounded-lg border border-primary/25 bg-primary/5 px-4 py-3 text-sm text-primary font-body"
+          className="rounded-lg border border-primary-ink/25 bg-primary-ink/5 px-4 py-3 text-sm text-primary-ink font-body"
           role="alert"
         >
           {errorMessage}

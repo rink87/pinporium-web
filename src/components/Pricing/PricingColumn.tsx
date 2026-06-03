@@ -24,7 +24,7 @@ const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
           {name}
         </h3>
         <p className="text-3xl md:text-4xl font-display font-semibold text-navy">
-          <span className={clsx({ "text-secondary": highlight })}>
+          <span className={clsx({ "text-secondary-ink": highlight })}>
             {isNumericPrice ? `$${price}` : price}
           </span>
           {isNumericPrice && (
@@ -43,7 +43,7 @@ const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
         <ul className="space-y-4 mb-2">
           {features.map((feature, index) => (
             <li key={index} className="flex items-start gap-2">
-              <BsFillCheckCircleFill className="h-5 w-5 text-secondary shrink-0 mt-0.5" />
+              <BsFillCheckCircleFill className="h-5 w-5 text-secondary-ink shrink-0 mt-0.5" />
               <span className="text-foreground-accent font-body leading-snug">
                 {feature}
               </span>

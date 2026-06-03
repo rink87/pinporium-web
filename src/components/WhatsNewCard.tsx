@@ -32,7 +32,7 @@ const WhatsNewCard: React.FC<Props> = ({ entry, isLatest }) => {
 
       <header className="relative px-6 pt-5 pb-4 text-center bg-white border-b border-gold-deco/15">
         {isLatest ? (
-          <span className="absolute top-3 right-4 text-[10px] uppercase tracking-deco-wide font-body font-semibold text-secondary">
+          <span className="absolute top-3 right-4 text-[10px] uppercase tracking-deco-wide font-body font-semibold text-secondary-ink">
             Latest
           </span>
         ) : null}

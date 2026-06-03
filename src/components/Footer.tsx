@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
               {footerDetails.email}
             </a>
           ) : (
-            <p className="text-cream/60 text-sm font-body">
+            <p className="text-cream/70 text-sm font-body">
               Public inbox coming soon — follow announcements on social when we
               open them.
             </p>
@@ -119,21 +119,21 @@ const Footer: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="mt-12 md:text-center text-cream/45 px-6 text-sm font-body relative z-10">
+      <div className="mt-12 md:text-center text-cream/70 px-6 text-sm font-body relative z-10">
         <p>
           Copyright &copy; {new Date().getFullYear()} {siteDetails.siteName}.
           All rights reserved.
         </p>
-        <p className="mt-3 text-cream/35 text-xs max-w-xl mx-auto">
-          <Link href="/privacy" className="hover:text-cream/60 underline">
+        <p className="mt-3 text-cream/65 text-xs max-w-xl mx-auto">
+          <Link href="/privacy" className="hover:text-cream underline">
             Privacy
           </Link>
           {" · "}
-          <Link href="/terms" className="hover:text-cream/60 underline">
+          <Link href="/terms" className="hover:text-cream underline">
             Terms
           </Link>
           {" · "}
-          <Link href="/delete-account" className="hover:text-cream/60 underline">
+          <Link href="/delete-account" className="hover:text-cream underline">
             Delete account
           </Link>
         </p>

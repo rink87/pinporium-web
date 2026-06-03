@@ -11,8 +11,14 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        primary: "var(--primary)",
-        secondary: "var(--secondary)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          ink: "var(--primary-ink)",
+        },
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          ink: "var(--secondary-ink)",
+        },
         "primary-accent": "var(--primary-accent)",
         "foreground-accent": "var(--foreground-accent)",
         "hero-background": "var(--hero-background)",

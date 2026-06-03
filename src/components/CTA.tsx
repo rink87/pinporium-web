@@ -41,7 +41,7 @@ const CTA: React.FC = () => {
               {ctaDetails.subheading}
             </p>
 
-            <p className="mt-4 text-sm text-cream/60 font-body">{ctaDetails.storeNote}</p>
+            <p className="mt-4 text-sm text-cream/70 font-body">{ctaDetails.storeNote}</p>
 
             <div className="mt-8">
               <BetaApplyButton label="Apply to be a beta tester" />

@@ -112,7 +112,7 @@ const LandingPage: React.FC<Props> = ({ page }) => {
                 Questions?{" "}
                 <a
                   href={`mailto:${siteDetails.supportEmail}`}
-                  className="text-secondary font-semibold hover:underline"
+                  className="text-secondary-ink font-semibold hover:underline"
                 >
                   {siteDetails.supportEmail}
                 </a>
@@ -133,7 +133,7 @@ const LandingPage: React.FC<Props> = ({ page }) => {
                   <li key={rel.slug}>
                     <Link
                       href={rel.path}
-                      className="font-body text-secondary font-semibold hover:underline"
+                      className="font-body text-secondary-ink font-semibold hover:underline"
                     >
                       {rel.eyebrow}
                     </Link>
@@ -142,7 +142,7 @@ const LandingPage: React.FC<Props> = ({ page }) => {
                 <li>
                   <Link
                     href="/changelog"
-                    className="font-body text-secondary font-semibold hover:underline"
+                    className="font-body text-secondary-ink font-semibold hover:underline"
                   >
                     Changelog
                   </Link>
@@ -152,7 +152,7 @@ const LandingPage: React.FC<Props> = ({ page }) => {
           ) : null}
 
           <p className="mt-10 text-center font-body text-foreground-accent">
-            <Link href="/" className="text-secondary font-semibold hover:underline">
+            <Link href="/" className="text-secondary-ink font-semibold hover:underline">
               ← Back to home
             </Link>
           </p>

@@ -43,7 +43,7 @@ const Header: React.FC = () => {
               <li key={item.text}>
                 <Link
                   href={item.url}
-                  className="text-navy/85 hover:text-primary text-sm uppercase tracking-deco font-body transition-colors"
+                  className="text-navy hover:text-primary-ink text-sm uppercase tracking-deco font-body transition-colors"
                 >
                   {item.text}
                 </Link>
@@ -88,7 +88,7 @@ const Header: React.FC = () => {
               <li key={item.text}>
                 <Link
                   href={item.url}
-                  className="text-navy hover:text-primary block font-body"
+                  className="text-navy hover:text-primary-ink block font-body"
                   onClick={toggleMenu}
                 >
                   {item.text}

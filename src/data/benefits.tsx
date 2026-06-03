@@ -20,19 +20,19 @@ export const benefits: IBenefit[] = [
                 title: "Pin boards",
                 description:
                     "Group pins by artist, series, fandom, or that one unforgettable con haul.",
-                icon: <FiBookOpen size={26} className="text-primary" />,
+                icon: <FiBookOpen size={26} className="text-primary-ink" />,
             },
             {
                 title: "Collection stats",
                 description:
                     "Pin count, collector score, and momentum — watch the vault grow over time.",
-                icon: <FiLayers size={26} className="text-primary" />,
+                icon: <FiLayers size={26} className="text-primary-ink" />,
             },
             {
                 title: "Every kind of pin",
                 description:
                     "Artist drops, licensed pins, LEs, and chases together — no splitting your collection across apps.",
-                icon: <FiSearch size={26} className="text-primary" />,
+                icon: <FiSearch size={26} className="text-primary-ink" />,
             },
         ],
         imageSrc: "/images/feature-vault.png",
@@ -46,19 +46,19 @@ export const benefits: IBenefit[] = [
                 title: "Browse & search",
                 description:
                     "Trending pins, themes, and the full catalog — filter and explore from one place.",
-                icon: <FiSearch size={26} className="text-primary" />,
+                icon: <FiSearch size={26} className="text-primary-ink" />,
             },
             {
                 title: "Shared catalog",
                 description:
                     "Every listing is reviewed so names and variants stay easy to find.",
-                icon: <FiBookOpen size={26} className="text-primary" />,
+                icon: <FiBookOpen size={26} className="text-primary-ink" />,
             },
             {
                 title: "All your fandoms",
                 description:
                     "Star Wars, parks, artist studios, and more — one Discover for how you actually collect.",
-                icon: <FiLayers size={26} className="text-primary" />,
+                icon: <FiLayers size={26} className="text-primary-ink" />,
             },
         ],
         imageSrc: "/images/feature-discover.png",
@@ -72,19 +72,19 @@ export const benefits: IBenefit[] = [
                 title: "Reviewed entries",
                 description:
                     "Human review keeps pin names and variants consistent.",
-                icon: <FiLayers size={26} className="text-primary" />,
+                icon: <FiLayers size={26} className="text-primary-ink" />,
             },
             {
                 title: "Contributor credit",
                 description:
                     "Earn collector score and badges when your submissions are approved.",
-                icon: <FiBookOpen size={26} className="text-primary" />,
+                icon: <FiBookOpen size={26} className="text-primary-ink" />,
             },
             {
                 title: "Clear pin details",
                 description:
                     "Edition, grade, enamel, and metal — the details that matter when you trade or compare.",
-                icon: <FiSearch size={26} className="text-primary" />,
+                icon: <FiSearch size={26} className="text-primary-ink" />,
             },
         ],
         imageSrc: "/images/feature-pin-detail.png",
@@ -98,19 +98,19 @@ export const benefits: IBenefit[] = [
                 title: "Hunt tiers",
                 description:
                     "ISO, DISO, and Grail — mark how badly you want each pin.",
-                icon: <FiTarget size={26} className="text-primary" />,
+                icon: <FiTarget size={26} className="text-primary-ink" />,
             },
             {
                 title: "Series tracking",
                 description:
                     "Follow a set from pin detail and watch your completion add up.",
-                icon: <FiLayers size={26} className="text-primary" />,
+                icon: <FiLayers size={26} className="text-primary-ink" />,
             },
             {
                 title: "One hunt tab",
                 description:
                     "Wants, trades, and series — still chasing, all in The Hunt.",
-                icon: <FiBookOpen size={26} className="text-primary" />,
+                icon: <FiBookOpen size={26} className="text-primary-ink" />,
             },
         ],
         imageSrc: "/images/feature-hunt.png",
@@ -124,19 +124,19 @@ export const benefits: IBenefit[] = [
                 title: "Mutual matches",
                 description:
                     "See when your ISO lines up with another collector’s for-trade pin on the same catalog entry.",
-                icon: <FiRepeat size={26} className="text-primary" />,
+                icon: <FiRepeat size={26} className="text-primary-ink" />,
             },
             {
                 title: "Active trades",
                 description:
                     "Waiting, in progress, and history — always know where a swap stands.",
-                icon: <FiLayers size={26} className="text-primary" />,
+                icon: <FiLayers size={26} className="text-primary-ink" />,
             },
             {
                 title: "Same catalog entry",
                 description:
                     "Both sides linked to the same variant — fewer mix-ups on which pin is which.",
-                icon: <FiSearch size={26} className="text-primary" />,
+                icon: <FiSearch size={26} className="text-primary-ink" />,
             },
         ],
         imageSrc: "/images/feature-trades.png",
@@ -150,19 +150,19 @@ export const benefits: IBenefit[] = [
                 title: "Milestone awards",
                 description:
                     "Unlock levels for your vault, boards, variants, and catalog help.",
-                icon: <FiAward size={26} className="text-primary" />,
+                icon: <FiAward size={26} className="text-primary-ink" />,
             },
             {
                 title: "Collector score",
                 description:
                     "One score that grows with pins added, submissions approved, and more.",
-                icon: <FiLayers size={26} className="text-primary" />,
+                icon: <FiLayers size={26} className="text-primary-ink" />,
             },
             {
                 title: "Hunt & trade awards",
                 description:
                     "Goals for ISOs, grails, DISOs, and completed trades.",
-                icon: <FiTarget size={26} className="text-primary" />,
+                icon: <FiTarget size={26} className="text-primary-ink" />,
             },
         ],
         imageSrc: "/images/feature-achievements.png",
@@ -176,19 +176,19 @@ export const benefits: IBenefit[] = [
                 title: "Guided capture",
                 description:
                     "Step-by-step photos with crop, tilt, and duplicate checks before you save.",
-                icon: <FiBookOpen size={26} className="text-primary" />,
+                icon: <FiBookOpen size={26} className="text-primary-ink" />,
             },
             {
                 title: "3D pin viewer",
                 description:
                     "Interactive model from your photos — rotate and admire the enamel.",
-                icon: <FiRotateCw size={26} className="text-primary" />,
+                icon: <FiRotateCw size={26} className="text-primary-ink" />,
             },
             {
                 title: "Suggest for catalog",
                 description:
                     "Optional submission after you add a pin — help others find it too.",
-                icon: <FiAward size={26} className="text-primary" />,
+                icon: <FiAward size={26} className="text-primary-ink" />,
             },
         ],
         imageSrc: "/images/feature-pin-added.png",

@@ -5,10 +5,16 @@
 :root {
   --background: #f1e5d8;
   --foreground: #2c3345;
+  /** Brand coral — buttons, fills (pair with white/cream label text). */
   --primary: #e8734a;
+  /** Links & emphasis on light backgrounds (≥4.5:1 on --background). */
+  --primary-ink: #a34a29;
+  /** Brand teal — fills, icons on dark UI. */
   --secondary: #2d8b75;
+  /** Links & teal text on light backgrounds (≥4.5:1 on --background). */
+  --secondary-ink: #1f604f;
 
-  --primary-accent: #d4612f;
+  --primary-accent: #8b3b22;
   --foreground-accent: #524e5f;
   --hero-background: #eadbcc;
 
@@ -82,7 +88,7 @@ h6 {
 }
 
 .legal-prose a {
-  @apply text-primary underline underline-offset-2 hover:text-primary-accent;
+  @apply text-primary-ink underline underline-offset-2 hover:text-primary-accent;
 }
 
 .legal-prose strong {

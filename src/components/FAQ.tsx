@@ -25,7 +25,7 @@ const FAQ: React.FC = () => {
           {siteDetails.supportEmail ? (
             <a
               href={`mailto:${siteDetails.supportEmail}`}
-              className="mt-4 block text-xl lg:text-3xl text-secondary font-semibold hover:underline text-center lg:text-left font-display"
+              className="mt-4 block text-xl lg:text-3xl text-secondary-ink font-semibold hover:underline text-center lg:text-left font-display"
             >
               {siteDetails.supportEmail}
             </a>
@@ -43,9 +43,9 @@ const FAQ: React.FC = () => {
                         {faq.question}
                       </span>
                       {open ? (
-                        <BiMinus className="w-5 h-5 text-secondary shrink-0" />
+                        <BiMinus className="w-5 h-5 text-secondary-ink shrink-0" />
                       ) : (
-                        <BiPlus className="w-5 h-5 text-secondary shrink-0" />
+                        <BiPlus className="w-5 h-5 text-secondary-ink shrink-0" />
                       )}
                     </DisclosureButton>
                     <DisclosurePanel className="px-4 pt-3 pb-4 text-foreground-accent font-body leading-relaxed">

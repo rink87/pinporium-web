@@ -35,7 +35,7 @@ export function ReleaseNoteHighlightIcon({ icon, className }: Props) {
       className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold-deco/30 bg-secondary/10 ${className ?? ""}`}
       aria-hidden
     >
-      <Icon className="text-secondary" size={18} strokeWidth={2.25} />
+      <Icon className="text-secondary-ink" size={18} strokeWidth={2.25} />
     </span>
   );
 }
