@@ -3,6 +3,7 @@ import { IMenuItem, ISocials } from "@/types";
 export const footerDetails: {
     subheading: string;
     quickLinks: IMenuItem[];
+    exploreLinks: IMenuItem[];
     legalLinks: IMenuItem[];
     email: string;
     telephone: string;
@@ -16,6 +17,13 @@ export const footerDetails: {
         { text: "Changelog", url: "/changelog" },
         { text: "Apply for beta", url: "#" },
         { text: "FAQ", url: "/#faq" },
+    ],
+    exploreLinks: [
+        { text: "For collectors", url: "/for-collectors" },
+        { text: "For artists & shops", url: "/for-artists" },
+        { text: "Pin collection app", url: "/enamel-pin-collection" },
+        { text: "Pin trading", url: "/pin-trading" },
+        { text: "Pin wishlist", url: "/pin-wishlist" },
     ],
     legalLinks: [
         { text: "Privacy Policy", url: "/privacy" },

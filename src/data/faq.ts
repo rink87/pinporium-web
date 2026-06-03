@@ -30,7 +30,7 @@ export const faqs: IFAQ[] = [
     {
         question: "Can pin artists and studios work with you?",
         answer:
-            "We’re inviting artists and shops to claim verified listings. Email help@pinporium.app if you’d like to partner early.",
+            "We’re inviting artists and shops to claim verified listings. See pinporium.app/for-artists for how partnering works, or email help@pinporium.app to get started.",
     },
     {
         question: "When can I download the app?",

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { RELEASE_NOTES } from "@/content/release-notes";
+import { SEO_LANDING_PAGES } from "@/data/seoLandings";
 import { siteDetails } from "@/data/siteDetails";
 
 const staticRoutes: MetadataRoute.Sitemap = [
@@ -14,6 +15,11 @@ const staticRoutes: MetadataRoute.Sitemap = [
     changeFrequency: "weekly",
     priority: 0.85,
   },
+  ...SEO_LANDING_PAGES.map((page) => ({
+    url: `${siteDetails.siteUrl}${page.path}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  })),
   {
     url: `${siteDetails.siteUrl}/privacy`,
     changeFrequency: "yearly",

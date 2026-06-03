@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { FiCheckCircle } from "react-icons/fi";
 import { FormEvent, useRef, useState } from "react";
 
+import { trackBetaApplySuccess } from "@/lib/analytics";
 import {
   BETA_PLATFORM_OPTIONS,
   PIN_COUNT_OPTIONS,
@@ -159,6 +160,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
 
       setSuccessPlatform(submittedPlatform);
       setStatus("success");
+      trackBetaApplySuccess(submittedPlatform);
       onSuccess?.();
       form.reset();
       setPlatform("ios");
