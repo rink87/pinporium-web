@@ -26,11 +26,11 @@ const WhatsNewCard: React.FC<Props> = ({ entry, isLatest }) => {
   return (
     <article
       id={`v${entry.version.replace(/\./g, "-")}`}
-      className="w-full max-w-[440px] mx-auto overflow-hidden rounded-deco border border-gold-deco/30 bg-cream shadow-[0_12px_40px_-8px_rgba(44,51,69,0.18)]"
+      className="w-full max-w-[440px] md:max-w-none mx-auto overflow-hidden rounded-deco border border-gold-deco/30 bg-cream shadow-[0_12px_40px_-8px_rgba(44,51,69,0.18)]"
     >
       <BrandStripe />
 
-      <header className="relative px-6 pt-5 pb-4 text-center bg-hero-background">
+      <header className="relative px-6 md:px-10 pt-5 pb-4 text-center bg-hero-background">
         {isLatest ? (
           <span className="absolute top-3 right-4 text-[10px] uppercase tracking-deco-wide font-body font-semibold text-secondary">
             Latest
@@ -48,7 +48,7 @@ const WhatsNewCard: React.FC<Props> = ({ entry, isLatest }) => {
         </p>
       </header>
 
-      <div className="px-6 pt-4 pb-5">
+      <div className="px-6 md:px-10 pt-4 pb-5 md:pt-5 md:pb-6">
         {entry.summary ? (
           <p className="mb-4 text-[15px] font-body text-foreground-accent leading-relaxed">
             {entry.summary}
@@ -72,7 +72,7 @@ const WhatsNewCard: React.FC<Props> = ({ entry, isLatest }) => {
         </ul>
       </div>
 
-      <footer className="border-t border-gold-deco/20 px-6 py-4">
+      <footer className="border-t border-gold-deco/20 px-6 md:px-10 py-4">
         <p className="text-center text-xs font-body text-foreground-accent leading-snug">
           One vault for your whole pin collection.
         </p>

@@ -32,8 +32,8 @@ export default function ChangelogPage() {
       />
 
       <article className="pt-28 md:pt-32 pb-20 md:pb-24">
-        <Container className="max-w-3xl">
-          <div className="text-center max-w-xl mx-auto">
+        <Container className="max-w-4xl">
+          <div className="text-center max-w-2xl mx-auto">
             <p className="text-xs uppercase tracking-deco-wide text-foreground-accent font-body mb-3">
               Updates
             </p>
@@ -41,12 +41,11 @@ export default function ChangelogPage() {
               Changelog
             </h1>
             <p className="mt-4 text-foreground-accent font-body leading-relaxed text-lg">
-              The same What&apos;s new cards you see in the app — every beta build,
-              in one place.
+              New features and improvements in each release of Pinporium.
             </p>
           </div>
 
-          <div className="mt-12 md:mt-16 flex flex-col items-center gap-10 md:gap-14">
+          <div className="mt-12 md:mt-16 flex flex-col items-stretch gap-10 md:gap-14 w-full">
             {RELEASE_NOTES.length === 0 ? (
               <p className="text-foreground-accent font-body text-center">
                 No release notes yet — check back after the next build.
