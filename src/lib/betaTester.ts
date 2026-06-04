@@ -77,7 +77,7 @@ export const BETA_SLACK_SIGNUP_HEADER = "Beta Tester Request";
 
 export function parseBetaTesterSlackMessage(
   text: string,
-): Pick<BetaTesterPayload, "name" | "email" | "platform"> | null {
+): BetaTesterPayload | null {
   const normalized = text.replace(/\r\n/g, "\n").trim();
   const body = normalizeSlackMessageText(normalized);
 
@@ -88,6 +88,8 @@ export function parseBetaTesterSlackMessage(
   const nameLine = body.match(/^Name:\s*(.+)$/m);
   const emailLine = body.match(/^Email:\s*(.+)$/m);
   const platformLine = body.match(/^Platform:\s*(.+)$/m);
+  const pinLine = body.match(/^Approximate pins:\s*(.+)$/m);
+  const whyLine = body.match(/^Why they want to be a tester:\s*(.+)$/m);
 
   const name = nameLine?.[1]?.trim() ?? "";
   const emailRaw = emailLine?.[1]?.trim() ?? "";
@@ -103,11 +105,28 @@ export function parseBetaTesterSlackMessage(
     return null;
   }
 
+  const pinCount = pinLine?.[1] ? parsePinCountFromSlackLine(pinLine[1]) : null;
+  const whyRaw = whyLine?.[1]?.trim();
+  const why =
+    whyRaw && whyRaw !== "(not provided)" ? whyRaw : undefined;
+
   return {
     name,
     email: normalizeBetaEmail(emailRaw),
     platform,
+    pinCount: pinCount ?? "under-25",
+    why,
   };
+}
+
+function parsePinCountFromSlackLine(raw: string): PinCountValue | null {
+  const trimmed = raw.trim();
+  if (!trimmed) {
+    return null;
+  }
+  const lower = trimmed.toLowerCase();
+  const match = PIN_COUNT_OPTIONS.find((o) => o.label.toLowerCase() === lower);
+  return match?.value ?? null;
 }
 
 function parsePlatformFromSlackLine(line: string): BetaPlatform | null {

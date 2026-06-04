@@ -1,17 +1,23 @@
 # Send beta welcome email from Slack
 
-Signups post to your beta channel via the site webhook. **You** send the welcome email by reacting on that message.
+Signups post to your beta channel via the site webhook. **You** approve and send emails by reacting on that message.
 
-## Trigger
+## Triggers
 
-React with **:incoming_envelope:** (`incoming_envelope`) on any message that starts with `Beta Tester Request`.
+| Reaction | Action |
+|----------|--------|
+| **:approved:** | Adds/updates the signup in **Admin → Beta testers** (reads name, email, platform, pins, why from the Slack message) |
+| **:incoming_envelope:** | Sends the welcome email (TestFlight or Play) and records `welcome_sent_at` |
 
-The bot reads **Name**, **Email**, and **Platform** from the message and sends:
+Override emojis with `SLACK_BETA_APPROVED_REACTION` and `SLACK_BETA_THANKS_REACTION`.
 
-- **iPhone** → TestFlight welcome + checklist + Discord
-- **Android** → waitlist welcome + Discord
+## Typical flow
 
-Override the emoji with `SLACK_BETA_THANKS_REACTION`.
+1. Someone applies on pinporium.app → Slack message (webhook).
+2. React **:approved:** → row appears in admin Beta testers.
+3. React **:incoming_envelope:** → welcome email sent → status becomes **Invited** in admin.
+
+New signups also upsert to admin automatically when the form submits (if `SUPABASE_SERVICE_ROLE_KEY` is set). **:approved:** is useful for backfill, re-sync, or if you prefer manual approval before they show up.
 
 ## Slack app setup
 
@@ -38,14 +44,15 @@ See [`docs/slack/README.md`](./slack/README.md) for file list and troubleshootin
 
 - `SLACK_SIGNING_SECRET`, `SLACK_BOT_TOKEN`
 - `RESEND_API_KEY`, `RESEND_FROM`
-- Optional: `SLACK_BETA_CHANNEL_ID`, `SLACK_BETA_THANKS_REACTION`, `SLACK_BETA_THANKS_USER_IDS`
+- `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (for :approved: → admin)
+- Optional: `SLACK_BETA_CHANNEL_ID`, `SLACK_BETA_APPROVED_REACTION`, `SLACK_BETA_THANKS_REACTION`, `SLACK_BETA_THANKS_USER_IDS`
 
 Redeploy, then re-verify the Event Subscriptions URL in Slack.
 
 ## Flow
 
-1. Someone applies on pinporium.app → Slack message (webhook only, no email).
-2. You review the signup.
-3. You react with :incoming_envelope: → Resend sends the right template → bot replies in thread with confirmation.
+1. Someone applies on pinporium.app → Slack message (webhook).
+2. You react with **:approved:** → signup saved to admin Beta testers → bot confirms in thread.
+3. You react with **:incoming_envelope:** → Resend sends the welcome template → bot confirms in thread.
 
-Automatic email on form submit is **off** to avoid duplicates.
+Automatic upsert on form submit also runs when Supabase service role is configured.

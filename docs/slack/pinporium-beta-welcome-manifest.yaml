@@ -11,7 +11,7 @@
 #
 # After install, set in Vercel:
 #   SLACK_SIGNING_SECRET, SLACK_BOT_TOKEN, RESEND_API_KEY, RESEND_FROM
-# Optional: SLACK_BETA_CHANNEL_ID, SLACK_BETA_THANKS_REACTION=incoming_envelope
+# Optional: SLACK_BETA_CHANNEL_ID, SLACK_BETA_APPROVED_REACTION=approved, SLACK_BETA_THANKS_REACTION=incoming_envelope
 
 _metadata:
   major_version: 2

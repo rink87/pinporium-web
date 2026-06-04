@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { handleBetaApprovedReactionAdded } from "@/lib/slack/betaApprovedReaction";
 import { handleBetaThanksReactionAdded } from "@/lib/slack/betaThanksReaction";
 import { verifySlackRequestSignature } from "@/lib/slack/verifyRequest";
 
@@ -67,14 +68,22 @@ export async function POST(request: Request) {
       event.reaction
     ) {
       try {
-        await handleBetaThanksReactionAdded({
-          userId: event.user,
-          reaction: event.reaction,
-          channelId: event.item.channel,
-          messageTs: event.item.ts,
-        });
+        await Promise.all([
+          handleBetaApprovedReactionAdded({
+            userId: event.user,
+            reaction: event.reaction,
+            channelId: event.item.channel,
+            messageTs: event.item.ts,
+          }),
+          handleBetaThanksReactionAdded({
+            userId: event.user,
+            reaction: event.reaction,
+            channelId: event.item.channel,
+            messageTs: event.item.ts,
+          }),
+        ]);
       } catch (err) {
-        console.error("Beta thanks reaction handler failed", err);
+        console.error("Beta Slack reaction handler failed", err);
       }
     }
   }

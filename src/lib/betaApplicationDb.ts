@@ -8,31 +8,48 @@ export async function upsertBetaApplicationFromSignup(data: {
   name: string;
   email: string;
   platform: BetaPlatform;
-  pinCount: PinCountValue;
+  pinCount?: PinCountValue;
   why?: string;
-}): Promise<void> {
+  adminNotes?: string;
+}): Promise<{ ok: true; created: boolean } | { ok: false; message: string }> {
   const admin = getSupabaseAdmin();
   if (!admin) {
-    console.warn("Beta application upsert skipped: SUPABASE_SERVICE_ROLE_KEY not set");
-    return;
+    return {
+      ok: false,
+      message:
+        "Beta application not saved — SUPABASE_SERVICE_ROLE_KEY is not configured on pinporium-web.",
+    };
   }
 
   const email = normalizeBetaEmail(data.email);
-  const { error } = await admin.from("beta_applications").upsert(
-    {
-      name: data.name.trim(),
-      email,
-      platform: data.platform,
-      pin_count_bucket: data.pinCount,
-      why: data.why?.trim() || null,
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: "email" },
-  );
+
+  const { data: existing } = await admin
+    .from("beta_applications")
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
+
+  const row: Record<string, unknown> = {
+    name: data.name.trim(),
+    email,
+    platform: data.platform,
+    pin_count_bucket: data.pinCount ?? null,
+    why: data.why?.trim() || null,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (data.adminNotes?.trim()) {
+    row.admin_notes = data.adminNotes.trim();
+  }
+
+  const { error } = await admin.from("beta_applications").upsert(row, { onConflict: "email" });
 
   if (error) {
     console.error("beta_applications upsert failed", error);
+    return { ok: false, message: `Could not save beta application: ${error.message}` };
   }
+
+  return { ok: true, created: !existing?.id };
 }
 
 export async function recordBetaApplicationEmailSent(

@@ -1,22 +1,19 @@
+import type { BetaTesterPayload } from "@/lib/betaTester";
 import {
+  BETA_SLACK_SIGNUP_HEADER,
   parseBetaTesterSlackMessage,
   platformLabel,
-  type BetaPlatform,
 } from "@/lib/betaTester";
-import { sendBetaWelcomeEmail } from "@/lib/email/sendBetaEmails";
+import { upsertBetaApplicationFromSignup } from "@/lib/betaApplicationDb";
 
 import { fetchSlackMessageText, postSlackThreadReply } from "./api";
 import {
-  getBetaThanksReactionName,
+  getBetaApprovedReactionName,
   isAllowedBetaReactionChannel,
   isAllowedBetaReactionUser,
 } from "./betaSlackGuards";
 
-function emailPlatformLabel(platform: BetaPlatform): string {
-  return platform === "ios" ? "iPhone / TestFlight welcome" : "Android / Play welcome";
-}
-
-export async function handleBetaThanksReactionAdded({
+export async function handleBetaApprovedReactionAdded({
   userId,
   reaction,
   channelId,
@@ -27,17 +24,14 @@ export async function handleBetaThanksReactionAdded({
   channelId: string;
   messageTs: string;
 }): Promise<void> {
-  const expectedReaction = getBetaThanksReactionName();
+  const expectedReaction = getBetaApprovedReactionName();
   if (reaction !== expectedReaction) {
-    console.info(
-      `Beta thanks reaction ignored: got "${reaction}", expected "${expectedReaction}"`,
-    );
     return;
   }
 
   if (!isAllowedBetaReactionChannel(channelId)) {
     console.info(
-      `Beta thanks reaction ignored: channel ${channelId} does not match SLACK_BETA_CHANNEL_ID`,
+      `Beta approved reaction ignored: channel ${channelId} does not match SLACK_BETA_CHANNEL_ID`,
     );
     return;
   }
@@ -51,7 +45,7 @@ export async function handleBetaThanksReactionAdded({
     await postSlackThreadReply({
       channel: channelId,
       threadTs: messageTs,
-      text: "You are not allowed to send beta welcome emails from this reaction.",
+      text: "You are not allowed to approve beta signups from this reaction.",
     });
     return;
   }
@@ -78,31 +72,17 @@ export async function handleBetaThanksReactionAdded({
     await postSlackThreadReply({
       channel: channelId,
       threadTs: messageTs,
-      text: "This doesn’t look like a beta signup message — react on a post that starts with *Beta Tester Request*.",
+      text: `This doesn’t look like a beta signup message — react with :${expectedReaction}: on a post that starts with *${BETA_SLACK_SIGNUP_HEADER}*.`,
     });
     return;
   }
 
-  const emailResult = await sendBetaWelcomeEmail({
-    name: signup.name,
-    email: signup.email,
-    platform: signup.platform,
-  });
-
-  if (emailResult.skipped) {
+  const result = await upsertBetaApplicationFromSlack(signup);
+  if (!result.ok) {
     await postSlackThreadReply({
       channel: channelId,
       threadTs: messageTs,
-      text: "Welcome email not sent — Resend is not configured (RESEND_API_KEY / RESEND_FROM).",
-    });
-    return;
-  }
-
-  if (!emailResult.sent) {
-    await postSlackThreadReply({
-      channel: channelId,
-      threadTs: messageTs,
-      text: `Failed to send welcome email: ${emailResult.error ?? "unknown error"}`,
+      text: result.message,
     });
     return;
   }
@@ -110,9 +90,27 @@ export async function handleBetaThanksReactionAdded({
   await postSlackThreadReply({
     channel: channelId,
     threadTs: messageTs,
-    text: `Sent ${emailPlatformLabel(signup.platform)} email to *${signup.name}* (${signup.email}) — platform: ${platformLabel(signup.platform)}.`,
+    text: result.created
+      ? `Added *${signup.name}* (${signup.email}) to Beta testers in admin — ${platformLabel(signup.platform)}. React with :incoming_envelope: when ready to send the welcome email.`
+      : `Updated *${signup.name}* (${signup.email}) in Beta testers admin — ${platformLabel(signup.platform)}.`,
   });
 }
 
-// Re-export for docs / callers that imported from here before.
-export { getBetaThanksReactionName } from "./betaSlackGuards";
+async function upsertBetaApplicationFromSlack(
+  signup: BetaTesterPayload,
+): Promise<{ ok: true; created: boolean } | { ok: false; message: string }> {
+  const result = await upsertBetaApplicationFromSignup({
+    name: signup.name,
+    email: signup.email,
+    platform: signup.platform,
+    pinCount: signup.pinCount,
+    why: signup.why,
+    adminNotes: "Approved via Slack :approved:",
+  });
+
+  if (!result.ok) {
+    return { ok: false, message: result.message };
+  }
+
+  return { ok: true, created: result.created };
+}
