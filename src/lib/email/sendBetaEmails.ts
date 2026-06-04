@@ -8,6 +8,10 @@ import {
   betaSignupReceivedEmailSubject,
 } from "./templates/betaSignupReceived";
 import {
+  betaNotYetStartedEmailHtml,
+  betaNotYetStartedEmailSubject,
+} from "./templates/betaNotYetStarted";
+import {
   betaThanksEmailHtml,
   betaThanksEmailSubject,
 } from "./templates/betaThanks";
@@ -91,3 +95,21 @@ export async function sendBetaWelcomeEmail({
 
 /** @deprecated Use sendBetaWelcomeEmail */
 export const sendBetaThanksEmail = sendBetaWelcomeEmail;
+
+/** Follow-up for approved beta testers who have not created an app account yet. */
+export async function sendBetaNotYetStartedEmail({
+  name,
+  email,
+  platform,
+}: {
+  name: string;
+  email: string;
+  platform: BetaPlatform;
+}): Promise<SendResult> {
+  return sendResendEmail({
+    to: email,
+    subject: betaNotYetStartedEmailSubject(),
+    html: betaNotYetStartedEmailHtml({ name, platform, email }),
+    logLabel: "Beta not-yet-started check-in email",
+  });
+}

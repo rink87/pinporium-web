@@ -7,6 +7,10 @@ import {
   betaSignupReceivedEmailSubject,
 } from "@/lib/email/templates/betaSignupReceived";
 import {
+  betaNotYetStartedEmailHtml,
+  betaNotYetStartedEmailSubject,
+} from "@/lib/email/templates/betaNotYetStarted";
+import {
   betaThanksEmailHtml,
   betaThanksEmailSubject,
 } from "@/lib/email/templates/betaThanks";
@@ -80,7 +84,7 @@ export default function EmailPreviewPage() {
       <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-accent mb-4">
         2 — After Slack :incoming_envelope: approval
       </h2>
-      <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid gap-10 lg:grid-cols-2 mb-12">
         {platforms.map((platform) => (
           <section key={`welcome-${platform}`} className="space-y-3">
             <h3 className="text-sm font-medium text-navy">
@@ -95,6 +99,37 @@ export default function EmailPreviewPage() {
                 assetsBaseUrl,
               })}
               className="w-full min-h-[780px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
+            />
+          </section>
+        ))}
+      </div>
+
+      <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-accent mb-4">
+        3 — Not started yet (manual send) · {betaNotYetStartedEmailSubject()}
+      </h2>
+      <p className="text-sm text-foreground-accent mb-4 max-w-2xl">
+        Send to testers who got the welcome email but have no app account. Reason links open{" "}
+        <a href="/beta/check-in" className="text-secondary-ink underline">
+          /beta/check-in
+        </a>{" "}
+        with <code className="text-xs">?reason=</code> pre-selected.
+      </p>
+      <div className="grid gap-10 lg:grid-cols-2">
+        {platforms.map((platform) => (
+          <section key={`not-started-${platform}`} className="space-y-3">
+            <h3 className="text-sm font-medium text-navy">
+              {platform === "ios" ? "iPhone" : "Android"}
+            </h3>
+            <iframe
+              title={`Beta not yet started — ${platform}`}
+              srcDoc={betaNotYetStartedEmailHtml({
+                name,
+                platform,
+                email: "collector@example.com",
+                wordmarkSrc,
+                assetsBaseUrl,
+              })}
+              className="w-full min-h-[920px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
             />
           </section>
         ))}
