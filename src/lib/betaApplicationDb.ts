@@ -29,14 +29,19 @@ export async function upsertBetaApplicationFromSignup(data: {
     .eq("email", email)
     .maybeSingle();
 
+  const now = new Date().toISOString();
   const row: Record<string, unknown> = {
     name: data.name.trim(),
     email,
     platform: data.platform,
     pin_count_bucket: data.pinCount ?? null,
     why: data.why?.trim() || null,
-    updated_at: new Date().toISOString(),
+    updated_at: now,
   };
+
+  if (!existing?.id) {
+    row.submitted_at = now;
+  }
 
   if (data.adminNotes?.trim()) {
     row.admin_notes = data.adminNotes.trim();

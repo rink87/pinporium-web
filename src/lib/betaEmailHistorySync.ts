@@ -3,11 +3,13 @@ import { normalizeBetaEmail } from "@/lib/betaTester";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
 import { fetchBetaEmailHistoryFromResend } from "./email/resendSentEmailHistory";
+import { fetchBetaSignupHistoryFromSlack } from "./slack/betaSignupSlackHistory";
 import { fetchBetaWelcomeHistoryFromSlack } from "./slack/betaWelcomeSentHistory";
 
 type BetaApplicationRow = {
   id: string;
   email: string;
+  submitted_at: string | null;
   signup_received_at: string | null;
   welcome_sent_at: string | null;
   check_in_sent_at: string | null;
@@ -18,12 +20,14 @@ export type BetaEmailHistorySyncResult = {
   scannedApplications: number;
   updatedApplications: number;
   filled: {
+    submitted: number;
     signup_received: number;
     welcome: number;
     check_in: number;
   };
   sources: {
     resendRecipients: number;
+    slackSignupRecipients: number;
     slackWelcomeRecipients: number;
   };
 };
@@ -35,6 +39,39 @@ function columnForKind(kind: BetaEmailKind): keyof Pick<
   if (kind === "signup_received") return "signup_received_at";
   if (kind === "welcome") return "welcome_sent_at";
   return "check_in_sent_at";
+}
+
+function pickEarlier(existing: string | null | undefined, candidate: string): string {
+  if (!existing) return candidate;
+  return new Date(existing).getTime() <= new Date(candidate).getTime() ? existing : candidate;
+}
+
+function shouldUpdateSubmittedAt(
+  current: string | null | undefined,
+  discovered: string,
+): boolean {
+  if (!current) return true;
+  return new Date(discovered).getTime() < new Date(current).getTime();
+}
+
+function resolveSubmittedAt(
+  app: BetaApplicationRow,
+  submittedFromSlack: string | undefined,
+  fromResend: Partial<Record<BetaEmailKind, string>>,
+  patch: Record<string, string>,
+): string | null {
+  const candidates = [
+    submittedFromSlack,
+    fromResend.signup_received,
+    app.signup_received_at ?? undefined,
+    patch.signup_received_at,
+  ].filter((value): value is string => Boolean(value));
+
+  if (candidates.length === 0) {
+    return null;
+  }
+
+  return candidates.reduce((earliest, candidate) => pickEarlier(earliest, candidate));
 }
 
 export async function syncBetaApplicationEmailHistory(): Promise<
@@ -50,38 +87,41 @@ export async function syncBetaApplicationEmailHistory(): Promise<
 
   let resendHistory: Awaited<ReturnType<typeof fetchBetaEmailHistoryFromResend>>;
   try {
-    [resendHistory] = await Promise.all([
-      fetchBetaEmailHistoryFromResend(),
-      // Slack runs in parallel; merged below.
-    ]);
+    resendHistory = await fetchBetaEmailHistoryFromResend();
   } catch (err) {
     const message = err instanceof Error ? err.message : "Resend history sync failed.";
     return { ok: false, message };
   }
 
+  let slackSignupHistory: Map<string, string>;
   let slackWelcomeHistory: Map<string, string>;
   try {
-    slackWelcomeHistory = await fetchBetaWelcomeHistoryFromSlack();
+    [slackSignupHistory, slackWelcomeHistory] = await Promise.all([
+      fetchBetaSignupHistoryFromSlack(),
+      fetchBetaWelcomeHistoryFromSlack(),
+    ]);
   } catch (err) {
-    console.error("Slack beta welcome history sync failed", err);
+    console.error("Slack beta history sync failed", err);
+    slackSignupHistory = new Map();
     slackWelcomeHistory = new Map();
   }
 
   const { data: applications, error } = await admin
     .from("beta_applications")
-    .select("id, email, signup_received_at, welcome_sent_at, check_in_sent_at");
+    .select("id, email, submitted_at, signup_received_at, welcome_sent_at, check_in_sent_at");
 
   if (error) {
     return { ok: false, message: error.message };
   }
 
-  const filled = { signup_received: 0, welcome: 0, check_in: 0 };
+  const filled = { submitted: 0, signup_received: 0, welcome: 0, check_in: 0 };
   let updatedApplications = 0;
 
   for (const app of (applications ?? []) as BetaApplicationRow[]) {
     const email = normalizeBetaEmail(app.email);
     const fromResend = resendHistory.get(email) ?? {};
     const welcomeFromSlack = slackWelcomeHistory.get(email);
+    const submittedFromSlack = slackSignupHistory.get(email);
 
     const patch: Record<string, string> = {};
 
@@ -93,9 +133,7 @@ export async function syncBetaApplicationEmailHistory(): Promise<
       const discovered =
         kind === "welcome" && welcomeFromSlack
           ? fromResendAt
-            ? new Date(welcomeFromSlack).getTime() < new Date(fromResendAt).getTime()
-              ? welcomeFromSlack
-              : fromResendAt
+            ? pickEarlier(fromResendAt, welcomeFromSlack)
             : welcomeFromSlack
           : fromResendAt;
 
@@ -103,6 +141,14 @@ export async function syncBetaApplicationEmailHistory(): Promise<
         patch[column] = discovered;
         filled[kind] += 1;
       }
+    }
+
+    const submittedCandidate = resolveSubmittedAt(app, submittedFromSlack, fromResend, patch);
+    if (submittedCandidate && shouldUpdateSubmittedAt(app.submitted_at, submittedCandidate)) {
+      patch.submitted_at = app.submitted_at
+        ? pickEarlier(app.submitted_at, submittedCandidate)
+        : submittedCandidate;
+      filled.submitted += 1;
     }
 
     if (Object.keys(patch).length === 0) continue;
@@ -128,6 +174,7 @@ export async function syncBetaApplicationEmailHistory(): Promise<
     filled,
     sources: {
       resendRecipients: resendHistory.size,
+      slackSignupRecipients: slackSignupHistory.size,
       slackWelcomeRecipients: slackWelcomeHistory.size,
     },
   };
