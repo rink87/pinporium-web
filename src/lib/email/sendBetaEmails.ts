@@ -27,11 +27,13 @@ async function sendResendEmail({
   subject,
   html,
   logLabel,
+  recordKind,
 }: {
   to: string;
   subject: string;
   html: string;
   logLabel: string;
+  recordKind?: BetaEmailKind;
 }): Promise<SendResult> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM;
@@ -51,6 +53,9 @@ async function sendResendEmail({
     replyTo: siteDetails.supportEmail,
     subject,
     html,
+    ...(recordKind
+      ? { tags: [{ name: "category", value: `beta_${recordKind}` }] }
+      : {}),
   });
 
   if (error) {
@@ -74,7 +79,7 @@ async function sendResendEmailWithBetaRecord({
   logLabel: string;
   recordKind?: BetaEmailKind;
 }): Promise<SendResult> {
-  const result = await sendResendEmail({ to, subject, html, logLabel });
+  const result = await sendResendEmail({ to, subject, html, logLabel, recordKind });
   if (result.sent && recordKind) {
     await recordBetaApplicationEmailSent(to, recordKind);
   }
