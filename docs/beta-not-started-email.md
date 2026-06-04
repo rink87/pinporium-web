@@ -19,6 +19,14 @@ For collectors who **applied**, received the **welcome email** (Slack :incoming_
 
 Optional: include `?email=` in links when sending via Resend (per-recipient merge) so the form is pre-filled. Email in URLs is visible in browser history — acceptable for a small beta list.
 
+## Admin (pinporium-admin)
+
+After migration `20260682_beta_applications` is applied:
+
+- **Beta** nav → `/beta-testers` — list, platform, lifecycle status, email sent dates, sign-in count, send Welcome / Check-in from the UI.
+- **Add signup** — backfill Slack-only applicants.
+- Requires `ADMIN_BETA_EMAIL_SECRET` (same on web + admin) and `PINPORIUM_WEB_URL` on admin.
+
 ## Send the email
 
 ### Preview (local)

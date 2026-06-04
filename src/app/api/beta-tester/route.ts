@@ -4,6 +4,7 @@ import {
   formatBetaTesterSlackMessage,
   parseBetaTesterBody,
 } from "@/lib/betaTester";
+import { upsertBetaApplicationFromSignup } from "@/lib/betaApplicationDb";
 import { sendBetaSignupReceivedEmail } from "@/lib/email/sendBetaEmails";
 import { turnstileRequired, verifyTurnstileToken } from "@/lib/turnstile";
 
@@ -50,6 +51,14 @@ export async function POST(request: Request) {
   }
 
   const text = formatBetaTesterSlackMessage(payload);
+
+  await upsertBetaApplicationFromSignup({
+    name: payload.name,
+    email: payload.email,
+    platform: payload.platform,
+    pinCount: payload.pinCount,
+    why: payload.why,
+  });
 
   try {
     const slackRes = await fetch(webhookUrl, {

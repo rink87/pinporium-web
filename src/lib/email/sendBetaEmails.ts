@@ -2,6 +2,10 @@ import { Resend } from "resend";
 
 import type { BetaPlatform } from "@/lib/betaTester";
 import { siteDetails } from "@/data/siteDetails";
+import {
+  recordBetaApplicationEmailSent,
+  type BetaEmailKind,
+} from "@/lib/betaApplicationDb";
 
 import {
   betaSignupReceivedEmailHtml,
@@ -57,6 +61,26 @@ async function sendResendEmail({
   return { sent: true };
 }
 
+async function sendResendEmailWithBetaRecord({
+  to,
+  subject,
+  html,
+  logLabel,
+  recordKind,
+}: {
+  to: string;
+  subject: string;
+  html: string;
+  logLabel: string;
+  recordKind?: BetaEmailKind;
+}): Promise<SendResult> {
+  const result = await sendResendEmail({ to, subject, html, logLabel });
+  if (result.sent && recordKind) {
+    await recordBetaApplicationEmailSent(to, recordKind);
+  }
+  return result;
+}
+
 /** Sent immediately when someone submits the beta form on the site. */
 export async function sendBetaSignupReceivedEmail({
   name,
@@ -67,11 +91,12 @@ export async function sendBetaSignupReceivedEmail({
   email: string;
   platform: BetaPlatform;
 }): Promise<SendResult> {
-  return sendResendEmail({
+  return sendResendEmailWithBetaRecord({
     to: email,
     subject: betaSignupReceivedEmailSubject(),
     html: betaSignupReceivedEmailHtml({ name, platform }),
     logLabel: "Beta signup received email",
+    recordKind: "signup_received",
   });
 }
 
@@ -85,11 +110,12 @@ export async function sendBetaWelcomeEmail({
   email: string;
   platform: BetaPlatform;
 }): Promise<SendResult> {
-  return sendResendEmail({
+  return sendResendEmailWithBetaRecord({
     to: email,
     subject: betaThanksEmailSubject(platform),
     html: betaThanksEmailHtml({ name, platform }),
     logLabel: "Beta welcome email",
+    recordKind: "welcome",
   });
 }
 
@@ -106,10 +132,11 @@ export async function sendBetaNotYetStartedEmail({
   email: string;
   platform: BetaPlatform;
 }): Promise<SendResult> {
-  return sendResendEmail({
+  return sendResendEmailWithBetaRecord({
     to: email,
     subject: betaNotYetStartedEmailSubject(),
     html: betaNotYetStartedEmailHtml({ name, platform, email }),
     logLabel: "Beta not-yet-started check-in email",
+    recordKind: "check_in",
   });
 }
