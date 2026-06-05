@@ -7,12 +7,13 @@ import {
   fetchBetaApplicationById,
 } from "@/lib/betaApplicationDb";
 import {
+  sendBetaActiveUserCheckInEmail,
   sendBetaNotYetStartedEmail,
   sendBetaSignupReceivedEmail,
   sendBetaWelcomeEmail,
 } from "@/lib/email/sendBetaEmails";
 
-type EmailType = "signup_received" | "welcome" | "check_in";
+type EmailType = "signup_received" | "welcome" | "check_in" | "check_in_active";
 
 function adminSecret(): string | undefined {
   return process.env.ADMIN_BETA_EMAIL_SECRET?.trim();
@@ -23,7 +24,12 @@ function parsePlatform(value: unknown): BetaPlatform | null {
 }
 
 function parseEmailType(value: unknown): EmailType | null {
-  if (value === "signup_received" || value === "welcome" || value === "check_in") {
+  if (
+    value === "signup_received" ||
+    value === "welcome" ||
+    value === "check_in" ||
+    value === "check_in_active"
+  ) {
     return value;
   }
   return null;
@@ -94,6 +100,7 @@ export async function POST(request: Request) {
     signup_received: () => sendBetaSignupReceivedEmail({ name, email, platform }),
     welcome: () => sendBetaWelcomeEmail({ name, email, platform }),
     check_in: () => sendBetaNotYetStartedEmail({ name, email, platform }),
+    check_in_active: () => sendBetaActiveUserCheckInEmail({ name, email, platform }),
   } as const;
 
   const result = await senders[emailType]();

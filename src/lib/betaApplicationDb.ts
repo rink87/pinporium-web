@@ -2,7 +2,11 @@ import type { BetaPlatform, PinCountValue } from "@/lib/betaTester";
 import { normalizeBetaEmail } from "@/lib/betaTester";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
-export type BetaEmailKind = "signup_received" | "welcome" | "check_in";
+export type BetaEmailKind =
+  | "signup_received"
+  | "welcome"
+  | "check_in"
+  | "check_in_active";
 
 export async function upsertBetaApplicationFromSignup(data: {
   name: string;
@@ -72,7 +76,9 @@ export async function recordBetaApplicationEmailSent(
       ? "signup_received_at"
       : kind === "welcome"
         ? "welcome_sent_at"
-        : "check_in_sent_at";
+        : kind === "check_in_active"
+          ? "check_in_active_sent_at"
+          : "check_in_sent_at";
 
   const { error } = await admin
     .from("beta_applications")

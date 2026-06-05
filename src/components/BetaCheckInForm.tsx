@@ -6,7 +6,8 @@ import { FiCheckCircle } from "react-icons/fi";
 import { FormEvent, useRef, useState } from "react";
 
 import {
-  BETA_CHECK_IN_REASONS,
+  getBetaCheckInReasons,
+  type BetaCheckInAudience,
   type BetaCheckInReason,
 } from "@/lib/betaCheckIn";
 import {
@@ -27,16 +28,21 @@ const fieldClass =
 const labelClass = "block text-sm font-medium text-navy font-body mb-2";
 
 type BetaCheckInFormProps = {
+  audience: BetaCheckInAudience;
   initialReason: BetaCheckInReason | null;
   initialEmail: string;
+  initialName: string;
   initialPlatform: BetaPlatform | null;
 };
 
 export function BetaCheckInForm({
+  audience,
   initialReason,
   initialEmail,
+  initialName,
   initialPlatform,
 }: BetaCheckInFormProps) {
+  const reasons = getBetaCheckInReasons(audience);
   const formRef = useRef<HTMLFormElement>(null);
   const turnstileRef = useRef<TurnstileInstance>(null);
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -92,6 +98,7 @@ export function BetaCheckInForm({
         body: JSON.stringify({
           name: fd.get("name"),
           email: fd.get("email"),
+          audience,
           reason,
           platform: platform || undefined,
           details: fd.get("details"),
@@ -123,8 +130,15 @@ export function BetaCheckInForm({
         <FiCheckCircle className="mx-auto mb-3 text-secondary" size={40} aria-hidden />
         <h2 className="font-display text-xl text-navy mb-2">Thanks — we got it</h2>
         <p className="text-[15px] text-foreground-accent leading-relaxed">
-          Your note helps us improve the beta. If you&apos;re ready to try Pinporium, use the install
-          link from your welcome email, or reply to{" "}
+          Your note helps us improve the beta.{" "}
+          {audience === "not_started" ? (
+            <>
+              If you&apos;re ready to try Pinporium, use the install link from your welcome email, or
+              reply to{" "}
+            </>
+          ) : (
+            <>Questions or ideas? Reply to </>
+          )}
           <a href={`mailto:${siteDetails.supportEmail}`} className="text-secondary-ink font-semibold underline">
             {siteDetails.supportEmail}
           </a>
@@ -166,15 +180,18 @@ export function BetaCheckInForm({
           name="name"
           type="text"
           autoComplete="name"
+          defaultValue={initialName}
           className={fieldClass}
           disabled={status === "submitting"}
         />
       </div>
 
       <fieldset>
-        <legend className={labelClass}>What&apos;s going on? <span className="text-primary-ink">*</span></legend>
+        <legend className={labelClass}>
+          What&apos;s going on? <span className="text-primary-ink">*</span>
+        </legend>
         <div className="space-y-2">
-          {BETA_CHECK_IN_REASONS.map((option) => (
+          {reasons.map((option) => (
             <label
               key={option.value}
               className={clsx(

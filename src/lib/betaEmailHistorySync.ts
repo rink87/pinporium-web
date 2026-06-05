@@ -13,6 +13,7 @@ type BetaApplicationRow = {
   signup_received_at: string | null;
   welcome_sent_at: string | null;
   check_in_sent_at: string | null;
+  check_in_active_sent_at: string | null;
 };
 
 export type BetaEmailHistorySyncResult = {
@@ -24,6 +25,7 @@ export type BetaEmailHistorySyncResult = {
     signup_received: number;
     welcome: number;
     check_in: number;
+    check_in_active: number;
   };
   sources: {
     resendRecipients: number;
@@ -34,10 +36,14 @@ export type BetaEmailHistorySyncResult = {
 
 function columnForKind(kind: BetaEmailKind): keyof Pick<
   BetaApplicationRow,
-  "signup_received_at" | "welcome_sent_at" | "check_in_sent_at"
+  | "signup_received_at"
+  | "welcome_sent_at"
+  | "check_in_sent_at"
+  | "check_in_active_sent_at"
 > {
   if (kind === "signup_received") return "signup_received_at";
   if (kind === "welcome") return "welcome_sent_at";
+  if (kind === "check_in_active") return "check_in_active_sent_at";
   return "check_in_sent_at";
 }
 
@@ -108,13 +114,21 @@ export async function syncBetaApplicationEmailHistory(): Promise<
 
   const { data: applications, error } = await admin
     .from("beta_applications")
-    .select("id, email, submitted_at, signup_received_at, welcome_sent_at, check_in_sent_at");
+    .select(
+      "id, email, submitted_at, signup_received_at, welcome_sent_at, check_in_sent_at, check_in_active_sent_at",
+    );
 
   if (error) {
     return { ok: false, message: error.message };
   }
 
-  const filled = { submitted: 0, signup_received: 0, welcome: 0, check_in: 0 };
+  const filled = {
+    submitted: 0,
+    signup_received: 0,
+    welcome: 0,
+    check_in: 0,
+    check_in_active: 0,
+  };
   let updatedApplications = 0;
 
   for (const app of (applications ?? []) as BetaApplicationRow[]) {
@@ -125,7 +139,12 @@ export async function syncBetaApplicationEmailHistory(): Promise<
 
     const patch: Record<string, string> = {};
 
-    for (const kind of ["signup_received", "welcome", "check_in"] as const) {
+    for (const kind of [
+      "signup_received",
+      "welcome",
+      "check_in",
+      "check_in_active",
+    ] as const) {
       const column = columnForKind(kind);
       if (app[column]) continue;
 

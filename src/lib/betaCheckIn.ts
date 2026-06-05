@@ -2,8 +2,10 @@ import type { BetaPlatform } from "@/lib/betaTester";
 import { normalizeBetaEmail, validateBetaEmail } from "@/lib/betaTester";
 import { siteDetails } from "@/data/siteDetails";
 
-/** Why someone has not started the beta yet — used in email links and check-in form. */
-export const BETA_CHECK_IN_REASONS = [
+export type BetaCheckInAudience = "not_started" | "active";
+
+/** Why someone has not started the beta yet — email links and check-in form. */
+export const BETA_CHECK_IN_NOT_STARTED_REASONS = [
   {
     value: "not-installed",
     label: "I haven't installed the app yet",
@@ -46,23 +48,109 @@ export const BETA_CHECK_IN_REASONS = [
   },
 ] as const;
 
-export type BetaCheckInReason = (typeof BETA_CHECK_IN_REASONS)[number]["value"];
+/** Why someone signed in but we want feedback on their experience. */
+export const BETA_CHECK_IN_ACTIVE_REASONS = [
+  {
+    value: "barely-used",
+    label: "I've signed in but haven't explored much yet",
+    shortLabel: "Haven't explored much",
+  },
+  {
+    value: "confusing",
+    label: "The app is hard to figure out",
+    shortLabel: "Hard to figure out",
+  },
+  {
+    value: "missing-feature",
+    label: "I'm missing a feature I need",
+    shortLabel: "Missing a feature",
+  },
+  {
+    value: "bugs",
+    label: "I ran into bugs or crashes",
+    shortLabel: "Bugs or crashes",
+  },
+  {
+    value: "catalog-gaps",
+    label: "I couldn't find pins I expected in the catalog",
+    shortLabel: "Catalog gaps",
+  },
+  {
+    value: "trades-not-tried",
+    label: "I haven't tried trades or The Hunt yet",
+    shortLabel: "Haven't tried trades / Hunt",
+  },
+  {
+    value: "going-well",
+    label: "It's going well — I want to share feedback",
+    shortLabel: "Going well (feedback)",
+  },
+  {
+    value: "other-active",
+    label: "Something else",
+    shortLabel: "Something else",
+  },
+] as const;
 
-const REASON_VALUES = new Set<string>(BETA_CHECK_IN_REASONS.map((r) => r.value));
+/** @deprecated Use BETA_CHECK_IN_NOT_STARTED_REASONS */
+export const BETA_CHECK_IN_REASONS = BETA_CHECK_IN_NOT_STARTED_REASONS;
 
-export function isBetaCheckInReason(value: string): value is BetaCheckInReason {
-  return REASON_VALUES.has(value);
+export type BetaCheckInNotStartedReason =
+  (typeof BETA_CHECK_IN_NOT_STARTED_REASONS)[number]["value"];
+export type BetaCheckInActiveReason =
+  (typeof BETA_CHECK_IN_ACTIVE_REASONS)[number]["value"];
+export type BetaCheckInReason = BetaCheckInNotStartedReason | BetaCheckInActiveReason;
+
+const NOT_STARTED_VALUES = new Set<string>(
+  BETA_CHECK_IN_NOT_STARTED_REASONS.map((r) => r.value),
+);
+const ACTIVE_VALUES = new Set<string>(
+  BETA_CHECK_IN_ACTIVE_REASONS.map((r) => r.value),
+);
+
+export function getBetaCheckInReasons(audience: BetaCheckInAudience) {
+  return audience === "active"
+    ? BETA_CHECK_IN_ACTIVE_REASONS
+    : BETA_CHECK_IN_NOT_STARTED_REASONS;
 }
 
-export function betaCheckInReasonLabel(value: BetaCheckInReason): string {
-  return BETA_CHECK_IN_REASONS.find((r) => r.value === value)?.label ?? value;
+export function parseBetaCheckInAudienceParam(
+  raw: string | null | undefined,
+): BetaCheckInAudience {
+  return raw?.trim() === "active" ? "active" : "not_started";
+}
+
+export function isBetaCheckInReasonForAudience(
+  value: string,
+  audience: BetaCheckInAudience,
+): value is BetaCheckInReason {
+  return audience === "active"
+    ? ACTIVE_VALUES.has(value)
+    : NOT_STARTED_VALUES.has(value);
+}
+
+export function isBetaCheckInReason(value: string): value is BetaCheckInReason {
+  return NOT_STARTED_VALUES.has(value) || ACTIVE_VALUES.has(value);
+}
+
+export function betaCheckInReasonLabel(
+  value: BetaCheckInReason,
+  audience?: BetaCheckInAudience,
+): string {
+  if (audience === "active" || ACTIVE_VALUES.has(value)) {
+    const hit = BETA_CHECK_IN_ACTIVE_REASONS.find((r) => r.value === value);
+    if (hit) return hit.label;
+  }
+  const hit = BETA_CHECK_IN_NOT_STARTED_REASONS.find((r) => r.value === value);
+  return hit?.label ?? value;
 }
 
 export function parseBetaCheckInReasonParam(
   raw: string | null | undefined,
+  audience: BetaCheckInAudience = "not_started",
 ): BetaCheckInReason | null {
   const trimmed = raw?.trim();
-  if (!trimmed || !isBetaCheckInReason(trimmed)) {
+  if (!trimmed || !isBetaCheckInReasonForAudience(trimmed, audience)) {
     return null;
   }
   return trimmed;
@@ -77,14 +165,27 @@ export function parseBetaCheckInPlatformParam(
   return null;
 }
 
-/** Public check-in page with optional pre-selected reason (from email links). */
+export function parseBetaCheckInNameParam(raw: string | null | undefined): string {
+  const trimmed = raw?.trim() ?? "";
+  if (!trimmed || trimmed.length > 120) {
+    return "";
+  }
+  return trimmed;
+}
+
 export function betaCheckInPageUrl(params?: {
+  audience?: BetaCheckInAudience;
   reason?: BetaCheckInReason;
   platform?: BetaPlatform;
   email?: string;
+  name?: string;
 }): string {
   const base = `${siteDetails.siteUrl.replace(/\/$/, "")}/beta/check-in`;
   const search = new URLSearchParams();
+  const audience = params?.audience ?? "not_started";
+  if (audience === "active") {
+    search.set("audience", "active");
+  }
   if (params?.reason) {
     search.set("reason", params.reason);
   }
@@ -94,24 +195,43 @@ export function betaCheckInPageUrl(params?: {
   if (params?.email?.trim()) {
     search.set("email", params.email.trim().toLowerCase());
   }
+  const name = parseBetaCheckInNameParam(params?.name);
+  if (name) {
+    search.set("name", name);
+  }
   const qs = search.toString();
   return qs ? `${base}?${qs}` : base;
 }
 
-export const BETA_SLACK_CHECK_IN_HEADER = "Beta check-in (not started yet)";
+export const BETA_SLACK_CHECK_IN_NOT_STARTED_HEADER = "Beta check-in (not started yet)";
+export const BETA_SLACK_CHECK_IN_ACTIVE_HEADER = "Beta check-in (active user)";
 
-export function formatBetaCheckInSlackMessage(data: {
-  name?: string;
-  email: string;
-  reason: BetaCheckInReason;
-  platform?: BetaPlatform;
-  details?: string;
-}): string {
+/** @deprecated */
+export const BETA_SLACK_CHECK_IN_HEADER = BETA_SLACK_CHECK_IN_NOT_STARTED_HEADER;
+
+export function formatBetaCheckInSlackMessage(
+  data: {
+    name?: string;
+    email: string;
+    reason: BetaCheckInReason;
+    audience?: BetaCheckInAudience;
+    platform?: BetaPlatform;
+    details?: string;
+  } & { turnstileToken?: string },
+): string {
+  const audience =
+    data.audience ??
+    (ACTIVE_VALUES.has(data.reason) ? "active" : "not_started");
+  const header =
+    audience === "active"
+      ? BETA_SLACK_CHECK_IN_ACTIVE_HEADER
+      : BETA_SLACK_CHECK_IN_NOT_STARTED_HEADER;
+
   const lines = [
-    BETA_SLACK_CHECK_IN_HEADER,
+    header,
     "",
     `Email: ${data.email}`,
-    `Reason: ${betaCheckInReasonLabel(data.reason)}`,
+    `Reason: ${betaCheckInReasonLabel(data.reason, audience)}`,
   ];
   if (data.name?.trim()) {
     lines.push(`Name: ${data.name.trim()}`);
@@ -146,8 +266,12 @@ export function parseBetaCheckInBody(
     return { ok: false, error: emailError };
   }
 
+  const audience = parseBetaCheckInAudienceParam(
+    typeof raw.audience === "string" ? raw.audience : undefined,
+  );
+
   const reasonRaw = typeof raw.reason === "string" ? raw.reason.trim() : "";
-  if (!isBetaCheckInReason(reasonRaw)) {
+  if (!isBetaCheckInReasonForAudience(reasonRaw, audience)) {
     return { ok: false, error: "Please choose what best describes your situation." };
   }
 
@@ -174,6 +298,7 @@ export function parseBetaCheckInBody(
       name: name || undefined,
       email: normalizeBetaEmail(emailRaw),
       reason: reasonRaw,
+      audience,
       platform: platform ?? undefined,
       details: details || undefined,
       turnstileToken,
@@ -185,7 +310,26 @@ export type BetaCheckInPayload = {
   name?: string;
   email: string;
   reason: BetaCheckInReason;
+  audience: BetaCheckInAudience;
   platform?: BetaPlatform;
   details?: string;
   turnstileToken: string;
 };
+
+/** Which check-in email fits this tester (for admin UI). */
+export function suggestedBetaCheckInEmailType(signInCount: number): "check_in" | "check_in_active" {
+  return signInCount > 0 ? "check_in_active" : "check_in";
+}
+
+export const BETA_CHECK_IN_EMAIL_OPTIONS = [
+  {
+    value: "check_in" as const,
+    label: "Not started yet",
+    description: "No app sign-ins — what's blocking them?",
+  },
+  {
+    value: "check_in_active" as const,
+    label: "Active user",
+    description: "Has signed in — feature feedback form (~3 min)",
+  },
+];

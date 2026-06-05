@@ -1,6 +1,6 @@
 import type { BetaPlatform } from "@/lib/betaTester";
 import {
-  BETA_CHECK_IN_REASONS,
+  BETA_CHECK_IN_NOT_STARTED_REASONS,
   betaCheckInPageUrl,
 } from "@/lib/betaCheckIn";
 import { siteDetails } from "@/data/siteDetails";
@@ -31,13 +31,15 @@ function firstName(fullName: string) {
   return trimmed.split(/\s+/)[0] ?? trimmed;
 }
 
-function reasonLinksHtml(platform: BetaPlatform, email?: string) {
+function reasonLinksHtml(platform: BetaPlatform, name: string, email?: string) {
   const t = emailTheme;
-  const rows = BETA_CHECK_IN_REASONS.map((reason) => {
+  const rows = BETA_CHECK_IN_NOT_STARTED_REASONS.map((reason) => {
     const href = betaCheckInPageUrl({
+      audience: "not_started",
       reason: reason.value,
       platform,
       email,
+      name,
     });
     return `<li style="margin-bottom:10px;"><a href="${escapeHtml(href)}" style="color:${t.secondary};font-weight:600;font-size:15px;text-decoration:underline;">${escapeHtml(reason.shortLabel)}</a></li>`;
   }).join("");
@@ -55,7 +57,7 @@ function bodyCopy(
   const t = emailTheme;
   const support = siteDetails.supportEmail;
   const assets = getEmailAssetUrls(assetsBaseUrl);
-  const checkInUrl = betaCheckInPageUrl({ platform, email });
+  const checkInUrl = betaCheckInPageUrl({ audience: "not_started", platform, email, name });
 
   const installBlock =
     platform === "ios"
@@ -80,7 +82,7 @@ function bodyCopy(
 
     ${emailSectionHeading("What's holding you back?")}
     <p style="margin:0 0 12px;color:${t.foreground};font-size:15px;line-height:1.6;">Tap the option that fits best (opens a short form with that choice already selected):</p>
-    ${reasonLinksHtml(platform, email)}
+    ${reasonLinksHtml(platform, name, email)}
     <p style="margin:16px 0 0;color:${t.foregroundAccent};font-size:14px;line-height:1.5;">Prefer one page? <a href="${escapeHtml(checkInUrl)}" style="color:${t.secondary};font-weight:600;">Open the check-in form</a> and pick from the list.</p>
 
     ${emailSectionHeading("Ready to jump in?")}
@@ -125,5 +127,5 @@ export function betaNotYetStartedEmailHtml({
 }
 
 export function betaNotYetStartedEmailSubject() {
-  return "Quick check-in — Pinporium beta";
+  return "Quick check-in — haven't started yet";
 }

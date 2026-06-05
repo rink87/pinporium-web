@@ -12,6 +12,10 @@ import {
   betaSignupReceivedEmailSubject,
 } from "./templates/betaSignupReceived";
 import {
+  betaActiveUserCheckInEmailHtml,
+  betaActiveUserCheckInEmailSubject,
+} from "./templates/betaActiveUserCheckIn";
+import {
   betaNotYetStartedEmailHtml,
   betaNotYetStartedEmailSubject,
 } from "./templates/betaNotYetStarted";
@@ -128,6 +132,7 @@ export async function sendBetaWelcomeEmail({
 export const sendBetaThanksEmail = sendBetaWelcomeEmail;
 
 /** Follow-up for approved beta testers who have not created an app account yet. */
+/** Follow-up for testers who got welcome but have no app sign-ins yet. */
 export async function sendBetaNotYetStartedEmail({
   name,
   email,
@@ -143,5 +148,24 @@ export async function sendBetaNotYetStartedEmail({
     html: betaNotYetStartedEmailHtml({ name, platform, email }),
     logLabel: "Beta not-yet-started check-in email",
     recordKind: "check_in",
+  });
+}
+
+/** Follow-up for testers who have signed into the app at least once. */
+export async function sendBetaActiveUserCheckInEmail({
+  name,
+  email,
+  platform,
+}: {
+  name: string;
+  email: string;
+  platform: BetaPlatform;
+}): Promise<SendResult> {
+  return sendResendEmailWithBetaRecord({
+    to: email,
+    subject: betaActiveUserCheckInEmailSubject(),
+    html: betaActiveUserCheckInEmailHtml({ name, platform, email }),
+    logLabel: "Beta active-user check-in email",
+    recordKind: "check_in_active",
   });
 }

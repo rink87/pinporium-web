@@ -7,6 +7,10 @@ import {
   betaSignupReceivedEmailSubject,
 } from "@/lib/email/templates/betaSignupReceived";
 import {
+  betaActiveUserCheckInEmailHtml,
+  betaActiveUserCheckInEmailSubject,
+} from "@/lib/email/templates/betaActiveUserCheckIn";
+import {
   betaNotYetStartedEmailHtml,
   betaNotYetStartedEmailSubject,
 } from "@/lib/email/templates/betaNotYetStarted";
@@ -114,7 +118,7 @@ export default function EmailPreviewPage() {
         </a>{" "}
         with <code className="text-xs">?reason=</code> pre-selected.
       </p>
-      <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid gap-10 lg:grid-cols-2 mb-12">
         {platforms.map((platform) => (
           <section key={`not-started-${platform}`} className="space-y-3">
             <h3 className="text-sm font-medium text-navy">
@@ -130,6 +134,37 @@ export default function EmailPreviewPage() {
                 assetsBaseUrl,
               })}
               className="w-full min-h-[920px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
+            />
+          </section>
+        ))}
+      </div>
+
+      <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-accent mb-4">
+        4 — Active user (manual send) · {betaActiveUserCheckInEmailSubject()}
+      </h2>
+      <p className="text-sm text-foreground-accent mb-4 max-w-2xl">
+        Send to testers who have signed into the app at least once. Email links to the web form at{" "}
+        <a href="/beta/check-in?audience=active" className="text-secondary-ink underline">
+          /beta/check-in
+        </a>
+        .
+      </p>
+      <div className="grid gap-10 lg:grid-cols-2">
+        {platforms.map((platform) => (
+          <section key={`active-${platform}`} className="space-y-3">
+            <h3 className="text-sm font-medium text-navy">
+              {platform === "ios" ? "iPhone" : "Android"}
+            </h3>
+            <iframe
+              title={`Beta active user — ${platform}`}
+              srcDoc={betaActiveUserCheckInEmailHtml({
+                name,
+                platform,
+                email: "collector@example.com",
+                wordmarkSrc,
+                assetsBaseUrl,
+              })}
+              className="w-full min-h-[880px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
             />
           </section>
         ))}

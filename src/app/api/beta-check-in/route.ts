@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 
-import { formatBetaCheckInSlackMessage, parseBetaCheckInBody } from "@/lib/betaCheckIn";
+import {
+  formatBetaActiveFeedbackSlackMessage,
+  parseBetaActiveFeedbackBody,
+  type BetaActiveFeedbackPayload,
+} from "@/lib/betaActiveFeedback";
+import {
+  formatBetaCheckInSlackMessage,
+  parseBetaCheckInBody,
+  type BetaCheckInPayload,
+} from "@/lib/betaCheckIn";
 import { turnstileRequired, verifyTurnstileToken } from "@/lib/turnstile";
 
 export async function POST(request: Request) {
@@ -21,12 +30,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  const parsed = parseBetaCheckInBody(body);
+  const rawAudience =
+    body && typeof body === "object"
+      ? (body as Record<string, unknown>).audience
+      : undefined;
+
+  const isActive = typeof rawAudience === "string" && rawAudience.trim() === "active";
+
+  const parsed = isActive ? parseBetaActiveFeedbackBody(body) : parseBetaCheckInBody(body);
   if (!parsed.ok) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
 
-  const { turnstileToken, ...payload } = parsed.data;
+  const { turnstileToken } = parsed.data;
 
   if (turnstileRequired()) {
     if (!turnstileToken) {
@@ -45,7 +61,9 @@ export async function POST(request: Request) {
     }
   }
 
-  const text = formatBetaCheckInSlackMessage(payload);
+  const text = isActive
+    ? formatBetaActiveFeedbackSlackMessage(parsed.data as BetaActiveFeedbackPayload)
+    : formatBetaCheckInSlackMessage(parsed.data as BetaCheckInPayload);
 
   try {
     const slackRes = await fetch(webhookUrl, {
