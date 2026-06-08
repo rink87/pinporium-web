@@ -25,8 +25,8 @@ const DISCORD_JOIN_BUTTON_PATH = "/images/discord-join-button.png";
 const GOOGLE_PLAY_BADGE_PATH = "/images/get-it-on-google-play.png";
 
 /** discord-join-button.png intrinsic size (800×272) — display size in email */
-export const EMAIL_DISCORD_BUTTON_WIDTH = 260;
-export const EMAIL_DISCORD_BUTTON_HEIGHT = 88;
+export const EMAIL_DISCORD_BUTTON_WIDTH = 220;
+export const EMAIL_DISCORD_BUTTON_HEIGHT = 75;
 
 /** Official “Get it on Google Play” badge (646×250) */
 export const EMAIL_GOOGLE_PLAY_BADGE_WIDTH = 200;

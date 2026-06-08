@@ -12,6 +12,10 @@ import {
   betaSignupReceivedEmailSubject,
 } from "./templates/betaSignupReceived";
 import {
+  betaActiveNoPinsCheckInEmailHtml,
+  betaActiveNoPinsCheckInEmailSubject,
+} from "./templates/betaActiveNoPinsCheckIn";
+import {
   betaActiveUserCheckInEmailHtml,
   betaActiveUserCheckInEmailSubject,
 } from "./templates/betaActiveUserCheckIn";
@@ -151,7 +155,26 @@ export async function sendBetaNotYetStartedEmail({
   });
 }
 
-/** Follow-up for testers who have signed into the app at least once. */
+/** Follow-up for testers who signed in but have no vault pins yet. */
+export async function sendBetaActiveNoPinsCheckInEmail({
+  name,
+  email,
+  platform,
+}: {
+  name: string;
+  email: string;
+  platform: BetaPlatform;
+}): Promise<SendResult> {
+  return sendResendEmailWithBetaRecord({
+    to: email,
+    subject: betaActiveNoPinsCheckInEmailSubject(),
+    html: betaActiveNoPinsCheckInEmailHtml({ name, platform, email }),
+    logLabel: "Beta active-no-pins check-in email",
+    recordKind: "check_in_active",
+  });
+}
+
+/** Follow-up for testers who have signed in and added at least one vault pin. */
 export async function sendBetaActiveUserCheckInEmail({
   name,
   email,

@@ -1,12 +1,12 @@
 import type { BetaPlatform } from "@/lib/betaTester";
 import { betaCheckInPageUrl } from "@/lib/betaCheckIn";
 import { BETA_ACTIVE_FEATURES_USED } from "@/lib/betaActiveFeedback";
-import { siteDetails } from "@/data/siteDetails";
 
-import { emailButton, emailSectionHeading, escapeHtml } from "../blocks";
-import { BETA_DISCORD_URL } from "../constants";
+import { emailButton, escapeHtml } from "../blocks";
 import { emailLayout } from "../layout";
 import { emailTheme } from "../theme";
+
+import { betaMoreFeedbackSection } from "./betaMoreFeedbackSection";
 
 function firstName(fullName: string) {
   const trimmed = fullName.trim();
@@ -16,11 +16,21 @@ function firstName(fullName: string) {
   return trimmed.split(/\s+/)[0] ?? trimmed;
 }
 
-function bodyCopy(platform: BetaPlatform, name: string, email?: string) {
+function bodyCopy(
+  platform: BetaPlatform,
+  name: string,
+  assetsBaseUrl?: string,
+  email?: string,
+) {
   const greeting = `Hi ${escapeHtml(firstName(name))},`;
   const t = emailTheme;
-  const support = siteDetails.supportEmail;
-  const formUrl = betaCheckInPageUrl({ audience: "active", platform, email, name });
+  const formUrl = betaCheckInPageUrl({
+    audience: "active",
+    platform,
+    email,
+    name,
+    siteUrl: assetsBaseUrl,
+  });
   const featurePreview = BETA_ACTIVE_FEATURES_USED.slice(0, 4)
     .map((f) => f.label.toLowerCase())
     .join(", ");
@@ -34,8 +44,7 @@ function bodyCopy(platform: BetaPlatform, name: string, email?: string) {
 
     <p style="margin:0 0 16px;color:${t.foregroundAccent};font-size:14px;line-height:1.5;text-align:center;">On the form you&apos;ll check off features you&apos;ve used (e.g. ${escapeHtml(featurePreview)}…) and share what clicked vs. what didn&apos;t.</p>
 
-    ${emailSectionHeading("Other ways to reach us")}
-    <p style="margin:0 0 12px;color:${t.foreground};font-size:15px;line-height:1.6;">On iPhone you can still <strong>shake your phone</strong> in the app for quick feedback. Join collectors on <a href="${escapeHtml(BETA_DISCORD_URL)}" style="color:${t.secondary};font-weight:600;">Discord</a>, or email <a href="mailto:${support}" style="color:${t.secondary};font-weight:600;">${support}</a>.</p>
+    ${betaMoreFeedbackSection(assetsBaseUrl)}
     <p style="margin:0;color:${t.foregroundAccent};font-size:14px;line-height:1.5;">Thank you for helping shape Pinporium for the whole pin community.</p>
   `;
 }
@@ -65,7 +74,7 @@ export function betaActiveUserCheckInEmailHtml({
   return emailLayout({
     previewText,
     title: "Share your beta feedback",
-    bodyHtml: bodyCopy(platform, name, email),
+    bodyHtml: bodyCopy(platform, name, assetsBaseUrl, email),
     footerHtml,
     assetsBaseUrl,
     wordmarkSrc,

@@ -1,5 +1,6 @@
 import type { BetaEmailKind } from "@/lib/betaApplicationDb";
 
+import { betaActiveNoPinsCheckInEmailSubject } from "./templates/betaActiveNoPinsCheckIn";
 import { betaActiveUserCheckInEmailSubject } from "./templates/betaActiveUserCheckIn";
 import { betaNotYetStartedEmailSubject } from "./templates/betaNotYetStarted";
 import { betaSignupReceivedEmailSubject } from "./templates/betaSignupReceived";
@@ -8,6 +9,7 @@ import { betaThanksEmailSubject } from "./templates/betaThanks";
 const SIGNUP_SUBJECT = betaSignupReceivedEmailSubject();
 const CHECK_IN_NOT_STARTED_SUBJECT = betaNotYetStartedEmailSubject();
 const CHECK_IN_ACTIVE_SUBJECT = betaActiveUserCheckInEmailSubject();
+const CHECK_IN_ACTIVE_NO_PINS_SUBJECT = betaActiveNoPinsCheckInEmailSubject();
 const WELCOME_IOS_SUBJECT = betaThanksEmailSubject("ios");
 const WELCOME_ANDROID_SUBJECT = betaThanksEmailSubject("android");
 
@@ -18,6 +20,7 @@ export function betaEmailKindFromResendTag(tagValue: string | undefined): BetaEm
   if (tagValue === "beta_welcome") return "welcome";
   if (tagValue === "beta_check_in") return "check_in";
   if (tagValue === "beta_check_in_active") return "check_in_active";
+  if (tagValue === "beta_check_in_active_no_pins") return "check_in_active";
   return null;
 }
 
@@ -35,6 +38,9 @@ export function betaEmailKindFromSubject(subject: string | undefined): BetaEmail
     normalized === CHECK_IN_ACTIVE_SUBJECT ||
     normalized === "Quick check-in — how's Pinporium going?"
   ) {
+    return "check_in_active";
+  }
+  if (normalized === CHECK_IN_ACTIVE_NO_PINS_SUBJECT) {
     return "check_in_active";
   }
   if (normalized === WELCOME_IOS_SUBJECT || normalized === WELCOME_ANDROID_SUBJECT) {

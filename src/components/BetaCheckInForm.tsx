@@ -247,7 +247,7 @@ export function BetaCheckInForm({
           name="details"
           rows={4}
           className={clsx(fieldClass, "resize-y min-h-[100px]")}
-          placeholder="Install error message, device model, etc."
+          placeholder="Any other feedback you'd like us to know"
           disabled={status === "submitting"}
         />
       </div>

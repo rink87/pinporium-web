@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 import { BetaActiveFeedbackForm } from "@/components/BetaActiveFeedbackForm";
 import { BetaCheckInForm } from "@/components/BetaCheckInForm";
 import {
-  parseBetaCheckInAudienceParam,
   parseBetaCheckInNameParam,
   parseBetaCheckInPlatformParam,
   parseBetaCheckInReasonParam,
+  resolveBetaCheckInAudience,
 } from "@/lib/betaCheckIn";
 import { normalizeBetaEmail, validateBetaEmail } from "@/lib/betaTester";
 import clsx from "clsx";
@@ -35,36 +35,44 @@ function firstParam(value: string | string[] | undefined): string | undefined {
 }
 
 export default function BetaCheckInPage({ searchParams }: PageProps) {
-  const audience = parseBetaCheckInAudienceParam(firstParam(searchParams.audience));
-  const reason = parseBetaCheckInReasonParam(
-    firstParam(searchParams.reason),
-    audience,
-  );
+  const audienceRaw = firstParam(searchParams.audience);
+  const reasonRaw = firstParam(searchParams.reason);
+  const audience = resolveBetaCheckInAudience(audienceRaw, reasonRaw);
+  const reason = parseBetaCheckInReasonParam(reasonRaw, audience);
   const platform = parseBetaCheckInPlatformParam(firstParam(searchParams.platform));
   const emailRaw = firstParam(searchParams.email) ?? "";
   const initialEmail =
     emailRaw && !validateBetaEmail(emailRaw) ? normalizeBetaEmail(emailRaw) : "";
   const initialName = parseBetaCheckInNameParam(firstParam(searchParams.name));
 
-  const isActive = audience === "active";
+  const isFullActiveFeedback = audience === "active";
+  const isNoPinsCheckIn = audience === "active_no_pins";
 
   return (
     <main className="min-h-[70vh] bg-cream pt-28 md:pt-32 pb-12 sm:pb-16">
       <div
         className={clsx(
           "mx-auto px-5",
-          isActive ? "max-w-2xl" : "max-w-lg",
+          isFullActiveFeedback ? "max-w-2xl" : "max-w-lg",
         )}
       >
         <h1 className="font-display text-3xl text-navy mb-2">
-          {isActive ? "Beta feature feedback" : "Beta check-in"}
+          {isFullActiveFeedback ? "Beta feature feedback" : "Beta check-in"}
         </h1>
         <p className="text-[15px] text-foreground-accent leading-relaxed mb-8">
-          {isActive ? (
+          {isFullActiveFeedback ? (
             <>
               Thanks for using Pinporium — this form helps us prioritize what to fix and build next.
               Check the features you&apos;ve tried, rate a couple of key flows, and add anything else
               on your mind (~3 minutes).
+            </>
+          ) : isNoPinsCheckIn ? (
+            <>
+              Thanks for signing into Pinporium — we&apos;d love to know what&apos;s in the way of
+              adding your first pin.
+              {reason
+                ? " Your email link pre-selected an option below; change it if another fits better."
+                : null}
             </>
           ) : (
             <>
@@ -76,7 +84,7 @@ export default function BetaCheckInPage({ searchParams }: PageProps) {
           )}
         </p>
         <div className="rounded-xl border border-gold-deco/30 bg-white/90 p-5 sm:p-6 shadow-sm">
-          {isActive ? (
+          {isFullActiveFeedback ? (
             <BetaActiveFeedbackForm
               initialEmail={initialEmail}
               initialName={initialName}

@@ -1,11 +1,14 @@
 # Beta check-in emails
 
-Two manual check-ins, sent from **pinporium-admin** → **Send check-in** (dropdown with **Suggested** based on sign-in count):
+Three manual check-ins, sent from **pinporium-admin** → communication timeline in the tester drawer (the eligible branch is **available**; the other is grayed out):
 
 | Type | When to use | DB column | Resend tag |
 |------|-------------|-----------|------------|
 | **Not started yet** | Welcome sent, **0 app sign-ins** | `check_in_sent_at` | `beta_check_in` |
-| **Active user** | **≥1 app sign-in** | `check_in_active_sent_at` | `beta_check_in_active` |
+| **Signed in — no pins** | **≥1 sign-in**, **0 vault pins** | `check_in_active_sent_at` | `beta_check_in_active` |
+| **Active — has pins** | **≥1 sign-in**, **≥1 vault pin** | `check_in_active_sent_at` | `beta_check_in_active` |
+
+Both active variants share `check_in_active_sent_at`; the admin UI picks the template from vault pin count at send time.
 
 Migration: `20260688_beta_check_in_active.sql`.
 
@@ -36,8 +39,10 @@ Optional: include `?email=` in links when sending via Resend (per-recipient merg
 
 After migration `20260682_beta_applications` is applied:
 
-- **Beta** nav → `/beta-testers` — list, platform, lifecycle status, both check-in sent dates, sign-in count, **Send check-in** dropdown (suggests not-started vs active from sign-in count).
+- **Beta** nav → `/beta-testers` — searchable list with email status icons and **View** drawer per tester.
+- Drawer: engagement, signup survey answers, in-app feedback, communication timeline (send + preview), editable details.
 - **Add signup** — backfill Slack-only applicants.
+- Deep link: `/beta-testers?tester={applicationId}`.
 - Requires `ADMIN_BETA_EMAIL_SECRET` (same on web + admin) and `PINPORIUM_WEB_URL` on admin.
 
 ## Send the email
@@ -83,9 +88,42 @@ Submissions post to `SLACK_BETA_WEBHOOK_URL` with header **Beta check-in (not st
 
 ---
 
+## Signed in — no pins
+
+For testers who **signed into the app** but have **not added a vault pin** yet. Same shape as the not-started email: reason links + short form (not the full feature survey).
+
+### Send
+
+```ts
+import { sendBetaActiveNoPinsCheckInEmail } from "@/lib/email/sendBetaEmails";
+
+await sendBetaActiveNoPinsCheckInEmail({
+  name: "Alex",
+  email: "alex@example.com",
+  platform: "ios",
+});
+```
+
+### Subject
+
+`Quick check-in — haven't added a pin yet`
+
+### Check-in page (signed in, no pins)
+
+- URL: `https://pinporium.app/beta/check-in?audience=active_no_pins&platform=ios&email=alex@example.com`
+- Query params: `audience=active_no_pins`, `reason`, `platform`, `email` (optional)
+
+Reason values: `not-tried-add`, `add-pin-confusing`, `photos-hard`, `catalog-blocked`, `started-gave-up`, `browsing-only`, `other-no-pins`.
+
+### Slack
+
+Header **Beta check-in (signed in — no pins yet)**.
+
+---
+
 ## Active user (feature feedback)
 
-For testers who have **signed into the app** at least once. The email is a **single CTA** to a web form (no survey inside the email).
+For testers who have **signed into the app** and added **at least one vault pin**. The email is a **single CTA** to a web form (no survey inside the email).
 
 ### Send
 

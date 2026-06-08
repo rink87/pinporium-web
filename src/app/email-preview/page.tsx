@@ -2,23 +2,9 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import {
-  betaSignupReceivedEmailHtml,
-  betaSignupReceivedEmailSubject,
-} from "@/lib/email/templates/betaSignupReceived";
-import {
-  betaActiveUserCheckInEmailHtml,
-  betaActiveUserCheckInEmailSubject,
-} from "@/lib/email/templates/betaActiveUserCheckIn";
-import {
-  betaNotYetStartedEmailHtml,
-  betaNotYetStartedEmailSubject,
-} from "@/lib/email/templates/betaNotYetStarted";
-import {
-  betaThanksEmailHtml,
-  betaThanksEmailSubject,
-} from "@/lib/email/templates/betaThanks";
 import { getWordmarkDataUri } from "@/lib/email/wordmarkDataUri";
+
+import { EmailPreviewTabs } from "./EmailPreviewTabs";
 
 /**
  * Local preview only — open http://localhost:3001/email-preview (dev runs on 3001)
@@ -36,139 +22,27 @@ export default function EmailPreviewPage() {
     (host ? `http://${host}` : "http://localhost:3001");
 
   const name = "Chris";
-  const platforms = ["ios", "android"] as const;
 
   return (
     <div className="min-h-screen bg-[#f1e5d8] p-8 font-body">
-      <h1 className="font-display text-2xl text-navy mb-2">Beta email preview</h1>
-
-      <div className="mb-10 max-w-2xl space-y-3 rounded-lg border border-gold-deco/40 bg-cream/80 p-4 text-sm text-foreground-accent">
-        <p className="text-navy font-medium">Two emails</p>
-        <ol className="list-decimal pl-5 space-y-2">
-          <li>
-            <strong>On form submit</strong> — short &ldquo;thanks, you&apos;re on the
-            list&rdquo; (below, first row).
-          </li>
-          <li>
-            <strong>After you react :incoming_envelope: on Slack</strong> — full welcome
-            with install link, checklist, and Discord (second row).
-          </li>
-        </ol>
-        <p>
-          <Link href="/" className="text-secondary-ink underline">
-            Open site
-          </Link>{" "}
-          to try the form.
-        </p>
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="font-display text-2xl text-navy mb-2">Email preview</h1>
+          <p className="text-sm text-foreground-accent max-w-2xl">
+            Beta onboarding and catalog submission decision emails. Use the tabs to switch
+            templates.
+          </p>
+        </div>
+        <Link href="/" className="text-secondary-ink underline text-sm">
+          Open site
+        </Link>
       </div>
 
-      <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-accent mb-4">
-        1 — Immediately after signup · {betaSignupReceivedEmailSubject()}
-      </h2>
-      <div className="grid gap-10 lg:grid-cols-2 mb-12">
-        {platforms.map((platform) => (
-          <section key={`received-${platform}`} className="space-y-3">
-            <h3 className="text-sm font-medium text-navy">
-              {platform === "ios" ? "iPhone" : "Android"}
-            </h3>
-            <iframe
-              title={`Signup received — ${platform}`}
-              srcDoc={betaSignupReceivedEmailHtml({
-                name,
-                platform,
-                wordmarkSrc,
-                assetsBaseUrl,
-              })}
-              className="w-full min-h-[420px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
-            />
-          </section>
-        ))}
-      </div>
-
-      <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-accent mb-4">
-        2 — After Slack :incoming_envelope: approval
-      </h2>
-      <div className="grid gap-10 lg:grid-cols-2 mb-12">
-        {platforms.map((platform) => (
-          <section key={`welcome-${platform}`} className="space-y-3">
-            <h3 className="text-sm font-medium text-navy">
-              {platform === "ios" ? "iPhone" : "Android"} — {betaThanksEmailSubject(platform)}
-            </h3>
-            <iframe
-              title={`Beta welcome — ${platform}`}
-              srcDoc={betaThanksEmailHtml({
-                name,
-                platform,
-                wordmarkSrc,
-                assetsBaseUrl,
-              })}
-              className="w-full min-h-[780px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
-            />
-          </section>
-        ))}
-      </div>
-
-      <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-accent mb-4">
-        3 — Not started yet (manual send) · {betaNotYetStartedEmailSubject()}
-      </h2>
-      <p className="text-sm text-foreground-accent mb-4 max-w-2xl">
-        Send to testers who got the welcome email but have no app account. Reason links open{" "}
-        <a href="/beta/check-in" className="text-secondary-ink underline">
-          /beta/check-in
-        </a>{" "}
-        with <code className="text-xs">?reason=</code> pre-selected.
-      </p>
-      <div className="grid gap-10 lg:grid-cols-2 mb-12">
-        {platforms.map((platform) => (
-          <section key={`not-started-${platform}`} className="space-y-3">
-            <h3 className="text-sm font-medium text-navy">
-              {platform === "ios" ? "iPhone" : "Android"}
-            </h3>
-            <iframe
-              title={`Beta not yet started — ${platform}`}
-              srcDoc={betaNotYetStartedEmailHtml({
-                name,
-                platform,
-                email: "collector@example.com",
-                wordmarkSrc,
-                assetsBaseUrl,
-              })}
-              className="w-full min-h-[920px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
-            />
-          </section>
-        ))}
-      </div>
-
-      <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-accent mb-4">
-        4 — Active user (manual send) · {betaActiveUserCheckInEmailSubject()}
-      </h2>
-      <p className="text-sm text-foreground-accent mb-4 max-w-2xl">
-        Send to testers who have signed into the app at least once. Email links to the web form at{" "}
-        <a href="/beta/check-in?audience=active" className="text-secondary-ink underline">
-          /beta/check-in
-        </a>
-        .
-      </p>
-      <div className="grid gap-10 lg:grid-cols-2">
-        {platforms.map((platform) => (
-          <section key={`active-${platform}`} className="space-y-3">
-            <h3 className="text-sm font-medium text-navy">
-              {platform === "ios" ? "iPhone" : "Android"}
-            </h3>
-            <iframe
-              title={`Beta active user — ${platform}`}
-              srcDoc={betaActiveUserCheckInEmailHtml({
-                name,
-                platform,
-                email: "collector@example.com",
-                wordmarkSrc,
-                assetsBaseUrl,
-              })}
-              className="w-full min-h-[880px] rounded-lg border border-gold-deco/30 bg-white shadow-lg"
-            />
-          </section>
-        ))}
-      </div>
+      <EmailPreviewTabs
+        name={name}
+        wordmarkSrc={wordmarkSrc}
+        assetsBaseUrl={assetsBaseUrl}
+      />
     </div>
   );
 }
