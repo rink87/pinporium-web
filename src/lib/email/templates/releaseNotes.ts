@@ -30,6 +30,10 @@ export function releaseNotesEmailHtml(
   const bodyHtml = formatReleaseNotesEmailBodyHtml(entry, emailTheme);
 
   const footerHtml = `
+    <p style="margin:20px 0 0;font-size:14px;line-height:1.5;color:${emailTheme.foregroundAccent};">
+      <a href="https://www.pinporium.app/beta/changelog#v${entry.version.replace(/\./g, "-")}" style="color:${emailTheme.secondary};font-weight:600;text-decoration:none;">View full changelog</a>
+      — detailed release notes for beta testers.
+    </p>
     ${betaMoreFeedbackSection(options?.assetsBaseUrl)}
     <p style="margin:20px 0 0;padding-top:20px;font-size:13px;line-height:1.5;color:${emailTheme.foregroundAccent};">
       Pinporium — one vault for your whole pin collection.
