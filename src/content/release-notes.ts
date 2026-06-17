@@ -31,6 +31,45 @@ export type ReleaseNotesEntry = {
 /** Newest first. */
 export const RELEASE_NOTES: ReleaseNotesEntry[] = [
   {
+    version: "1.0.3",
+    date: "2026-06-12",
+    headline: "What's new",
+    summary:
+      "List pins for sale, manage trade and sale offers in one inbox, and clearer timelines when deals wrap up.",
+    highlights: [
+      {
+        title: "For sale from your vault",
+        icon: "sparkles",
+        body: "Mark copies **for sale** with a **fixed ask** or **open to offers**, set **USD/CAD** prices, shipping terms, and a contact email for buyers.",
+      },
+      {
+        title: "Unified Offers inbox",
+        icon: "arrow-left-right",
+        body: "Hunt **Offers** brings **trades and sales** together — **Needs action**, **Waiting**, and **History** in one place.",
+      },
+      {
+        title: "From offer to sold",
+        icon: "truck",
+        body: "**Suggest an offer** on OBO listings, negotiate with one seller counter, **accept** to start a pending sale, then **mark as sold** when payment and shipping are done offline.",
+      },
+      {
+        title: "Discover listings",
+        icon: "map-pin",
+        body: "Browse **For trade** and **For sale** on Discover, preview listings before you message, and see **recently added** catalog pins.",
+      },
+      {
+        title: "Clearer active deals",
+        icon: "shield",
+        body: "**Expiry reminders** on open offers, **report a problem** during fulfillment if something goes wrong, and richer **completion timelines** when a trade or sale finishes.",
+      },
+      {
+        title: "Profiles & polish",
+        icon: "circle-user",
+        body: "Public profiles show **completed sales** alongside trades; Android gets a smoother **3D pin viewer** and **Quick Add** fixes.",
+      },
+    ],
+  },
+  {
     version: "1.0.2",
     date: "2026-06-02",
     headline: "What's new",

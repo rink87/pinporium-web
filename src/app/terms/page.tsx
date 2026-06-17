@@ -67,8 +67,10 @@ const sections: LegalSection[] = [
             <>
                 <p>
                     Pinporium helps enamel pin collectors organize collections, discover
-                    pins, contribute to a community catalog, track ISOs and grails, and
-                    (over time) participate in social and marketplace features.
+                    pins, contribute to a community catalog, track ISOs and grails, coordinate
+                    trades with other collectors, and list pins for sale. Sale and trade
+                    features help you connect and track status; they do not process payments
+                    on your behalf unless we clearly say otherwise in the app.
                 </p>
                 <p>
                     We may add, change, or remove features at any time. Beta or early
@@ -169,26 +171,72 @@ const sections: LegalSection[] = [
         ),
     },
     {
-        id: "trades",
-        title: "Trades and marketplace (current and future)",
+        id: "trades-sales",
+        title: "Trades and for-sale coordination",
         content: (
             <>
                 <p>
-                    Trading and buy/sell features may be introduced over time. Unless we
-                    explicitly state otherwise:
+                    Pinporium may help collectors propose trades, negotiate sale offers,
+                    share contact or shipping details, and record coordination status (for
+                    example shipped, received, or paid). Unless we explicitly state
+                    otherwise in the app:
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
                     <li>
-                        Transactions between users are between those users; Pinporium is not
-                        a party to the sale or trade.
+                        <strong>Between collectors.</strong> Sales and trades are agreements
+                        between the users involved. Pinporium is not a party to those
+                        transactions and is not the seller, buyer, broker, escrow agent, or
+                        shipping carrier.
                     </li>
                     <li>
-                        We do not guarantee item condition, delivery, payment, or dispute
-                        outcomes.
+                        <strong>No payment processing for collector sales.</strong> We do not
+                        collect sale proceeds, hold funds in escrow, or guarantee that a
+                        buyer pays or that a seller ships. Payment is arranged outside the
+                        app (for example email, Venmo, PayPal, or cash in person) unless a
+                        future feature clearly states that Pinporium processes payment.
                     </li>
                     <li>
-                        Future marketplace fees, if any, will be disclosed before you are
-                        charged.
+                        <strong>Information you share.</strong> You choose what contact or
+                        shipping information to provide. When you accept a trade or sale, you
+                        may choose to share details with the other collector so you can
+                        complete the exchange off-platform.
+                    </li>
+                    <li>
+                        <strong>Status is user-reported.</strong> Buttons or labels such as
+                        shipped, received, or paid reflect what users report in the app.
+                        Pinporium does not verify delivery, tracking, payment, or item
+                        condition.
+                    </li>
+                    <li>
+                        <strong>No guarantees.</strong> We do not guarantee that any user
+                        will complete a trade or sale, ship on time, describe items
+                        accurately, or resolve disputes. Problems such as non-shipment,
+                        non-payment, damaged pins, or misrepresentation are primarily between
+                        the collectors involved.
+                    </li>
+                    <li>
+                        <strong>Pin locks.</strong> A pin may be temporarily locked from other
+                        offers while a sale or trade is pending. That lock is a coordination
+                        aid only; it does not mean the transaction is complete, insured, or
+                        protected by Pinporium.
+                    </li>
+                    <li>
+                        <strong>Your responsibility.</strong> You are responsible for
+                        complying with applicable laws (including taxes, consumer protection,
+                        and restrictions on what you sell or ship), for verifying pins and
+                        counterparty identity, and for using reasonable care when meeting or
+                        mailing items.
+                    </li>
+                    <li>
+                        <strong>Abuse and enforcement.</strong> We may investigate reports,
+                        remove listings, suspend accounts, or take other action for fraud,
+                        harassment, or policy violations, but we are not obligated to mediate
+                        every dispute between collectors.
+                    </li>
+                    <li>
+                        <strong>Future marketplace features.</strong> If we later add in-app
+                        checkout, seller fees, or payment processing, additional terms and
+                        pricing will be disclosed before you are charged.
                     </li>
                 </ul>
             </>

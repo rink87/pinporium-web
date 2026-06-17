@@ -43,8 +43,14 @@ const sections: LegalSection[] = [
                     </li>
                     <li>
                         <strong>Collection and vault data</strong> — pins you add, boards,
-                        ISO/grail/DISO/trader status, notes, estimated values, and related
-                        metadata you choose to store.
+                        ISO/grail/DISO/trader or for-sale status, listing prices, notes,
+                        estimated values, and related metadata you choose to store.
+                    </li>
+                    <li>
+                        <strong>Trade and sale coordination</strong> — shipping addresses
+                        you save for trades or sales, optional sale contact email, offer and
+                        counter amounts, negotiation notes, tracking numbers you enter, and
+                        status you report (such as shipped, received, or paid).
                     </li>
                     <li>
                         <strong>Photos and media</strong> — images you upload for your
@@ -77,6 +83,11 @@ const sections: LegalSection[] = [
                 <ul className="list-disc pl-6 space-y-2">
                     <li>Provide and maintain your account, vault, and catalog features</li>
                     <li>Process and display your collection, boards, and hunt lists</li>
+                    <li>
+                        Facilitate trade and for-sale coordination between collectors
+                        (matching, offers, status tracking, and sharing details you choose
+                        to provide with a counterparty)
+                    </li>
                     <li>Review and moderate community catalog submissions</li>
                     <li>Send service-related notices (e.g. security, submission outcomes)</li>
                     <li>
@@ -106,13 +117,19 @@ const sections: LegalSection[] = [
                         Pinporium under contractual obligations to protect your data.
                     </li>
                     <li>
-                        <strong>Other users</strong> — only what you choose to make
-                        visible (e.g. public profile or shared collection features, when
-                        offered).
+                        <strong>Other users</strong> — information you choose to make
+                        visible (for example a public profile, shared collection features,
+                        or for-sale listings). When you enter into a trade or accepted sale
+                        with another collector, we may show that person information you
+                        provide for coordination (such as username, sale contact email,
+                        shipping address, offer terms, or tracking details) and they may see
+                        similar information you need to complete the exchange.
                     </li>
                     <li>
                         <strong>Moderators and reviewers</strong> — catalog submission
-                        content needed to approve, reject, or normalize entries.
+                        content needed to approve, reject, or normalize entries; trade or
+                        sale records when needed to investigate abuse, fraud, or policy
+                        violations.
                     </li>
                     <li>
                         <strong>Legal and safety</strong> — when required by law, court
@@ -123,6 +140,31 @@ const sections: LegalSection[] = [
                         acquisition, or asset sale, with notice where required by law.
                     </li>
                 </ul>
+            </>
+        ),
+    },
+    {
+        id: "trades-sales",
+        title: "Trades, sales, and counterparty data",
+        content: (
+            <>
+                <p>
+                    Trade and for-sale features are designed to help collectors coordinate
+                    off-platform. Pinporium does not process payment for collector-to-collector
+                    sales unless a future feature clearly says otherwise.
+                </p>
+                <p>
+                    If you save a shipping address, add a sale contact email, or accept a
+                    trade or sale, that information may be stored in our systems and shown
+                    to the other collector involved so you can complete shipping and payment
+                    outside the app. Do not share more personal information than you are
+                    comfortable providing to another user.
+                </p>
+                <p>
+                    We may retain trade and sale records (including offers, notes, and status
+                    updates) to operate the feature, prevent abuse, and resolve support or
+                    enforcement issues.
+                </p>
             </>
         ),
     },

@@ -9,6 +9,7 @@ import {
 
 import { emailLayout } from "../layout";
 import { emailTheme } from "../theme";
+import { betaMoreFeedbackSection } from "./betaMoreFeedbackSection";
 
 export type { ReleaseNotesEntry };
 
@@ -29,6 +30,7 @@ export function releaseNotesEmailHtml(
   const bodyHtml = formatReleaseNotesEmailBodyHtml(entry, emailTheme);
 
   const footerHtml = `
+    ${betaMoreFeedbackSection(options?.assetsBaseUrl)}
     <p style="margin:20px 0 0;padding-top:20px;font-size:13px;line-height:1.5;color:${emailTheme.foregroundAccent};">
       Pinporium — one vault for your whole pin collection.
     </p>
