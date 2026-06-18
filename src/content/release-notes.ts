@@ -42,22 +42,22 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
     date: "2026-06-12",
     headline: "What's new",
     summary:
-      "Offers now covers trades and sales, you can list pins for sale, catalog details got richer, and Discover shows real listings from other collectors.",
+      "List pins for sale, manage trades and sales in one Offers inbox, find other collectors, and browse real listings on Discover.",
     highlights: [
-      {
-        title: "Offers — trades and sales together",
-        icon: "arrow-left-right",
-        body: "Hunt **Trades** is now **Offers**. Trade proposals and **sale offers** share one inbox — **Needs action**, **Waiting**, and **History**.",
-      },
       {
         title: "List pins for sale",
         icon: "sparkles",
         body: "Mark vault copies **for sale** alongside **for trade**. Set a **fixed ask** or **open to offers**, **USD/CAD** pricing, shipping terms, and a buyer contact email.",
       },
       {
-        title: "Help build the catalog",
-        icon: "layers",
-        body: "Richer pin details — **pin type**, **pin features**, and **number of posts**. On catalog pins, tap **Suggest an edit** to flag image or data issues.",
+        title: "Offers — trades and sales together",
+        icon: "arrow-left-right",
+        body: "Hunt **Trades** is now **Offers**. Trade proposals and **sale offers** share one inbox — **Needs action**, **Waiting**, and **History**.",
+      },
+      {
+        title: "Find collectors & profile controls",
+        icon: "circle-user",
+        body: "**Search collectors** from Search. Choose what your public profile shows — **stats**, **trade pins**, **sale pins**, **vault**, and **boards** — plus **trade request** policies in Settings.",
       },
       {
         title: "Discover real listings",
@@ -67,21 +67,10 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
       {
         title: "Clearer deals end to end",
         icon: "shield",
-        body: "**Expiry reminders** on open offers, **report a problem** during fulfillment, richer **completion timelines**, and **completed sales** on public profiles.",
+        body: "**Expiry reminders** on open offers, **report a problem** during fulfillment, and richer **completion timelines** when a trade or sale finishes.",
       },
     ],
     changelog: [
-      {
-        title: "Offers — trades and sales together",
-        items: [
-          "Hunt **Trades** tab renamed **Offers**.",
-          "Trade and **sale offers** merged into **Needs action**, **Waiting**, and **History**.",
-          "Combined offer history sorted newest first.",
-          "Home cards for pending trades, incoming trade intake, pending sales, and offer updates.",
-          "Offer **expiry badges** on inbox cards; clearer expired state on trade and sale detail screens.",
-          "Open offers expire after ~14 days; hourly maintenance job.",
-        ],
-      },
       {
         title: "List pins for sale",
         items: [
@@ -98,12 +87,25 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
         ],
       },
       {
-        title: "Help build the catalog",
+        title: "Offers — trades and sales together",
         items: [
-          "**Pin type** (mechanism) and **pin features** (effects) on vault, Quick Add, and catalog pins.",
-          "Optional **No. of pin posts** on vault rows and catalog submissions.",
-          "Catalog pin detail → **Suggest an edit** (image issue, pin data issue, or other).",
-          "Vault pin detail → **Report an issue** for your own copy.",
+          "Hunt **Trades** tab renamed **Offers**.",
+          "Trade and **sale offers** merged into **Needs action**, **Waiting**, and **History**.",
+          "Combined offer history sorted newest first.",
+          "Home cards for pending trades, incoming trade intake, pending sales, and offer updates.",
+          "Offer **expiry badges** on inbox cards; clearer expired state on trade and sale detail screens.",
+          "Open offers expire after ~14 days; hourly maintenance job.",
+        ],
+      },
+      {
+        title: "Collector profiles & settings",
+        items: [
+          "**Search collectors** by username or display name from the Search tab.",
+          "Public profile toggles for **stats**, **trade pins**, **sale pins**, **vault pins**, and **boards**.",
+          "Public profiles show **completed sales** count alongside trades.",
+          "Shareable **public board** pages for collector boards.",
+          "**Trade requests** policy in Settings — traders only vs any owned pin.",
+          "**Counter-offer pin picker** policy in Settings — who can offer when you counter.",
         ],
       },
       {
@@ -113,8 +115,9 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
           "**Recently added** surfaces new catalog variants by approval date.",
           "**Listing preview** before you contact a seller or send an offer.",
           "Standardized pin row and grid cards across Home, vault, and Discover.",
-          "Search collectors by username or display name from the Search tab.",
-          "Shareable **public board** view for collector boards.",
+          "Optional **No. of pin posts** on vault rows and catalog submissions.",
+          "Catalog pin detail → **Suggest an edit**; vault → **Report an issue**.",
+          "**Retake vault photos** from pin detail with optional catalog re-link.",
         ],
       },
       {
@@ -123,7 +126,6 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
           "**Report a problem** on active trade or sale fulfillment (shipment issues, etc.).",
           "Mark a reported problem **resolved** when you and your counterparty sort it out.",
           "Richer **completion timelines** on finished trades and sales (notes folded in).",
-          "Public profiles show **completed sales** count alongside trades.",
           "Artists can **claim your profile** from artist pages.",
           "Partnerships contact form on Search.",
           "Android: smoother **3D pin viewer** and **Quick Add** crash fix after photo crop.",
