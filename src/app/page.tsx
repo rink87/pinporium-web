@@ -36,9 +36,17 @@ const HomePage: React.FC = () => {
         <Section
           id="roadmap"
           title="Where we’re headed"
-          description="Vault, catalog, The Hunt, trades, and achievements are in the beta today. Drop alerts, sharing, and marketplace features are what we’re building toward next."
+          description="Vault, The Hunt, Discover, and achievements are in the beta today. v1.0.4 adds bulk upload and push notifications — see the full roadmap and upvote what you want next."
         >
           <Pricing />
+          <p className="mt-8 text-center font-body">
+            <a
+              href="/roadmap"
+              className="text-secondary-ink font-semibold hover:underline"
+            >
+              View full roadmap & upvote features →
+            </a>
+          </p>
         </Section>
 
         {/* TODO: add real testimonials from collectors and shops once we have quotes */}

@@ -11,9 +11,14 @@ const staticRoutes: MetadataRoute.Sitemap = [
     priority: 1,
   },
   {
-    url: `${siteDetails.siteUrl}/changelog`,
+    url: `${siteDetails.siteUrl}/roadmap`,
     changeFrequency: "weekly",
     priority: 0.85,
+  },
+  {
+    url: `${siteDetails.siteUrl}/changelog`,
+    changeFrequency: "weekly",
+    priority: 0.8,
   },
   ...SEO_LANDING_PAGES.map((page) => ({
     url: `${siteDetails.siteUrl}${page.path}`,
@@ -42,9 +47,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return staticRoutes.map((entry) => {
     const isHome = entry.url === siteDetails.siteUrl;
+    const isRoadmap = entry.url.endsWith("/roadmap");
     const isChangelog = entry.url.endsWith("/changelog");
     const lastModified =
-      (isHome || isChangelog) && latestNoteDate
+      (isHome || isRoadmap || isChangelog) && latestNoteDate
         ? new Date(`${latestNoteDate}T12:00:00`)
         : undefined;
 

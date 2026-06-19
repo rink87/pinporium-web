@@ -1,3 +1,4 @@
+import { homeSectionAnchor } from "@/lib/homeNav";
 import { IMenuItem, ISocials } from "@/types";
 
 export const footerDetails: {
@@ -10,13 +11,13 @@ export const footerDetails: {
     socials: ISocials;
 } = {
     subheading:
-        'The collector-first home for enamel pins — vault, discover, the hunt, trades, achievements, and a catalog we grow together.',
+        'The collector-first home for enamel pins — vault, Discover, The Hunt (wants, offers, series), achievements, and a catalog we grow together.',
     quickLinks: [
-        { text: "Features", url: "/#features" },
-        { text: "Roadmap", url: "/#roadmap" },
+        { text: "Features", url: homeSectionAnchor("features") },
+        { text: "Roadmap", url: "/roadmap" },
         { text: "Changelog", url: "/changelog" },
         { text: "Apply for beta", url: "#" },
-        { text: "FAQ", url: "/#faq" },
+        { text: "FAQ", url: homeSectionAnchor("faq") },
     ],
     exploreLinks: [
         { text: "For collectors", url: "/for-collectors" },

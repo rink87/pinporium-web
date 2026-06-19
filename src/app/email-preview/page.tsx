@@ -29,8 +29,8 @@ export default function EmailPreviewPage() {
         <div>
           <h1 className="font-display text-2xl text-navy mb-2">Email preview</h1>
           <p className="text-sm text-foreground-accent max-w-2xl">
-            Beta onboarding and catalog submission decision emails. Use the tabs to switch
-            templates.
+            Beta onboarding, catalog submission decisions, and version release emails. Use the
+            tabs to switch templates.
           </p>
         </div>
         <Link href="/" className="text-secondary-ink underline text-sm">

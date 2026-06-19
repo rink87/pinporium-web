@@ -81,10 +81,10 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
     eyebrow: "Collectors",
     heading: "One app for your whole enamel pin collection",
     subheading:
-      "Artist drops, licensed pins, con hauls, limited editions, and chases — catalog what you own, hunt what you need, trade without losing threads in DMs.",
+      "Artist drops, licensed pins, con hauls, limited editions, and chases — catalog what you own, hunt what you need, and trade or sell on The Hunt without losing threads in DMs.",
     metaTitle: `For enamel pin collectors — ${siteDetails.siteName}`,
     metaDescription:
-      "Pinporium is the collector-first pin app: vault, boards, Discover, ISO and grail wishlists, in-app trades, achievements, and a shared catalog you can contribute to.",
+      "Pinporium is the collector-first pin app: vault, boards, Discover listings, The Hunt (Wants, Offers, Series), achievements, and a shared catalog you can contribute to.",
     sections: [
       {
         id: "vault",
@@ -100,16 +100,14 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
       },
       {
         id: "hunt",
-        title: "The Hunt — ISOs, DISOs, and grails",
+        title: "The Hunt — wants, offers & series",
         paragraphs: [
-          "Mark how badly you want each pin, track series completion, and keep wants separate from your owned vault. No more forgotten Notes app lists.",
+          "Wants holds your ISO, DISO, and Grail lists. Offers is the subtab for trade proposals, sale offers, and mutual matches. Series tracks set completion — all in one Hunt tab.",
         ],
-      },
-      {
-        id: "trade",
-        title: "Trades with follow-through",
-        paragraphs: [
-          "Mark pins for trade, get matched when another collector’s ISO lines up, and track proposals through shipment — linked to the same catalog variant on both sides.",
+        bullets: [
+          "Wants — tier what you’re still chasing",
+          "Offers — trades and for-sale deals with Needs action, Waiting, and History",
+          "Series — completion rings from pin detail",
         ],
       },
       {
@@ -151,9 +149,9 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
       },
       {
         id: "discover",
-        title: "Discover what to collect next",
+        title: "Discover listings & what to collect next",
         paragraphs: [
-          "Browse categories and search the catalog from Discover — trending pins, themes, and variants collectors actually use when they trade.",
+          "Browse for-trade and for-sale collector listings, search the catalog from Discover, and open a listing preview before you message someone.",
         ],
       },
       {
@@ -172,10 +170,10 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
     eyebrow: "Trading",
     heading: "Trade enamel pins in the app — not in a messy thread",
     subheading:
-      "Mark pins for trade, find mutual matches on the same catalog entry, and follow swaps from proposal to shipment with both sides aligned on variant and grade.",
+      "Mark pins for trade or for sale, find mutual matches on the same catalog entry, and follow swaps and sale offers on The Hunt → Offers from proposal to shipment.",
     metaTitle: `Enamel pin trading app — ${siteDetails.siteName}`,
     metaDescription:
-      "Trade enamel pins with matched collectors, active trade status, and catalog-linked variants. Pinporium keeps ISOs and for-trade pins on the same reviewed entries.",
+      "Trade and sell enamel pins on The Hunt Offers tab — matched collectors, unified inbox, and catalog-linked variants.",
     sections: [
       {
         id: "matches",
@@ -186,14 +184,14 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
       },
       {
         id: "workflow",
-        title: "A trade workflow you can trust",
+        title: "Offers on The Hunt",
         paragraphs: [
-          "See waiting, in-progress, and completed trades in one place. Trade profiles support shipping for the US and Canada with formatted addresses.",
+          "The Offers subtab on The Hunt shows trade proposals, sale offers, and completed deals in one place. Trade profiles support shipping for the US and Canada with formatted addresses.",
         ],
         bullets: [
-          "Proposals and counters in-app",
-          "History when you need to reference an old swap",
-          "Same catalog entry on both sides of the trade",
+          "Proposals, counters, and sale offers in-app",
+          "History when you need to reference an old swap or sale",
+          "Same catalog entry on both sides of every deal",
         ],
       },
       {
@@ -212,7 +210,7 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
     eyebrow: "Wishlist & hunt",
     heading: "Pin wishlist app for ISOs, DISOs, and grails",
     subheading:
-      "The Hunt is Pinporium’s wishlist built for enamel collectors — tier what you want, track series, and keep chasing without losing lists in screenshots or Notes.",
+      "The Hunt Wants subtab is Pinporium’s wishlist for enamel collectors — tier ISO, DISO, and Grail, track series, and keep chasing without losing lists in screenshots or Notes.",
     metaTitle: `Pin wishlist & ISO tracker — ${siteDetails.siteName}`,
     metaDescription:
       "Track pin ISOs, DISOs, and grails in one hunt list. Series completion, catalog-linked wants, and trade matches when someone has your pin for swap.",
@@ -235,7 +233,7 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
         id: "connect",
         title: "Connected to vault and trades",
         paragraphs: [
-          "The Hunt sits beside your vault and trade pins. When a match appears, you’re already looking at the same catalog entry both collectors use.",
+          "The Hunt sits beside your vault. Wants lists what you need; Offers on The Hunt is where trades and matches happen — both sides on the same catalog entry.",
         ],
       },
     ],

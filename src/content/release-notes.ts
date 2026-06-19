@@ -20,9 +20,22 @@ export type ReleaseNoteItem = {
   icon?: ReleaseNoteIcon;
 };
 
-export type ChangelogSection = {
-  title: string;
-  items: string[];
+export type ChangelogKind = "feature" | "fix" | "improvement";
+
+/**
+ * How to categorize /changelog items (strict — reserve "feature" for net-new capability):
+ *
+ * - **feature** — A new screen, tab, flow, or action users could not do before. Not a sub-option,
+ *   field, badge, rename, or extension of something already shipped.
+ * - **improvement** — Extends or polishes existing product: new fields on a known form, UX/copy,
+ *   sorting, performance, policy, or visibility toggles on settings that already exist.
+ * - **fix** — Repairs broken or unintended behavior.
+ *
+ * When in doubt, prefer improvement over feature.
+ */
+export type ChangelogItem = {
+  kind: ChangelogKind;
+  text: string;
 };
 
 export type ReleaseNotesEntry = {
@@ -31,8 +44,8 @@ export type ReleaseNotesEntry = {
   headline?: string;
   summary?: string;
   highlights: ReleaseNoteItem[];
-  /** Full detail — /beta/changelog only (noindex). */
-  changelog?: ChangelogSection[];
+  /** Granular items for /changelog — features, improvements, and fixes. */
+  changelog?: ChangelogItem[];
 };
 
 /** Newest first. */
@@ -42,7 +55,7 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
     date: "2026-06-12",
     headline: "What's new",
     summary:
-      "Sell pins from your vault, manage trades and sales in Offers, find collectors, retake photos, and browse listings on Discover.",
+      "Sell pins from your vault, manage trades and sales on The Hunt → Offers, find collectors, support artists, and browse listings on Discover.",
     highlights: [
       {
         title: "For sale",
@@ -50,9 +63,9 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
         body: "Mark vault copies **for sale** alongside **for trade**. Set a **fixed ask** or **open to offers**, **USD/CAD** pricing, shipping terms, and a buyer contact email.",
       },
       {
-        title: "Offers inbox",
+        title: "Offers on The Hunt",
         icon: "arrow-left-right",
-        body: "Hunt **Trades** is now **Offers**. Trade proposals and **sale offers** share one inbox — **Needs action**, **Waiting**, and **History**.",
+        body: "The Hunt **Trades** subtab is now **Offers**. Trade proposals and **sale offers** share one inbox — **Needs action**, **Waiting**, and **History**.",
       },
       {
         title: "Collector search",
@@ -60,9 +73,9 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
         body: "**Search collectors** from Search and visit their **public profiles**. Control what you show — **stats**, **trade pins**, **sale pins**, **vault**, and **boards** — in **Settings**.",
       },
       {
-        title: "Pin add improvements",
-        icon: "layers",
-        body: "**Retake vault photos** from pin detail without starting over — replace front and back shots and keep your catalog link when you want to.",
+        title: "Artists support",
+        icon: "medal",
+        body: "Artists can **claim their profile** from artist pages to manage their official catalog. Pin makers can **apply to become a partner artist** from Search.",
       },
       {
         title: "Discover listings",
@@ -71,66 +84,42 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
       },
     ],
     changelog: [
-      {
-        title: "For sale",
-        items: [
-          "**For sale** vault flag — independent per copy, alongside **for trade**.",
-          "**Fixed ask** or **open to offers (OBO)** when listing.",
-          "**USD/CAD** on ask price, personal value, and price paid.",
-          "Sale **contact email** required before listing (defaults to account email).",
-          "Shipping: included, additional amount, or **contact seller**.",
-          "**For Sale** listing sheet from pin detail; pending sale locks the copy while a deal is active.",
-          "Fixed ask listings: **Contact seller**. OBO listings: **Suggest an offer** thread with one seller counter.",
-          "Accept an offer → **pending sale** → mark buyer paid → **mark as sold** when complete offline.",
-          "Sale complete screen with summary, pin stack, notes, and timeline.",
-          "Per-user **close** on completed sales.",
-        ],
-      },
-      {
-        title: "Offers inbox",
-        items: [
-          "Hunt **Trades** tab renamed **Offers**.",
-          "Trade and **sale offers** merged into **Needs action**, **Waiting**, and **History**.",
-          "Combined offer history sorted newest first.",
-          "Home cards for pending trades, incoming trade intake, pending sales, and offer updates.",
-          "Offer **expiry badges** on inbox cards; clearer expired state on trade and sale detail screens.",
-          "Open offers expire after ~14 days; hourly maintenance job.",
-          "**Report a problem** on active trade or sale fulfillment; mark **resolved** when sorted out.",
-          "Richer **completion timelines** on finished trades and sales (notes folded in).",
-        ],
-      },
-      {
-        title: "Collector search & public profiles",
-        items: [
-          "**Search collectors** by username or display name from the Search tab.",
-          "Visit **public profiles** with tabs for trade & sale listings, vault, and boards.",
-          "Profile visibility toggles in **Settings** — **stats**, **trade pins**, **sale pins**, **vault pins**, and **boards**.",
-          "Public profiles show **completed sales** count alongside trades.",
-          "Shareable **public board** pages.",
-          "**Trade requests** and **counter-offer pin picker** policies in Settings.",
-        ],
-      },
-      {
-        title: "Pin add improvements",
-        items: [
-          "**Retake vault photos** from pin detail with optional catalog re-link.",
-          "Optional **No. of pin posts** on vault rows and catalog submissions.",
-          "Catalog pin detail → **Suggest an edit**; vault → **Report an issue**.",
-          "Android: **Quick Add** crash fix after photo crop.",
-        ],
-      },
-      {
-        title: "Discover listings",
-        items: [
-          "Discover **For trade** and **For sale** categories show real collector listings.",
-          "**Recently added** surfaces new catalog variants by approval date.",
-          "**Listing preview** before you contact a seller or send an offer.",
-          "Standardized pin row and grid cards across Home, vault, and Discover.",
-          "Artists can **claim your profile** from artist pages.",
-          "Partnerships contact form on Search.",
-          "Android: smoother **3D pin viewer**.",
-        ],
-      },
+      { kind: "feature", text: "**For sale** — list vault copies for sale alongside for trade." },
+      { kind: "improvement", text: "Set a **fixed ask** or **open to offers (OBO)** when listing for sale." },
+      { kind: "improvement", text: "**USD/CAD** currency on ask price, personal value, and price paid." },
+      { kind: "improvement", text: "Buyer **contact email** required before listing for sale (defaults to your account email)." },
+      { kind: "improvement", text: "Shipping terms when listing: included, additional amount, or **contact seller**." },
+      { kind: "improvement", text: "**For Sale** listing sheet from pin detail; copy locks while a sale is pending." },
+      { kind: "improvement", text: "Fixed-ask listings: **Contact seller**. OBO listings: **Suggest an offer** with one seller counter." },
+      { kind: "improvement", text: "Sale flow: accept offer → pending sale → mark paid → **mark as sold** when finished offline." },
+      { kind: "improvement", text: "Sale complete screen with summary, pin stack, notes, and timeline." },
+      { kind: "improvement", text: "**Close** completed sales from your side when the deal is done." },
+      { kind: "improvement", text: "The Hunt **Trades** subtab renamed **Offers** (still on The Hunt)." },
+      { kind: "feature", text: "Trade and **sale offers** in one inbox — **Needs action**, **Waiting**, and **History**." },
+      { kind: "improvement", text: "Offer history sorted newest first across trades and sales." },
+      { kind: "improvement", text: "Home cards for pending trades, incoming trade requests, pending sales, and offer updates." },
+      { kind: "improvement", text: "Offer **expiry badges** on inbox cards and clearer expired states on detail screens." },
+      { kind: "improvement", text: "Unresolved trade and sale offers expire after ~14 days." },
+      { kind: "feature", text: "**Report a problem** on active trade or sale fulfillment; mark **resolved** when sorted out." },
+      { kind: "improvement", text: "Richer **completion timelines** on finished trades and sales." },
+      { kind: "feature", text: "**Search collectors** by username or display name from Search." },
+      { kind: "improvement", text: "Public profiles: tabs for trade listings, sale listings, vault, and boards." },
+      { kind: "improvement", text: "**Sale pins** added to public profile visibility settings." },
+      { kind: "improvement", text: "Public profiles show **completed sales** count alongside trades." },
+      { kind: "improvement", text: "Shareable **public board** pages." },
+      { kind: "improvement", text: "**Trade request** and **counter-offer pin picker** policies in Settings." },
+      { kind: "feature", text: "**Claim this artist profile** on unverified artist pages to request catalog access." },
+      { kind: "feature", text: "**Partner with Pinporium** — apply from Search to become a verified partner artist." },
+      { kind: "improvement", text: "**Partner** badge on Discover, Search, and artist profiles for verified artists." },
+      { kind: "feature", text: "Discover **For trade** and **For sale** categories show live collector listings." },
+      { kind: "feature", text: "**Recently added** catalog pins on Discover." },
+      { kind: "feature", text: "**Listing preview** before you contact a seller or send an offer." },
+      { kind: "improvement", text: "Consistent pin row and grid cards across Home, vault, and Discover." },
+      { kind: "feature", text: "**Retake vault photos** from pin detail with optional catalog re-link." },
+      { kind: "improvement", text: "Optional **number of pin posts** on vault rows and catalog submissions." },
+      { kind: "improvement", text: "**Suggest an edit** on catalog pins; **Report an issue** on vault pins." },
+      { kind: "fix", text: "Fixed **Quick Add** crashing after photo crop on Android." },
+      { kind: "improvement", text: "Smoother **3D pin viewer** performance on Android." },
     ],
   },
   {
@@ -166,6 +155,15 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
         body: "Follow artists during setup, set profile visibility, and review your choices on a **welcome recap** with quick edits.",
       },
     ],
+    changelog: [
+      { kind: "improvement", text: "Expanded **mechanism** options on catalog and vault pins (spinners, sliders, and more)." },
+      { kind: "improvement", text: "Expanded **effects** options on catalog and vault pins (glow, glitter, stained glass, and more)." },
+      { kind: "feature", text: "Public **profile visibility** toggles — control **stats**, **trade pins**, **vault pins**, and **boards**." },
+      { kind: "feature", text: "**Collector leaderboards** — rank by collector score, vault size, and catalog contributions." },
+      { kind: "improvement", text: "**Follow artists** during onboarding." },
+      { kind: "improvement", text: "**Welcome recap** at end of onboarding with quick edits before you start collecting." },
+      { kind: "improvement", text: "Refreshed onboarding flow and clearer setup copy." },
+    ],
   },
   {
     version: "1.0.1",
@@ -193,6 +191,13 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
         icon: "shield",
         body: "Promote series and collection-aware vault flows for organizing drops and sets.",
       },
+    ],
+    changelog: [
+      { kind: "feature", text: "Pin details split **mechanism** (spinners, sliders, etc.) from **effects** (glow, glitter, stained glass)." },
+      { kind: "feature", text: "**US & Canada** shipping addresses on trade profiles with formatted ZIP and postal codes." },
+      { kind: "improvement", text: "Set **trade policy** and shipping address during onboarding." },
+      { kind: "feature", text: "**Collection items** and series-aware vault organization for drops and sets." },
+      { kind: "improvement", text: "Clearer trade setup prompts during onboarding." },
     ],
   },
 ];

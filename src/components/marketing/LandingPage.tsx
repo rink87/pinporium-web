@@ -141,10 +141,10 @@ const LandingPage: React.FC<Props> = ({ page }) => {
                 ))}
                 <li>
                   <Link
-                    href="/changelog"
+                    href="/roadmap"
                     className="font-body text-secondary-ink font-semibold hover:underline"
                   >
-                    Changelog
+                    Roadmap
                   </Link>
                 </li>
               </ul>

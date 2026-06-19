@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Link from "next/link";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 
 import { IPricing } from "@/types";
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
-  const { name, price, features, summary } = tier;
+  const { name, price, features, summary, exploreHref, exploreLabel } = tier;
   const isNumericPrice = typeof price === "number";
 
   return (
@@ -50,6 +51,16 @@ const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
             </li>
           ))}
         </ul>
+        {exploreHref ? (
+          <p className="mt-6 pt-4 border-t border-gold-deco/20">
+            <Link
+              href={exploreHref}
+              className="text-sm font-body font-semibold text-secondary-ink hover:underline"
+            >
+              {exploreLabel ?? "Explore on roadmap"} →
+            </Link>
+          </p>
+        ) : null}
       </div>
     </div>
   );

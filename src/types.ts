@@ -7,6 +7,8 @@ export interface IBenefit {
     title: string;
     description: string;
     imageSrc: string;
+    /** When set, the device frame cross-fades through these screenshots. */
+    imageSrcs?: string[];
     bullets: IBenefitBullet[];
     /** Optional demo video instead of a static screenshot in the device frame */
     videoSrc?: string;
@@ -25,6 +27,9 @@ export interface IPricing {
     features: string[];
     /** Short intro above the feature list */
     summary?: string;
+    /** Link to the matching section on /roadmap */
+    exploreHref?: string;
+    exploreLabel?: string;
 }
 
 export interface IFAQ {

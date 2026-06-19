@@ -6,7 +6,7 @@ export const siteDetails = {
     metadata: {
         title: 'Pinporium — The pin collection app you’ll actually use',
         description:
-            'Curate your vault, hunt ISOs and grails, browse Discover, compare with friends, flex badges, share wins, and grow the catalog — built for collectors who treat enamel pins like tiny trophies.',
+            'Curate your vault, hunt ISOs and grails on The Hunt, trade or sell from the Offers subtab, flex badges, share wins, and grow the catalog — built for collectors who treat enamel pins like tiny trophies.',
     },
     language: 'en-us',
     locale: 'en-US',

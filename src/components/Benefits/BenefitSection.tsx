@@ -1,6 +1,7 @@
 import clsx from "clsx";
 
 import BenefitBullet from "./BenefitBullet";
+import { BenefitImageCarousel } from "./BenefitImageCarousel";
 import DeviceFrame from "../DeviceFrame";
 import DeviceVideoFrame from "../DeviceVideoFrame";
 import SectionTitle from "../SectionTitle";
@@ -13,7 +14,7 @@ interface Props {
 }
 
 const BenefitSection: React.FC<Props> = ({ benefit, imageAtRight }) => {
-  const { title, description, imageSrc, bullets, videoSrc, videoPosterSrc } =
+  const { title, description, imageSrc, imageSrcs, bullets, videoSrc, videoPosterSrc } =
     benefit;
 
   return (
@@ -71,6 +72,12 @@ const BenefitSection: React.FC<Props> = ({ benefit, imageAtRight }) => {
               <DeviceVideoFrame
                 src={videoSrc}
                 poster={videoPosterSrc}
+                className={clsx("lg:ml-0", DEVICE_MOCKUP_WIDTH_CLASS)}
+              />
+            ) : imageSrcs && imageSrcs.length > 0 ? (
+              <BenefitImageCarousel
+                images={imageSrcs}
+                alt={`Pinporium — ${title}`}
                 className={clsx("lg:ml-0", DEVICE_MOCKUP_WIDTH_CLASS)}
               />
             ) : (

@@ -1,17 +1,18 @@
 import { IMenuItem } from "@/types";
+import { homeSectionAnchor } from "@/lib/homeNav";
 
 export const menuItems: IMenuItem[] = [
     {
         text: "Features",
-        url: "#features",
+        url: homeSectionAnchor("features"),
+    },
+    {
+        text: "For artists",
+        url: "/for-artists",
     },
     {
         text: "Roadmap",
-        url: "#roadmap",
-    },
-    {
-        text: "Changelog",
-        url: "/changelog",
+        url: "/roadmap",
     },
     // TODO: re-enable when real testimonials section ships
     // {

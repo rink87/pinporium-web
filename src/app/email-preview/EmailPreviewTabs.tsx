@@ -4,6 +4,10 @@ import { useMemo, useState } from "react";
 
 import type { BetaPlatform } from "@/lib/betaTester";
 import {
+  betaDiscordAnnouncementEmailHtml,
+  betaDiscordAnnouncementEmailSubject,
+} from "@/lib/email/templates/betaDiscordAnnouncement";
+import {
   betaActiveNoPinsCheckInEmailHtml,
   betaActiveNoPinsCheckInEmailSubject,
 } from "@/lib/email/templates/betaActiveNoPinsCheckIn";
@@ -42,6 +46,11 @@ import {
   submissionRejectedEmailHtml,
   submissionRejectedEmailSubject,
 } from "@/lib/email/templates/submission/submissionRejected";
+import {
+  RELEASE_NOTES,
+  releaseNotesEmailHtml,
+  releaseNotesEmailSubject,
+} from "@/lib/email/templates/releaseNotes";
 
 type EmailPreviewContext = {
   name: string;
@@ -49,20 +58,19 @@ type EmailPreviewContext = {
   assetsBaseUrl: string;
 };
 
-type TabId =
-  | "beta-signup"
-  | "beta-welcome"
-  | "beta-not-started"
-  | "beta-active-no-pins"
-  | "beta-active"
-  | "submission-catalog-approved"
-  | "submission-link-verified"
-  | "submission-catalog-rejected"
-  | "submission-link-rejected";
+type TabId = string;
+
+type EmailPreviewGroup = "Beta" | "Submissions" | "Release emails";
+
+const EMAIL_PREVIEW_GROUPS: EmailPreviewGroup[] = [
+  "Beta",
+  "Submissions",
+  "Release emails",
+];
 
 type TabConfig = {
   id: TabId;
-  group: "Beta" | "Submissions";
+  group: EmailPreviewGroup;
   label: string;
   subject: string;
   description?: string;
@@ -116,6 +124,20 @@ function buildTabs(): TabConfig[] {
             assetsBaseUrl: ctx.assetsBaseUrl,
           }),
         ),
+    },
+    {
+      id: "beta-discord",
+      group: "Beta",
+      label: "Discord moved",
+      subject: betaDiscordAnnouncementEmailSubject(),
+      description: "One-off broadcast — new beta Discord invite.",
+      minHeight: 720,
+      render: ctx =>
+        betaDiscordAnnouncementEmailHtml({
+          name: ctx.name,
+          wordmarkSrc: ctx.wordmarkSrc,
+          assetsBaseUrl: ctx.assetsBaseUrl,
+        }),
     },
     {
       id: "beta-not-started",
@@ -243,6 +265,16 @@ function buildTabs(): TabConfig[] {
           wordmarkSrc: ctx.wordmarkSrc,
         }),
     },
+    ...RELEASE_NOTES.map(entry => ({
+      id: `release-${entry.version}`,
+      group: "Release emails" as const,
+      label: `v${entry.version}`,
+      subject: releaseNotesEmailSubject(entry),
+      description: entry.summary,
+      minHeight: 900,
+      render: (ctx: EmailPreviewContext) =>
+        releaseNotesEmailHtml(entry, { assetsBaseUrl: ctx.assetsBaseUrl }),
+    })),
   ];
 }
 
@@ -280,57 +312,44 @@ export function EmailPreviewTabs({
   const ctx = { name, wordmarkSrc, assetsBaseUrl };
   const rendered = activeTab.render(ctx);
 
-  const betaTabs = tabs.filter(tab => tab.group === "Beta");
-  const submissionTabs = tabs.filter(tab => tab.group === "Submissions");
-
   return (
     <div>
       <div className="mb-6 max-w-3xl space-y-4">
         <p className="text-sm text-foreground-accent">
-          Local dev only. Transactional submission templates mirror{" "}
-          <code className="text-xs">pinporium/supabase/functions/_shared/email/</code>.
+          Local dev only. Beta and submission templates mirror production senders; release emails
+          come from <code className="text-xs">src/content/release-notes.ts</code>.
         </p>
       </div>
 
       <div className="mb-6 space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-wider text-foreground-accent">
-          Beta
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {betaTabs.map(tab => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveId(tab.id)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                activeId === tab.id
-                  ? "bg-secondary text-white"
-                  : "bg-cream/80 text-navy border border-gold-deco/40 hover:bg-cream"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-        <p className="text-xs font-semibold uppercase tracking-wider text-foreground-accent pt-2">
-          Submissions
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {submissionTabs.map(tab => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveId(tab.id)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                activeId === tab.id
-                  ? "bg-secondary text-white"
-                  : "bg-cream/80 text-navy border border-gold-deco/40 hover:bg-cream"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        {EMAIL_PREVIEW_GROUPS.map((group, groupIndex) => {
+          const groupTabs = tabs.filter(tab => tab.group === group);
+          if (groupTabs.length === 0) return null;
+
+          return (
+            <div key={group} className={groupIndex > 0 ? "pt-2" : undefined}>
+              <p className="text-xs font-semibold uppercase tracking-wider text-foreground-accent">
+                {group}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {groupTabs.map(tab => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveId(tab.id)}
+                    className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                      activeId === tab.id
+                        ? "bg-secondary text-white"
+                        : "bg-cream/80 text-navy border border-gold-deco/40 hover:bg-cream"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="mb-4 max-w-3xl rounded-lg border border-gold-deco/40 bg-cream/80 p-4">

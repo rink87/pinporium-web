@@ -30,9 +30,11 @@ export function releaseNotesEmailHtml(
   const bodyHtml = formatReleaseNotesEmailBodyHtml(entry, emailTheme);
 
   const footerHtml = `
-    <p style="margin:20px 0 0;font-size:14px;line-height:1.5;color:${emailTheme.foregroundAccent};">
-      <a href="https://www.pinporium.app/beta/changelog#v${entry.version.replace(/\./g, "-")}" style="color:${emailTheme.secondary};font-weight:600;text-decoration:none;">View full changelog</a>
-      — detailed release notes for beta testers.
+    <p style="margin:20px 0 0;font-size:14px;line-height:1.55;color:${emailTheme.foregroundAccent};">
+      You can now read all release notes on our
+      <a href="https://www.pinporium.app/changelog#v${entry.version.replace(/\./g, "-")}" style="color:${emailTheme.secondary};font-weight:600;text-decoration:none;">changelog</a>,
+      and see upcoming releases plus vote on what we build next at
+      <a href="https://www.pinporium.app/roadmap" style="color:${emailTheme.secondary};font-weight:600;text-decoration:none;">www.pinporium.app/roadmap</a>.
     </p>
     ${betaMoreFeedbackSection(options?.assetsBaseUrl)}
     <p style="margin:20px 0 0;padding-top:20px;font-size:13px;line-height:1.5;color:${emailTheme.foregroundAccent};">

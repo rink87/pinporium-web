@@ -8,6 +8,55 @@ export type BetaEmailKind =
   | "check_in"
   | "check_in_active";
 
+export function parseReleaseNotesSent(
+  raw: unknown,
+): Record<string, string> {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return {};
+  }
+  const out: Record<string, string> = {};
+  for (const [version, at] of Object.entries(raw)) {
+    if (typeof at === "string" && at.trim()) {
+      out[version] = at;
+    }
+  }
+  return out;
+}
+
+export async function recordBetaReleaseNotesSent(
+  email: string,
+  version: string,
+): Promise<void> {
+  const admin = getSupabaseAdmin();
+  if (!admin) {
+    return;
+  }
+
+  const normalized = normalizeBetaEmail(email);
+  const now = new Date().toISOString();
+
+  const { data: existing } = await admin
+    .from("beta_applications")
+    .select("release_notes_sent")
+    .eq("email", normalized)
+    .maybeSingle();
+
+  const current = parseReleaseNotesSent(existing?.release_notes_sent);
+  const next = { ...current, [version]: now };
+
+  const { error } = await admin
+    .from("beta_applications")
+    .update({
+      release_notes_sent: next,
+      updated_at: now,
+    })
+    .eq("email", normalized);
+
+  if (error) {
+    console.error("beta_applications release_notes_sent update failed", error);
+  }
+}
+
 export async function upsertBetaApplicationFromSignup(data: {
   name: string;
   email: string;

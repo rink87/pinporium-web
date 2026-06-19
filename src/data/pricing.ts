@@ -1,39 +1,43 @@
 import { IPricing } from "@/types";
 
-/** Roadmap cards — what’s live, what’s next, what’s later */
+/** Homepage roadmap teaser — full detail on /roadmap */
 export const tiers: IPricing[] = [
     {
         name: "In the app now",
         price: "Beta",
         summary: "Available to beta testers today.",
         features: [
-            "Your vault, pin boards, and collection stats",
-            "Discover and search the pin catalog",
-            "The Hunt: ISOs, DISOs, grails, and series tracking",
-            "Trade matching, proposals, and trade history",
-            "Add pins with photos and a 3D viewer",
-            "Achievements and collector score",
+            "Vault, pin boards, and collector score",
+            "Discover, catalog search, and ISOs / grails",
+            "The Hunt — Wants, Offers (trades & sales), and Series",
+            "Public profiles, collector search, and listings",
+            "Achievements, 3D pin viewer, and catalog submissions",
         ],
+        exploreHref: "/roadmap#shipped",
+        exploreLabel: "See what's shipped",
     },
     {
-        name: "Coming next",
+        name: "Next — v1.0.4",
         price: "Soon",
-        summary: "On deck after the core beta.",
+        summary: "Bulk vault onboarding and timely offer alerts.",
         features: [
-            "Drop reminders when artists release new pins",
-            "Shareable collection cards",
-            "Activity from collectors you follow",
-            "Convention mode for pin shows",
+            "Bulk upload — spreadsheets and batch photo flows",
+            "Push notifications for trade and sale offer events",
         ],
+        exploreHref: "/roadmap#next",
+        exploreLabel: "Preview v1.0.4",
     },
     {
         name: "Further out",
         price: "Later",
-        summary: "When buying and selling need more trust built in.",
+        summary: "Community pulse, trust, and marketplace depth.",
         features: [
-            "Buy and sell with seller reputation",
-            "Price history from real sales",
-            "More tools for artists and pin shops",
+            "Drop Zone reminders when artists release pins",
+            "Shareable collection cards and activity feed",
+            "Convention mode for pin shows",
+            "In-app marketplace, price history, and Pro tier",
         ],
+        exploreHref: "/roadmap#future",
+        exploreLabel: "Upvote future ideas",
     },
 ];

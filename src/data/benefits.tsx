@@ -38,26 +38,26 @@ export const benefits: IBenefit[] = [
         imageSrc: "/images/feature-vault.png",
     },
     {
-        title: "Discover the next pin to obsess over",
+        title: "Discover listings & the catalog",
         description:
-            "Browse categories, search the catalog, and see what’s popular — find your next grail without digging through old screenshots.",
+            "Browse for-trade and for-sale listings, search the catalog, find collectors, and see what’s popular — find your next grail without digging through old screenshots.",
         bullets: [
+            {
+                title: "Collector listings",
+                description:
+                    "For trade and for sale on Discover — preview a listing before you message or send an offer.",
+                icon: <FiSearch size={26} className="text-primary-ink" />,
+            },
             {
                 title: "Browse & search",
                 description:
                     "Trending pins, themes, and the full catalog — filter and explore from one place.",
-                icon: <FiSearch size={26} className="text-primary-ink" />,
-            },
-            {
-                title: "Shared catalog",
-                description:
-                    "Every listing is reviewed so names and variants stay easy to find.",
                 icon: <FiBookOpen size={26} className="text-primary-ink" />,
             },
             {
-                title: "All your fandoms",
+                title: "Collector profiles",
                 description:
-                    "Star Wars, parks, artist studios, and more — one Discover for how you actually collect.",
+                    "Search collectors by username, visit public profiles, and see trade and sale listings in one place.",
                 icon: <FiLayers size={26} className="text-primary-ink" />,
             },
         ],
@@ -90,56 +90,35 @@ export const benefits: IBenefit[] = [
         imageSrc: "/images/feature-pin-detail.png",
     },
     {
-        title: "The Hunt — ISOs, grails, and the chase",
+        title: "The Hunt — wants, offers & series",
         description:
-            "Keep a real wishlist — not a forgotten note. Mark ISOs, DISOs, and Grails, track series, and see everything you’re still chasing in one place.",
+            "Your wishlist, deal inbox, and set progress live in one tab on The Hunt — Wants for ISOs and grails, Offers for trades and sales, Series for completion rings.",
         bullets: [
             {
-                title: "Hunt tiers",
+                title: "Wants",
                 description:
-                    "ISO, DISO, and Grail — mark how badly you want each pin.",
+                    "ISO, DISO, and Grail tiers — mark how badly you want each pin.",
                 icon: <FiTarget size={26} className="text-primary-ink" />,
             },
             {
-                title: "Series tracking",
+                title: "Offers",
                 description:
-                    "Follow a set from pin detail and watch your completion add up.",
-                icon: <FiLayers size={26} className="text-primary-ink" />,
-            },
-            {
-                title: "One hunt tab",
-                description:
-                    "Wants, trades, and series — still chasing, all in The Hunt.",
-                icon: <FiBookOpen size={26} className="text-primary-ink" />,
-            },
-        ],
-        imageSrc: "/images/feature-hunt.png",
-    },
-    {
-        title: "Trades — matches, proposals, and follow-through",
-        description:
-            "Mark pins for trade, get matched when someone wants what you have, and follow swaps from proposal to shipment — in the app, not lost in messages.",
-        bullets: [
-            {
-                title: "Mutual matches",
-                description:
-                    "See when your ISO lines up with another collector’s for-trade pin on the same catalog entry.",
+                    "Trades and sale offers in one inbox — Needs action, Waiting, and History.",
                 icon: <FiRepeat size={26} className="text-primary-ink" />,
             },
             {
-                title: "Active trades",
+                title: "Series",
                 description:
-                    "Waiting, in progress, and history — always know where a swap stands.",
+                    "Track variant sets and series completion from pin detail.",
                 icon: <FiLayers size={26} className="text-primary-ink" />,
             },
-            {
-                title: "Same catalog entry",
-                description:
-                    "Both sides linked to the same variant — fewer mix-ups on which pin is which.",
-                icon: <FiSearch size={26} className="text-primary-ink" />,
-            },
         ],
-        imageSrc: "/images/feature-trades.png",
+        imageSrc: "/images/feature-hunt.png",
+        imageSrcs: [
+            "/images/feature-hunt.png",
+            "/images/feature-offer-sent.png",
+            "/images/feature-sale-complete.png",
+        ],
     },
     {
         title: "Achievements & collector score",
@@ -170,7 +149,7 @@ export const benefits: IBenefit[] = [
     {
         title: "Add a pin — photos, 3D viewer, catalog credit",
         description:
-            "Photograph front and back, line them up, and save a 3D model you can spin in your vault. Suggest new catalog entries and earn score when they’re approved.",
+            "Photograph front and back, line them up, and save a 3D model you can spin in your vault. Retake photos anytime, suggest new catalog entries, and earn score when they’re approved.",
         bullets: [
             {
                 title: "Guided capture",
@@ -185,9 +164,9 @@ export const benefits: IBenefit[] = [
                 icon: <FiRotateCw size={26} className="text-primary-ink" />,
             },
             {
-                title: "Suggest for catalog",
+                title: "Retake & suggest",
                 description:
-                    "Optional submission after you add a pin — help others find it too.",
+                    "Replace vault photos from pin detail, then optionally submit new pins to the catalog.",
                 icon: <FiAward size={26} className="text-primary-ink" />,
             },
         ],
