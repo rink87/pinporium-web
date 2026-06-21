@@ -8,9 +8,10 @@ const Analytics = dynamic(
 );
 import { Nunito, Playfair_Display } from "next/font/google";
 
+import { WebAuthProvider } from "@/components/auth/WebAuthProvider";
 import { BetaApplyProvider } from "@/components/BetaApplyProvider";
-import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import SiteFooter from "@/components/SiteFooter";
 import JsonLd from "@/components/JsonLd";
 import { siteDetails } from "@/data/siteDetails";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/jsonLd";
@@ -70,11 +71,13 @@ export default function RootLayout({
       <body className={`${playfair.variable} ${nunito.variable} font-body`}>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         {gaMeasurementId ? <GoogleAnalytics gaId={gaMeasurementId} /> : null}
-        <BetaApplyProvider>
-          <Header />
-          <main className="overflow-x-hidden">{children}</main>
-          <Footer />
-        </BetaApplyProvider>
+        <WebAuthProvider>
+          <BetaApplyProvider>
+            <Header />
+            <main className="overflow-x-hidden">{children}</main>
+            <SiteFooter />
+          </BetaApplyProvider>
+        </WebAuthProvider>
         <Analytics />
       </body>
     </html>
