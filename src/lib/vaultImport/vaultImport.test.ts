@@ -1,7 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { parseCsvText } from './csvParse';
 import { suggestVaultImportColumnMapping } from './columnMapping';
+import { sampleValueForColumn } from './columnSamples';
 import { prepareVaultImportRows } from './validateRows';
+
+describe('columnSamples', () => {
+  it('returns first non-empty value in column', () => {
+    const rows = [
+      { Name: '', Artist: 'A' },
+      { Name: 'Mickey', Artist: 'B' },
+    ];
+    expect(sampleValueForColumn(rows, 'Name')).toBe('Mickey');
+    expect(sampleValueForColumn(rows, 'Artist')).toBe('A');
+    expect(sampleValueForColumn(rows, 'Missing')).toBeNull();
+  });
+});
 
 describe('vaultImport csvParse', () => {
   it('parses quoted commas', () => {

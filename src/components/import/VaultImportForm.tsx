@@ -31,6 +31,7 @@ import {
   isCanonicalTemplateHeaders,
   suggestVaultImportColumnMapping,
 } from "@/lib/vaultImport/columnMapping";
+import { sampleValueForColumn } from "@/lib/vaultImport/columnSamples";
 import { VAULT_IMPORT_REQUIRED_FIELDS, VAULT_IMPORT_TEMPLATE_CSV } from "@/lib/vaultImport/constants";
 import type { VaultImportColumnMapping, VaultImportFieldKey } from "@/lib/vaultImport/types";
 import { prepareVaultImportRows } from "@/lib/vaultImport/validateRows";
@@ -226,6 +227,14 @@ export function VaultImportForm() {
   const matchedPreset = headerFingerprint
     ? presets.find(p => p.header_fingerprint === headerFingerprint)
     : undefined;
+
+  const columnSamples = useMemo(() => {
+    const samples: Record<string, string | null> = {};
+    for (const header of headers) {
+      samples[header] = sampleValueForColumn(rawRows, header);
+    }
+    return samples;
+  }, [headers, rawRows]);
 
   const progressPercent =
     activeJob && activeJob.total_rows > 0
@@ -571,21 +580,32 @@ export function VaultImportForm() {
                   >
                     —
                   </button>
-                  {headers.map(header => (
-                    <button
-                      key={`${field}-${header}`}
-                      type="button"
-                      onClick={() => setMapping(prev => ({ ...prev, [field]: header }))}
-                      className={clsx(
-                        "rounded-full border px-3 py-1 text-sm font-body transition-colors",
-                        mapping[field] === header
-                          ? "border-secondary bg-secondary/10 text-secondary-ink"
-                          : "border-navy/10 bg-white hover:bg-white/80",
-                      )}
-                    >
-                      {header}
-                    </button>
-                  ))}
+                  {headers.map(header => {
+                    const sample = columnSamples[header];
+                    return (
+                      <button
+                        key={`${field}-${header}`}
+                        type="button"
+                        onClick={() => setMapping(prev => ({ ...prev, [field]: header }))}
+                        className={clsx(
+                          "rounded-lg border px-3 py-2 text-left max-w-[220px] transition-colors",
+                          mapping[field] === header
+                            ? "border-secondary bg-secondary/10 text-secondary-ink"
+                            : "border-navy/10 bg-white hover:bg-white/80",
+                        )}
+                      >
+                        <span className="block text-sm font-bold font-body truncate">{header}</span>
+                        <span
+                          className={clsx(
+                            "block text-xs font-body mt-0.5 truncate",
+                            sample ? "text-foreground-accent" : "text-foreground-accent/45 italic",
+                          )}
+                        >
+                          {sample ?? "empty in sample rows"}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             ))}
