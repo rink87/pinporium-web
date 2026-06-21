@@ -17,12 +17,14 @@ export type WebProfile = {
   username: string | null;
   display_name: string | null;
   avatar_url: string | null;
+  is_beta_user: boolean;
 };
 
 type WebAuthContextValue = {
   session: Session | null;
   user: User | null;
   profile: WebProfile | null;
+  isBetaUser: boolean;
   loading: boolean;
   displayLabel: string;
   initials: string;
@@ -71,7 +73,7 @@ export function WebAuthProvider({ children }: { children: ReactNode }) {
       }
       const { data } = await supabase
         .from("profiles")
-        .select("username, display_name, avatar_url")
+        .select("username, display_name, avatar_url, is_beta_user")
         .eq("id", userId)
         .maybeSingle();
       setProfile(data ?? null);
@@ -117,18 +119,20 @@ export function WebAuthProvider({ children }: { children: ReactNode }) {
   const user = session?.user ?? null;
   const displayLabel = user ? labelFromUser(user, profile) : "";
   const initials = displayLabel ? initialsFromLabel(displayLabel) : "P";
+  const isBetaUser = profile?.is_beta_user === true;
 
   const value = useMemo(
     () => ({
       session,
       user,
       profile,
+      isBetaUser,
       loading,
       displayLabel,
       initials,
       signOut,
     }),
-    [session, user, profile, loading, displayLabel, initials, signOut],
+    [session, user, profile, isBetaUser, loading, displayLabel, initials, signOut],
   );
 
   return <WebAuthContext.Provider value={value}>{children}</WebAuthContext.Provider>;

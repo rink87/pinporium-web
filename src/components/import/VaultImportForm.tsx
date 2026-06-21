@@ -8,6 +8,11 @@ import { HiArrowUpTray, HiDocumentArrowDown } from "react-icons/hi2";
 import { useWebAuth } from "@/components/auth/WebAuthProvider";
 import { ImportCard, ImportShell, type ImportStepKey } from "@/components/import/ImportShell";
 import {
+  formatBetaImportRowCount,
+  parseBetaImportRowLimit,
+  sliceRowsForBetaLimit,
+} from "@/lib/vaultImport/betaImportTools";
+import {
   ImportAuthDivider,
   ImportSocialAuthButtons,
 } from "@/components/import/ImportSocialAuthButtons";
@@ -33,6 +38,7 @@ import {
   fetchActiveVaultImportJob,
   fetchVaultImportJobStatus,
   listVaultImportMappingPresets,
+  revertVaultImportJob,
   saveVaultImportMappingPreset,
   startVaultImportJob,
   type VaultImportMappingPreset,
@@ -120,7 +126,7 @@ export function VaultImportForm() {
   const supabaseRef = useRef<SupabaseClient | null>(getSupabaseBrowser());
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { session, loading: authLoading } = useWebAuth();
+  const { session, loading: authLoading, isBetaUser } = useWebAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -139,9 +145,11 @@ export function VaultImportForm() {
   const [presets, setPresets] = useState<VaultImportMappingPreset[]>([]);
   const [presetName, setPresetName] = useState("");
   const [activeJob, setActiveJob] = useState<VaultImportJobProgress | null>(null);
+  const [betaRowLimitInput, setBetaRowLimitInput] = useState("");
 
   const supabase = supabaseRef.current;
   const copy = STEP_COPY[step];
+  const betaRowLimit = isBetaUser ? parseBetaImportRowLimit(betaRowLimitInput) : null;
 
   useEffect(() => {
     if (!supabase) {
@@ -311,10 +319,11 @@ export function VaultImportForm() {
     setBusy(true);
     setMessage("");
     try {
+      const rowsToImport = sliceRowsForBetaLimit(result.rows, betaRowLimit);
       const started = await startVaultImportJob(supabase, {
         fileName,
         columnMapping: mapping,
-        rows: result.rows,
+        rows: rowsToImport,
         skippedDuplicateRows: result.skippedDuplicateRows,
       });
       if (!started.ok) {
@@ -360,6 +369,31 @@ export function VaultImportForm() {
     link.download = "pinporium-import-template.csv";
     link.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleRevertImport = async () => {
+    if (!supabase || !activeJob) return;
+    const confirmed = window.confirm(
+      "Remove every vault pin from this import job? You can run the import again afterward.",
+    );
+    if (!confirmed) return;
+
+    setBusy(true);
+    setMessage("");
+    try {
+      const result = await revertVaultImportJob(supabase, activeJob.id);
+      if (!result.ok) {
+        setMessage(result.message);
+        return;
+      }
+      setMessage(
+        `Removed ${result.deletedCount.toLocaleString()} imported pin${result.deletedCount === 1 ? "" : "s"} from your vault.`,
+      );
+      setActiveJob(null);
+      setStep("pick");
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (authLoading) {
@@ -610,12 +644,29 @@ export function VaultImportForm() {
           </div>
           {prepared?.ok ? (
             <p className="mt-4 text-sm text-foreground-accent font-body">
-              Ready to import {prepared.rows.length.toLocaleString()} rows
+              Ready to import {formatBetaImportRowCount(prepared.rows.length, betaRowLimit)} rows
               {prepared.skippedDuplicateRows > 0
                 ? ` (${prepared.skippedDuplicateRows} in-file duplicates will be skipped)`
                 : ""}
               .
             </p>
+          ) : null}
+          {isBetaUser ? (
+            <div className="mt-4 rounded-lg border border-secondary/25 bg-secondary/5 p-4">
+              <p className="text-sm font-bold text-secondary-ink font-body mb-1">Beta test limit</p>
+              <p className="text-xs text-foreground-accent font-body mb-3">
+                Optional cap on rows to import from this file. Leave blank to import all valid rows.
+              </p>
+              <input
+                type="number"
+                min={1}
+                inputMode="numeric"
+                placeholder="e.g. 10"
+                value={betaRowLimitInput}
+                onChange={e => setBetaRowLimitInput(e.target.value)}
+                className={clsx(fieldClass, "max-w-[160px]")}
+              />
+            </div>
           ) : null}
           <div className="mt-6 flex flex-wrap gap-3">
             <button
@@ -678,7 +729,33 @@ export function VaultImportForm() {
                 : copy.subtitle}
           </p>
 
-          {activeJob.status === "completed" ? (
+          {(activeJob.status === "completed" || activeJob.status === "failed") &&
+          activeJob.succeeded_rows > 0 ? (
+            <div className="mt-6 flex flex-wrap gap-3">
+              {activeJob.status === "completed" ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveJob(null);
+                    setStep("pick");
+                  }}
+                  className={secondaryBtn}
+                >
+                  Import another file
+                </button>
+              ) : null}
+              {isBetaUser ? (
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => void handleRevertImport()}
+                  className="inline-flex items-center justify-center rounded-deco border border-red-200 bg-red-50 px-5 py-3 text-red-800 font-bold font-body hover:bg-red-100 disabled:opacity-60"
+                >
+                  {busy ? "Removing…" : "Remove imported pins (beta)"}
+                </button>
+              ) : null}
+            </div>
+          ) : activeJob.status === "completed" ? (
             <button
               type="button"
               onClick={() => {

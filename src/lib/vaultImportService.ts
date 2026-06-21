@@ -127,6 +127,27 @@ export async function saveVaultImportMappingPreset(
   return { ok: true };
 }
 
+/** Delete vault rows created by an import job (beta testing / undo). */
+export async function revertVaultImportJob(
+  supabase: SupabaseClient,
+  jobId: string,
+): Promise<{ ok: true; deletedCount: number } | { ok: false; message: string }> {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, message: "Sign in required" };
+
+  const { data, error } = await supabase
+    .from("collection_items")
+    .delete()
+    .eq("import_job_id", jobId)
+    .eq("user_id", user.id)
+    .select("id");
+
+  if (error) return { ok: false, message: error.message };
+  return { ok: true, deletedCount: data?.length ?? 0 };
+}
+
 export async function listVaultImportMappingPresets(
   supabase: SupabaseClient,
 ): Promise<VaultImportMappingPreset[]> {
