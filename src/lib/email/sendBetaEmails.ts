@@ -4,6 +4,7 @@ import type { BetaPlatform } from "@/lib/betaTester";
 import { siteDetails } from "@/data/siteDetails";
 import {
   recordBetaApplicationEmailSent,
+  recordBetaImportSheetRequestSent,
   type BetaEmailKind,
 } from "@/lib/betaApplicationDb";
 
@@ -23,6 +24,10 @@ import {
   betaNotYetStartedEmailHtml,
   betaNotYetStartedEmailSubject,
 } from "./templates/betaNotYetStarted";
+import {
+  betaImportSheetRequestEmailHtml,
+  betaImportSheetRequestEmailSubject,
+} from "./templates/betaImportSheetRequest";
 import {
   betaThanksEmailHtml,
   betaThanksEmailSubject,
@@ -172,6 +177,29 @@ export async function sendBetaActiveNoPinsCheckInEmail({
     logLabel: "Beta active-no-pins check-in email",
     recordKind: "check_in_active",
   });
+}
+
+/** Campaign ask — share a collection tracking sheet while we build bulk import. */
+export async function sendBetaImportSheetRequestEmail({
+  name,
+  email,
+  platform,
+}: {
+  name: string;
+  email: string;
+  platform: BetaPlatform;
+}): Promise<SendResult> {
+  const result = await sendResendEmail({
+    to: email,
+    subject: betaImportSheetRequestEmailSubject(),
+    html: betaImportSheetRequestEmailHtml({ name, platform }),
+    logLabel: "Beta import sheet request email",
+    recordKind: undefined,
+  });
+  if (result.sent) {
+    await recordBetaImportSheetRequestSent(email);
+  }
+  return result;
 }
 
 /** Follow-up for testers who have signed in and added at least one vault pin. */

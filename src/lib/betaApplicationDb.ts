@@ -23,6 +23,28 @@ export function parseReleaseNotesSent(
   return out;
 }
 
+export async function recordBetaImportSheetRequestSent(email: string): Promise<void> {
+  const admin = getSupabaseAdmin();
+  if (!admin) {
+    return;
+  }
+
+  const normalized = normalizeBetaEmail(email);
+  const now = new Date().toISOString();
+
+  const { error } = await admin
+    .from("beta_applications")
+    .update({
+      import_sheet_request_sent_at: now,
+      updated_at: now,
+    })
+    .eq("email", normalized);
+
+  if (error) {
+    console.error("beta_applications import_sheet_request_sent_at update failed", error);
+  }
+}
+
 export async function recordBetaReleaseNotesSent(
   email: string,
   version: string,

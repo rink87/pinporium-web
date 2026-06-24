@@ -10,6 +10,10 @@ import {
   betaActiveUserCheckInEmailSubject,
 } from "@/lib/email/templates/betaActiveUserCheckIn";
 import {
+  betaImportSheetRequestEmailHtml,
+  betaImportSheetRequestEmailSubject,
+} from "@/lib/email/templates/betaImportSheetRequest";
+import {
   betaNotYetStartedEmailHtml,
   betaNotYetStartedEmailSubject,
 } from "@/lib/email/templates/betaNotYetStarted";
@@ -29,7 +33,8 @@ type EmailType =
   | "welcome"
   | "check_in"
   | "check_in_active"
-  | "check_in_active_no_pins";
+  | "check_in_active_no_pins"
+  | "import_sheet_request";
 
 function adminSecret(): string | undefined {
   return process.env.ADMIN_BETA_EMAIL_SECRET?.trim();
@@ -45,7 +50,8 @@ function parseEmailType(value: unknown): EmailType | null {
     value === "welcome" ||
     value === "check_in" ||
     value === "check_in_active" ||
-    value === "check_in_active_no_pins"
+    value === "check_in_active_no_pins" ||
+    value === "import_sheet_request"
   ) {
     return value;
   }
@@ -115,6 +121,10 @@ export async function POST(request: Request) {
     check_in_active_no_pins: {
       subject: betaActiveNoPinsCheckInEmailSubject(),
       html: betaActiveNoPinsCheckInEmailHtml(common),
+    },
+    import_sheet_request: {
+      subject: betaImportSheetRequestEmailSubject(),
+      html: betaImportSheetRequestEmailHtml(common),
     },
   } as const;
 

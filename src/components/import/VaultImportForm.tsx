@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { HiArrowUpTray, HiDocumentArrowDown } from "react-icons/hi2";
+import { HiArrowUpTray, HiDocumentArrowDown, HiLink } from "react-icons/hi2";
 
 import { useWebAuth } from "@/components/auth/WebAuthProvider";
 import { ImportCard, ImportShell, type ImportStepKey } from "@/components/import/ImportShell";
@@ -12,6 +12,7 @@ import {
   parseBetaImportRowLimit,
   sliceRowsForBetaLimit,
 } from "@/lib/vaultImport/betaImportTools";
+import { ImportColumnSelect } from "@/components/import/ImportColumnSelect";
 import {
   ImportAuthDivider,
   ImportSocialAuthButtons,
@@ -23,6 +24,8 @@ import {
   type ImportOAuthProvider,
 } from "@/lib/importAuth";
 import { getSupabaseBrowser } from "@/lib/supabaseBrowser";
+import { fetchVaultImportFromLink } from "@/lib/vaultImport/fetchImportLink";
+import { normalizeImportLinkInput } from "@/lib/vaultImport/linkSources";
 import { parseCsvText } from "@/lib/vaultImport/csvParse";
 import {
   applyColumnMapping,
@@ -32,7 +35,8 @@ import {
   suggestVaultImportColumnMapping,
 } from "@/lib/vaultImport/columnMapping";
 import { sampleValueForColumn } from "@/lib/vaultImport/columnSamples";
-import { VAULT_IMPORT_REQUIRED_FIELDS, VAULT_IMPORT_TEMPLATE_CSV } from "@/lib/vaultImport/constants";
+import { normalizeUniqueColumnMapping, setUniqueColumnMapping } from "@/lib/vaultImport/mappingUi";
+import { VAULT_IMPORT_MAPPING_SECTIONS, VAULT_IMPORT_REQUIRED_FIELDS, VAULT_IMPORT_TEMPLATE_CSV } from "@/lib/vaultImport/constants";
 import type { VaultImportColumnMapping, VaultImportFieldKey } from "@/lib/vaultImport/types";
 import { prepareVaultImportRows } from "@/lib/vaultImport/validateRows";
 import {
@@ -47,8 +51,8 @@ import {
 import type { VaultImportJobProgress } from "@/lib/vaultImport/types";
 
 const FIELD_LABELS: Record<VaultImportFieldKey, string> = {
-  pin_name: "Pin name *",
-  artist: "Artist *",
+  pin_name: "Pin name",
+  artist: "Artist",
   collaborating_artists: "Collaborating artists",
   front_image_url: "Front image URL",
   back_image_url: "Back image URL",
@@ -64,6 +68,8 @@ const FIELD_LABELS: Record<VaultImportFieldKey, string> = {
   notes: "Notes",
 };
 
+const IMAGE_PREVIEW_FIELDS = new Set<VaultImportFieldKey>(["front_image_url", "back_image_url"]);
+
 const STEP_COPY: Record<
   ImportStepKey,
   { title: string; subtitle: string }
@@ -74,13 +80,13 @@ const STEP_COPY: Record<
       "Use the same Pinporium account as the app. Your import runs in the background — open the app when it finishes to review catalog matches.",
   },
   pick: {
-    title: "Upload your spreadsheet",
+    title: "Upload or paste your collection",
     subtitle:
-      "CSV from Pinventory, Airtable, or your own export. We import up to 5,000 pins and save your column mapping for next time.",
+      "CSV file, published Google Sheets link, or public Baserow grid. We import up to 5,000 pins and save your column mapping for next time.",
   },
   map: {
     title: "Map your columns",
-    subtitle: "Match each Pinporium field to a column in your file. Required fields are marked with an asterisk.",
+    subtitle: "Match each Pinporium field to a column from your file. Required fields are grouped at the top.",
   },
   preview: {
     title: "Review before import",
@@ -147,6 +153,7 @@ export function VaultImportForm() {
   const [presetName, setPresetName] = useState("");
   const [activeJob, setActiveJob] = useState<VaultImportJobProgress | null>(null);
   const [betaRowLimitInput, setBetaRowLimitInput] = useState("");
+  const [importLink, setImportLink] = useState("");
 
   const supabase = supabaseRef.current;
   const copy = STEP_COPY[step];
@@ -279,6 +286,36 @@ export function VaultImportForm() {
 
   const authBusy = busy || oauthBusy != null;
 
+  const applyParsedImport = async (args: {
+    headers: string[];
+    rows: Record<string, string>[];
+    fileName: string;
+  }) => {
+    if (!supabase) return;
+
+    if (args.headers.length === 0 || args.rows.length === 0) {
+      setMessage("That source has no rows to import.");
+      return;
+    }
+
+    const fingerprint = buildImportHeaderFingerprint(args.headers);
+    const savedPresets = await listVaultImportMappingPresets(supabase);
+    setPresets(savedPresets);
+    const savedMatch = savedPresets.find(p => p.header_fingerprint === fingerprint);
+    const suggested = savedMatch?.column_mapping
+      ? savedMatch.column_mapping
+      : isCanonicalTemplateHeaders(args.headers)
+        ? canonicalTemplateColumnMapping(args.headers)
+        : suggestVaultImportColumnMapping(args.headers);
+
+    setFileName(args.fileName);
+    setHeaders(args.headers);
+    setRawRows(args.rows);
+    setHeaderFingerprint(fingerprint);
+    setMapping(normalizeUniqueColumnMapping(suggested, args.headers));
+    setStep("map");
+  };
+
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -293,25 +330,44 @@ export function VaultImportForm() {
         setMessage("Choose a CSV with a header row and at least one data row.");
         return;
       }
-
-      const fingerprint = buildImportHeaderFingerprint(parsed.headers);
-      const savedPresets = await listVaultImportMappingPresets(supabase);
-      setPresets(savedPresets);
-      const savedMatch = savedPresets.find(p => p.header_fingerprint === fingerprint);
-      const suggested = savedMatch?.column_mapping
-        ? savedMatch.column_mapping
-        : isCanonicalTemplateHeaders(parsed.headers)
-          ? canonicalTemplateColumnMapping(parsed.headers)
-          : suggestVaultImportColumnMapping(parsed.headers);
-
-      setFileName(file.name);
-      setHeaders(parsed.headers);
-      setRawRows(parsed.rows);
-      setHeaderFingerprint(fingerprint);
-      setMapping(suggested);
-      setStep("map");
+      await applyParsedImport({
+        headers: parsed.headers,
+        rows: parsed.rows,
+        fileName: file.name,
+      });
     } catch {
       setMessage("Could not read that file — try another CSV.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleFetchLink = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!supabase) return;
+
+    const url = normalizeImportLinkInput(importLink);
+    if (!url) {
+      setMessage("Paste a published Google Sheets or Baserow link.");
+      return;
+    }
+
+    setBusy(true);
+    setMessage("");
+    try {
+      const result = await fetchVaultImportFromLink(supabase, url);
+      if (!result.ok) {
+        setMessage(result.message);
+        return;
+      }
+
+      await applyParsedImport({
+        headers: result.data.headers,
+        rows: result.data.rows,
+        fileName: result.data.label,
+      });
+    } catch {
+      setMessage("Could not load that link — try again or upload a CSV.");
     } finally {
       setBusy(false);
     }
@@ -403,6 +459,14 @@ export function VaultImportForm() {
     } finally {
       setBusy(false);
     }
+  };
+
+  const handleMappingChange = (field: VaultImportFieldKey, header: string | undefined) => {
+    setMapping(prev => setUniqueColumnMapping(prev, field, header));
+  };
+
+  const handleApplyPreset = (presetMapping: VaultImportColumnMapping) => {
+    setMapping(normalizeUniqueColumnMapping(presetMapping, headers));
   };
 
   if (authLoading) {
@@ -512,9 +576,48 @@ export function VaultImportForm() {
               {busy ? "Reading file…" : "Drop a CSV here or click to browse"}
             </p>
             <p className="mt-2 text-sm text-foreground-accent font-body">
-              Pinventory, Airtable, or Pinporium template · up to 5,000 rows
+              CSV, published Google Sheets, or public Baserow · up to 5,000 rows
             </p>
           </button>
+
+          <div className="relative my-8">
+            <div className="absolute inset-0 flex items-center" aria-hidden>
+              <div className="w-full border-t border-navy/10" />
+            </div>
+            <p className="relative mx-auto w-fit bg-white px-3 text-xs uppercase tracking-deco-wide text-foreground-accent font-body">
+              Or paste a link
+            </p>
+          </div>
+
+          <form onSubmit={handleFetchLink} className="space-y-3">
+            <label htmlFor="import-link" className="sr-only">
+              Collection link
+            </label>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                id="import-link"
+                type="url"
+                inputMode="url"
+                placeholder="Google Sheets (published) or Baserow public grid URL"
+                value={importLink}
+                onChange={e => setImportLink(e.target.value)}
+                className={clsx(fieldClass, "flex-1 min-w-0")}
+                disabled={busy}
+              />
+              <button
+                type="submit"
+                disabled={busy || !importLink.trim()}
+                className={clsx(primaryBtn, "sm:shrink-0")}
+              >
+                <HiLink className="h-5 w-5" aria-hidden />
+                {busy ? "Loading…" : "Import from link"}
+              </button>
+            </div>
+            <p className="text-xs text-foreground-accent font-body leading-relaxed">
+              Works with published Google Sheets (thumbnail images included) and public Baserow grid views.
+              Private edit links need the sheet owner to publish to web first.
+            </p>
+          </form>
 
           <div className="mt-6 flex flex-wrap gap-3 justify-center">
             <button type="button" disabled={busy} onClick={() => fileInputRef.current?.click()} className={primaryBtn}>
@@ -541,7 +644,7 @@ export function VaultImportForm() {
               </p>
             </div>
             <button type="button" onClick={() => setStep("pick")} className="text-sm font-semibold text-secondary-ink font-body hover:underline">
-              Change file
+              Change source
             </button>
           </div>
 
@@ -551,7 +654,7 @@ export function VaultImportForm() {
                 <button
                   key={preset.id}
                   type="button"
-                  onClick={() => setMapping(preset.column_mapping)}
+                  onClick={() => handleApplyPreset(preset.column_mapping)}
                   className={clsx(
                     "rounded-full border px-3 py-1.5 text-sm font-bold font-body transition-colors",
                     preset.id === matchedPreset?.id
@@ -565,49 +668,57 @@ export function VaultImportForm() {
             </div>
           ) : null}
 
-          <div className="space-y-5 max-h-[min(52vh,520px)] overflow-y-auto pr-1">
-            {(Object.keys(FIELD_LABELS) as VaultImportFieldKey[]).map(field => (
-              <div key={field} className="rounded-lg border border-navy/8 bg-cream-warm/30 p-4">
-                <p className="text-sm font-bold text-navy font-body mb-3">{FIELD_LABELS[field]}</p>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setMapping(prev => ({ ...prev, [field]: undefined }))}
-                    className={clsx(
-                      "rounded-full border px-3 py-1 text-sm font-body transition-colors",
-                      !mapping[field] ? "border-secondary bg-secondary/10 text-secondary-ink" : "border-navy/10 bg-white",
+          <div className="space-y-8">
+            {VAULT_IMPORT_MAPPING_SECTIONS.map(section => (
+              <section key={section.id} aria-labelledby={`import-section-${section.id}`}>
+                <div className="mb-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2
+                      id={`import-section-${section.id}`}
+                      className={clsx(
+                        "text-sm font-bold uppercase tracking-deco-wide font-body",
+                        section.id === "required" ? "text-secondary-ink" : "text-navy",
+                      )}
+                    >
+                      {section.title}
+                    </h2>
+                    {section.id === "required" ? (
+                      <span className="rounded-full bg-secondary/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-deco-wide text-secondary-ink font-body">
+                        Required
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-navy/6 px-2 py-0.5 text-[10px] font-bold uppercase tracking-deco-wide text-foreground-accent font-body">
+                        Optional
+                      </span>
                     )}
-                  >
-                    —
-                  </button>
-                  {headers.map(header => {
-                    const sample = columnSamples[header];
-                    return (
-                      <button
-                        key={`${field}-${header}`}
-                        type="button"
-                        onClick={() => setMapping(prev => ({ ...prev, [field]: header }))}
-                        className={clsx(
-                          "rounded-lg border px-3 py-2 text-left max-w-[220px] transition-colors",
-                          mapping[field] === header
-                            ? "border-secondary bg-secondary/10 text-secondary-ink"
-                            : "border-navy/10 bg-white hover:bg-white/80",
-                        )}
-                      >
-                        <span className="block text-sm font-bold font-body truncate">{header}</span>
-                        <span
-                          className={clsx(
-                            "block text-xs font-body mt-0.5 truncate",
-                            sample ? "text-foreground-accent" : "text-foreground-accent/45 italic",
-                          )}
-                        >
-                          {sample ?? "empty in sample rows"}
-                        </span>
-                      </button>
-                    );
-                  })}
+                  </div>
+                  {section.description ? (
+                    <p className="mt-1.5 text-sm text-foreground-accent font-body leading-relaxed">
+                      {section.description}
+                    </p>
+                  ) : null}
                 </div>
-              </div>
+
+                <div className="divide-y divide-navy/8 rounded-lg border border-navy/8 overflow-hidden">
+                  {section.fields.map(field => (
+                    <div
+                      key={field}
+                      className="grid grid-cols-1 sm:grid-cols-[minmax(160px,1fr)_minmax(240px,1.5fr)] gap-2 sm:gap-4 py-3.5 px-3 sm:px-4 items-start sm:items-center bg-white"
+                    >
+                      <p className="text-sm font-bold text-navy font-body pt-2 sm:pt-0">{FIELD_LABELS[field]}</p>
+                      <ImportColumnSelect
+                        field={field}
+                        mapping={mapping}
+                        headers={headers}
+                        columnSamples={columnSamples}
+                        fieldLabels={FIELD_LABELS}
+                        showImagePreview={IMAGE_PREVIEW_FIELDS.has(field)}
+                        onChange={handleMappingChange}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </section>
             ))}
           </div>
 
@@ -656,7 +767,7 @@ export function VaultImportForm() {
               if (!value) return null;
               return (
                 <p key={field}>
-                  <span className="font-bold">{FIELD_LABELS[field].replace(" *", "")}: </span>
+                  <span className="font-bold">{FIELD_LABELS[field]}: </span>
                   {value}
                 </p>
               );

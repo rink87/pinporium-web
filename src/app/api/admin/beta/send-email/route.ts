@@ -9,6 +9,7 @@ import {
 import {
   sendBetaActiveNoPinsCheckInEmail,
   sendBetaActiveUserCheckInEmail,
+  sendBetaImportSheetRequestEmail,
   sendBetaNotYetStartedEmail,
   sendBetaSignupReceivedEmail,
   sendBetaWelcomeEmail,
@@ -19,7 +20,8 @@ type EmailType =
   | "welcome"
   | "check_in"
   | "check_in_active"
-  | "check_in_active_no_pins";
+  | "check_in_active_no_pins"
+  | "import_sheet_request";
 
 function adminSecret(): string | undefined {
   return process.env.ADMIN_BETA_EMAIL_SECRET?.trim();
@@ -35,7 +37,8 @@ function parseEmailType(value: unknown): EmailType | null {
     value === "welcome" ||
     value === "check_in" ||
     value === "check_in_active" ||
-    value === "check_in_active_no_pins"
+    value === "check_in_active_no_pins" ||
+    value === "import_sheet_request"
   ) {
     return value;
   }
@@ -109,6 +112,7 @@ export async function POST(request: Request) {
     check_in: () => sendBetaNotYetStartedEmail({ name, email, platform }),
     check_in_active: () => sendBetaActiveUserCheckInEmail({ name, email, platform }),
     check_in_active_no_pins: () => sendBetaActiveNoPinsCheckInEmail({ name, email, platform }),
+    import_sheet_request: () => sendBetaImportSheetRequestEmail({ name, email, platform }),
   } as const;
 
   const result = await senders[emailType]();

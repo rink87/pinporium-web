@@ -16,6 +16,10 @@ import {
   betaActiveUserCheckInEmailSubject,
 } from "@/lib/email/templates/betaActiveUserCheckIn";
 import {
+  betaImportSheetRequestEmailHtml,
+  betaImportSheetRequestEmailSubject,
+} from "@/lib/email/templates/betaImportSheetRequest";
+import {
   betaNotYetStartedEmailHtml,
   betaNotYetStartedEmailSubject,
 } from "@/lib/email/templates/betaNotYetStarted";
@@ -188,6 +192,23 @@ function buildTabs(): TabConfig[] {
             name: ctx.name,
             platform,
             email: "collector@example.com",
+            wordmarkSrc: ctx.wordmarkSrc,
+            assetsBaseUrl: ctx.assetsBaseUrl,
+          }),
+        ),
+    },
+    {
+      id: "beta-import-sheet",
+      group: "Beta",
+      label: "Import sheet ask",
+      subject: betaImportSheetRequestEmailSubject(),
+      description: "Manual send — ask beta testers to share a collection tracking spreadsheet.",
+      minHeight: 880,
+      render: ctx =>
+        betaPlatformHtml(ctx, platform =>
+          betaImportSheetRequestEmailHtml({
+            name: ctx.name,
+            platform,
             wordmarkSrc: ctx.wordmarkSrc,
             assetsBaseUrl: ctx.assetsBaseUrl,
           }),
