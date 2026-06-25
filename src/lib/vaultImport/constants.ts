@@ -5,8 +5,6 @@ export const VAULT_IMPORT_ROW_CAP = 5000;
 
 export const VAULT_IMPORT_REQUIRED_FIELDS: VaultImportFieldKey[] = ['pin_name', 'artist'];
 
-export const VAULT_IMPORT_REQUIRED_FIELDS: VaultImportFieldKey[] = ['pin_name', 'artist'];
-
 export const VAULT_IMPORT_RECOMMENDED_FIELDS: VaultImportFieldKey[] = [
   'metal_finish',
   'grade',
