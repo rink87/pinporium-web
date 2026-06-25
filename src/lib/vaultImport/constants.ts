@@ -5,6 +5,14 @@ export const VAULT_IMPORT_ROW_CAP = 5000;
 
 export const VAULT_IMPORT_REQUIRED_FIELDS: VaultImportFieldKey[] = ['pin_name', 'artist'];
 
+export const VAULT_IMPORT_REQUIRED_FIELDS: VaultImportFieldKey[] = ['pin_name', 'artist'];
+
+export const VAULT_IMPORT_RECOMMENDED_FIELDS: VaultImportFieldKey[] = [
+  'metal_finish',
+  'grade',
+  'enamel_type',
+];
+
 export const VAULT_IMPORT_MAPPING_SECTIONS: {
   id: string;
   title: string;
@@ -24,19 +32,23 @@ export const VAULT_IMPORT_MAPPING_SECTIONS: {
     fields: ['front_image_url', 'back_image_url'],
   },
   {
-    id: 'details',
-    title: 'Optional details',
+    id: 'recommended',
+    title: 'Recommended',
+    description: 'Metal finish, grade, and enamel type help your vault look complete on import.',
+    fields: ['metal_finish', 'grade', 'enamel_type'],
+  },
+  {
+    id: 'optional',
+    title: 'Optional',
     description: 'Map anything useful from your file. Unmapped columns are ignored.',
     fields: [
       'collaborating_artists',
-      'grade',
       'price_paid',
       'personal_value',
       'currency',
       'source',
       'edition',
       'variant',
-      'metal_finish',
       'num_posts',
       'notes',
     ],
@@ -59,6 +71,7 @@ export const VAULT_IMPORT_TEMPLATE_HEADERS: VaultImportFieldKey[] = [
   'edition',
   'variant',
   'metal_finish',
+  'enamel_type',
   'num_posts',
   'notes',
 ];
@@ -116,6 +129,7 @@ export const VAULT_IMPORT_HEADER_ALIASES: Record<VaultImportFieldKey, string[]> 
   edition: ['edition', 'le', 'run size'],
   variant: ['variant', 'variant name', 'colorway'],
   metal_finish: ['metal finish', 'metal_finish', 'metal', 'backing'],
+  enamel_type: ['enamel type', 'enamel_type', 'enamel', 'pin type', 'finish type'],
   num_posts: ['num posts', 'num_posts', 'posts', 'post count', 'pin posts'],
   notes: ['notes', 'note', 'comments', 'description'],
 };

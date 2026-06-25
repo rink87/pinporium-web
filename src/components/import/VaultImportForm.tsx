@@ -13,6 +13,7 @@ import {
   sliceRowsForBetaLimit,
 } from "@/lib/vaultImport/betaImportTools";
 import { ImportColumnSelect } from "@/components/import/ImportColumnSelect";
+import { ImportReviewPreview } from "@/components/import/ImportReviewPreview";
 import {
   ImportAuthDivider,
   ImportSocialAuthButtons,
@@ -34,7 +35,7 @@ import {
   isCanonicalTemplateHeaders,
   suggestVaultImportColumnMapping,
 } from "@/lib/vaultImport/columnMapping";
-import { sampleValueForColumn } from "@/lib/vaultImport/columnSamples";
+import { sampleValueForColumn, pickRepresentativeImportRow } from "@/lib/vaultImport/columnSamples";
 import { normalizeUniqueColumnMapping, setUniqueColumnMapping } from "@/lib/vaultImport/mappingUi";
 import { VAULT_IMPORT_MAPPING_SECTIONS, VAULT_IMPORT_REQUIRED_FIELDS, VAULT_IMPORT_TEMPLATE_CSV } from "@/lib/vaultImport/constants";
 import type { VaultImportColumnMapping, VaultImportFieldKey } from "@/lib/vaultImport/types";
@@ -64,6 +65,7 @@ const FIELD_LABELS: Record<VaultImportFieldKey, string> = {
   edition: "Edition",
   variant: "Variant",
   metal_finish: "Metal finish",
+  enamel_type: "Enamel type",
   num_posts: "Num posts",
   notes: "Notes",
 };
@@ -90,7 +92,7 @@ const STEP_COPY: Record<
   },
   preview: {
     title: "Review before import",
-    subtitle: "Here is how your first row will land in the vault. Start the job when everything looks right.",
+    subtitle: "Confirm how a sample pin will land in your vault, then start the import job.",
   },
   progress: {
     title: "Import in progress",
@@ -219,7 +221,17 @@ export function VaultImportForm() {
     return () => window.clearInterval(timer);
   }, [activeJob, step, supabase]);
 
-  const previewRow = rawRows[0];
+  const previewRow = useMemo(
+    () => pickRepresentativeImportRow(rawRows, mapping) ?? rawRows[0] ?? null,
+    [rawRows, mapping],
+  );
+
+  const previewRowIndex = useMemo(() => {
+    if (!previewRow) return null;
+    const index = rawRows.indexOf(previewRow);
+    return index >= 0 ? index : 0;
+  }, [previewRow, rawRows]);
+
   const mappedPreview = useMemo(() => {
     if (!previewRow) return null;
     return applyColumnMapping(previewRow, mapping);
@@ -761,18 +773,12 @@ export function VaultImportForm() {
 
       {step === "preview" && mappedPreview ? (
         <ImportCard>
-          <div className="rounded-lg border border-navy/10 bg-cream-warm/40 p-5 space-y-2 text-sm font-body text-navy">
-            {(Object.keys(FIELD_LABELS) as VaultImportFieldKey[]).map(field => {
-              const value = mappedPreview[field]?.trim();
-              if (!value) return null;
-              return (
-                <p key={field}>
-                  <span className="font-bold">{FIELD_LABELS[field]}: </span>
-                  {value}
-                </p>
-              );
-            })}
-          </div>
+          <ImportReviewPreview
+            fieldLabels={FIELD_LABELS}
+            mapped={mappedPreview}
+            sampleIndex={previewRowIndex}
+            totalRows={rawRows.length}
+          />
           {prepared?.ok ? (
             <p className="mt-4 text-sm text-foreground-accent font-body">
               Ready to import {formatBetaImportRowCount(prepared.rows.length, betaRowLimit)} rows

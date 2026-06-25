@@ -13,6 +13,7 @@ export type VaultImportFieldKey =
   | 'edition'
   | 'variant'
   | 'metal_finish'
+  | 'enamel_type'
   | 'num_posts'
   | 'notes';
 
@@ -34,6 +35,7 @@ export type VaultImportNormalizedRow = {
   edition?: string;
   variant?: string;
   metal_finish?: string;
+  enamel_type?: string;
   num_posts?: number | null;
   notes?: string;
 };

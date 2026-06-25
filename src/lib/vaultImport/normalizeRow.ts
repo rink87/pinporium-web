@@ -70,6 +70,9 @@ export function normalizeMappedImportRow(mapped: Record<string, string>): VaultI
   const metalFinish = mapped.metal_finish?.trim();
   if (metalFinish) row.metal_finish = metalFinish;
 
+  const enamelType = mapped.enamel_type?.trim();
+  if (enamelType) row.enamel_type = enamelType;
+
   const numPosts = parseNumPosts(mapped.num_posts);
   if (numPosts != null) row.num_posts = numPosts;
 
