@@ -87,6 +87,15 @@ h6 {
   @apply mb-10;
 }
 
+@keyframes import-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
 /* Scroll-driven reveal (no JS); static fallback when unsupported */
 @keyframes benefit-fade-in {
   from {

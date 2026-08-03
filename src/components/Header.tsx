@@ -8,6 +8,7 @@ import { Transition } from "@headlessui/react";
 import { HiOutlineXMark, HiBars3 } from "react-icons/hi2";
 
 import { HeaderUserMenu } from "./auth/HeaderUserMenu";
+import { ImportToolNav } from "./import/ImportToolNav";
 import { useWebAuth } from "./auth/WebAuthProvider";
 import BetaApplyButton from "./BetaApplyButton";
 import { useBetaApply } from "./BetaApplyProvider";
@@ -48,18 +49,22 @@ const Header: React.FC = () => {
           </Link>
 
           <ul className="hidden md:flex items-center gap-8 shrink-0">
-            {showMarketingNav
-              ? menuItems.map(item => (
-                  <li key={item.text}>
-                    <Link
-                      href={item.url}
-                      className="text-navy hover:text-primary-ink text-sm uppercase tracking-deco font-body transition-colors"
-                    >
-                      {item.text}
-                    </Link>
-                  </li>
-                ))
-              : null}
+            {isImportTool && user ? (
+              <li className="flex items-center">
+                <ImportToolNav className="mb-0" />
+              </li>
+            ) : showMarketingNav ? (
+              menuItems.map(item => (
+                <li key={item.text}>
+                  <Link
+                    href={item.url}
+                    className="text-navy hover:text-primary-ink text-sm uppercase tracking-deco font-body transition-colors"
+                  >
+                    {item.text}
+                  </Link>
+                </li>
+              ))
+            ) : null}
             <li>
               {showUserMenu ? (
                 <HeaderUserMenu />
@@ -70,6 +75,7 @@ const Header: React.FC = () => {
           </ul>
 
           <div className="md:hidden flex items-center shrink-0 gap-2">
+            {isImportTool && user ? <ImportToolNav className="mb-0 scale-90 origin-right" /> : null}
             {showUserMenu ? <HeaderUserMenu /> : null}
             {showMarketingNav ? (
               <button
@@ -92,7 +98,7 @@ const Header: React.FC = () => {
       </Container>
 
       <Transition
-        show={isOpen && showMarketingNav}
+        show={isOpen && (showMarketingNav || (isImportTool && Boolean(user)))}
         enter="transition ease-out duration-200 transform"
         enterFrom="opacity-0 scale-95"
         enterTo="opacity-100 scale-100"
@@ -102,17 +108,23 @@ const Header: React.FC = () => {
       >
         <div id="mobile-menu" className="md:hidden bg-cream-warm border-t border-gold-deco/20 shadow-lg">
           <ul className="flex flex-col space-y-4 pt-2 pb-6 px-6">
-            {menuItems.map(item => (
-              <li key={item.text}>
-                <Link
-                  href={item.url}
-                  className="text-navy hover:text-primary-ink block font-body"
-                  onClick={toggleMenu}
-                >
-                  {item.text}
-                </Link>
+            {isImportTool && user ? (
+              <li>
+                <ImportToolNav className="mb-0 justify-start" />
               </li>
-            ))}
+            ) : (
+              menuItems.map(item => (
+                <li key={item.text}>
+                  <Link
+                    href={item.url}
+                    className="text-navy hover:text-primary-ink block font-body"
+                    onClick={toggleMenu}
+                  >
+                    {item.text}
+                  </Link>
+                </li>
+              ))
+            )}
             {!showUserMenu ? (
               <li>
                 <button

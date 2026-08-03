@@ -7,6 +7,14 @@ import type {
   VaultImportRawRow,
 } from './types';
 
+export type DuplicateRowPolicy = 'skip' | 'unique' | 'cluster';
+
+export type InFileDuplicateGroup = {
+  dedupeKey: string;
+  rowIndices: number[];
+  sample: VaultImportNormalizedRow;
+};
+
 export type PrepareVaultImportRowsResult =
   | {
       ok: true;
@@ -16,9 +24,44 @@ export type PrepareVaultImportRowsResult =
     }
   | { ok: false; reason: 'row_cap' | 'empty'; message: string };
 
+export type PrepareVaultImportOptions = {
+  duplicatePolicyByRowIndex?: Record<number, DuplicateRowPolicy>;
+};
+
+/** Groups of valid rows that share the same in-file dedupe key (2+ rows each). */
+export function findInFileDuplicateGroups(
+  rawRows: VaultImportRawRow[],
+  mapping: VaultImportColumnMapping,
+): InFileDuplicateGroup[] {
+  const groups = new Map<string, { indices: number[]; sample: VaultImportNormalizedRow }>();
+
+  for (let rowIndex = 0; rowIndex < rawRows.length; rowIndex++) {
+    const mapped = applyColumnMapping(rawRows[rowIndex], mapping);
+    const normalized = normalizeMappedImportRow(mapped);
+    if (!normalized) continue;
+
+    const key = importRowDedupeKey(normalized);
+    const existing = groups.get(key);
+    if (existing) {
+      existing.indices.push(rowIndex);
+    } else {
+      groups.set(key, { indices: [rowIndex], sample: normalized });
+    }
+  }
+
+  return [...groups.entries()]
+    .filter(([, group]) => group.indices.length > 1)
+    .map(([dedupeKey, group]) => ({
+      dedupeKey,
+      rowIndices: group.indices,
+      sample: group.sample,
+    }));
+}
+
 export function prepareVaultImportRows(
   rawRows: VaultImportRawRow[],
   mapping: VaultImportColumnMapping,
+  options?: PrepareVaultImportOptions,
 ): PrepareVaultImportRowsResult {
   if (rawRows.length === 0) {
     return { ok: false, reason: 'empty', message: 'The file has no data rows.' };
@@ -35,8 +78,10 @@ export function prepareVaultImportRows(
   const seen = new Set<string>();
   let skippedDuplicateRows = 0;
   let invalidRowCount = 0;
+  const policies = options?.duplicatePolicyByRowIndex ?? {};
 
-  for (const raw of rawRows) {
+  for (let rowIndex = 0; rowIndex < rawRows.length; rowIndex++) {
+    const raw = rawRows[rowIndex];
     const mapped = applyColumnMapping(raw, mapping);
     const normalized = normalizeMappedImportRow(mapped);
     if (!normalized) {
@@ -45,7 +90,16 @@ export function prepareVaultImportRows(
     }
     const key = importRowDedupeKey(normalized);
     if (seen.has(key)) {
-      skippedDuplicateRows += 1;
+      const policy = policies[rowIndex] ?? 'skip';
+      if (policy === 'skip') {
+        skippedDuplicateRows += 1;
+        continue;
+      }
+      if (policy === 'cluster') {
+        rows.push({ ...normalized, import_cluster_key: key });
+        continue;
+      }
+      rows.push({ ...normalized });
       continue;
     }
     seen.add(key);

@@ -4,7 +4,7 @@ import { parseCsvText } from './csvParse';
 import { suggestVaultImportColumnMapping } from './columnMapping';
 import { sampleValueForColumn, isIgnoredImportSampleValue } from './columnSamples';
 import { normalizeUniqueColumnMapping, setUniqueColumnMapping, selectableImportHeaders, headerMappedToField, isLikelyImportImageUrl } from './mappingUi';
-import { prepareVaultImportRows } from './validateRows';
+import { findInFileDuplicateGroups, prepareVaultImportRows } from './validateRows';
 
 describe('mappingUi', () => {
   it('clears duplicate column from other fields when reassigning', () => {
@@ -13,7 +13,7 @@ describe('mappingUi', () => {
       'artist',
       'Artist/Brand',
     );
-    expect(next.pin_name).toBeUndefined();
+    expect(next.pin_name).toBe('Name');
     expect(next.artist).toBe('Artist/Brand');
   });
 
@@ -117,6 +117,50 @@ describe('prepareVaultImportRows', () => {
       expect(result.skippedDuplicateRows).toBe(1);
     }
   });
+
+  it('rejects spreadsheet error cells as pin name or artist', () => {
+    const result = prepareVaultImportRows(
+      [
+        { name: '#REF!', maker: 'Studio' },
+        { name: 'Real Pin', maker: '#REF!' },
+        { name: 'Good', maker: 'Artist' },
+      ],
+      { pin_name: 'name', artist: 'maker' },
+    );
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.rows).toHaveLength(1);
+      expect(result.invalidRowCount).toBe(2);
+    }
+  });
+
+  it('does not group spreadsheet error rows as duplicates', () => {
+    const mapping = { pin_name: 'name', artist: 'maker' };
+    const rawRows = [
+      { name: '#REF!', maker: '#REF!' },
+      { name: '#REF!', maker: '#REF!' },
+      { name: 'Pin A', maker: 'Artist' },
+    ];
+    const groups = findInFileDuplicateGroups(rawRows, mapping);
+    expect(groups).toHaveLength(0);
+  });
+
+  it('imports duplicate rows as cluster copies when requested', () => {
+    const result = prepareVaultImportRows(
+      [
+        { name: 'X-Wing', maker: 'Laserbrain', front: 'https://a/1.jpg' },
+        { name: 'X-Wing', maker: 'Laserbrain', front: 'https://a/1.jpg' },
+      ],
+      { pin_name: 'name', artist: 'maker', front_image_url: 'front' },
+      { duplicatePolicyByRowIndex: { 1: 'cluster' } },
+    );
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.rows).toHaveLength(2);
+      expect(result.rows[1].import_cluster_key).toBeTruthy();
+      expect(result.skippedDuplicateRows).toBe(0);
+    }
+  });
 });
 
 describe('importImagePreview', () => {
@@ -125,5 +169,17 @@ describe('importImagePreview', () => {
       'https://docs.google.com/sheets-images-rt/ADAzV4S8bOvBos2o2GMbqEl_BmUN7Y5iu-t_f2WKUKbvHEkkk8vuQtFXUa_BGDAgeJCVEGpzluvHviVmkq64JqD4cirXNH5NJTay6WYzRR6awtHiDUDiS-ONbQNZhv4CDsejPqKp2ATvKxQAEQJBIoTg11BgFhKBfMpYx-NqptAE8g=w800-h800';
     expect(isAllowedImportImagePreviewUrl(url)).toBe(true);
     expect(importImagePreviewSrc(url)).toContain('/api/import/image-preview?url=');
+  });
+
+  it('allowlists baserow s3 file hosts', () => {
+    const url =
+      'https://baserow-backend-production20240528124524339000000001.s3.amazonaws.com/user_files/pin.jpg';
+    expect(isAllowedImportImagePreviewUrl(url)).toBe(true);
+    expect(importImagePreviewSrc(url)).toContain('/api/import/image-preview?url=');
+  });
+
+  it('allowlists regional s3 file hosts', () => {
+    const url = 'https://my-bucket.s3.us-east-1.amazonaws.com/user_files/pin.jpg';
+    expect(isAllowedImportImagePreviewUrl(url)).toBe(true);
   });
 });

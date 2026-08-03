@@ -50,9 +50,9 @@ export const ROADMAP_FUTURE_FEATURES = [
   },
   {
     id: "convention-mode",
-    title: "Convention mode",
+    title: "Convention card",
     description:
-      "Offline-friendly flows for pin shows — fast vault lookup, trade handoffs, and booth-day capture when Wi‑Fi is spotty.",
+      "Trade-show showcase you can share by link or QR — a fast public page with the pins you pick for trade (and optional for-sale), plus a Get Pinporium CTA for anyone who scans. Digital first; optional NFC cards for in-person taps at pin meets.",
   },
   {
     id: "marketplace",

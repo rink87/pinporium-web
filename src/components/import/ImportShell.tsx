@@ -66,15 +66,15 @@ export function ImportCard({ children, className = "" }: { children: ReactNode; 
   );
 }
 
-export function ImportShell({
-  step,
+export function ImportPageChrome({
   title,
   subtitle,
+  step,
   children,
 }: {
-  step: ImportStepKey;
   title: string;
   subtitle: string;
+  step?: ImportStepKey;
   children: ReactNode;
 }) {
   return (
@@ -96,10 +96,28 @@ export function ImportShell({
           </p>
         </div>
 
-        <ImportStepNav step={step} />
+        {step ? <ImportStepNav step={step} /> : null}
 
         <div className="mx-auto max-w-3xl">{children}</div>
       </Container>
     </section>
+  );
+}
+
+export function ImportShell({
+  step,
+  title,
+  subtitle,
+  children,
+}: {
+  step: ImportStepKey;
+  title: string;
+  subtitle: string;
+  children: ReactNode;
+}) {
+  return (
+    <ImportPageChrome step={step} title={title} subtitle={subtitle}>
+      {children}
+    </ImportPageChrome>
   );
 }

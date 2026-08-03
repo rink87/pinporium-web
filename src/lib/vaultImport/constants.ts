@@ -14,30 +14,35 @@ export const VAULT_IMPORT_RECOMMENDED_FIELDS: VaultImportFieldKey[] = [
 export const VAULT_IMPORT_MAPPING_SECTIONS: {
   id: string;
   title: string;
+  badge?: string;
   description?: string;
   fields: VaultImportFieldKey[];
 }[] = [
   {
     id: 'required',
     title: 'Required',
+    badge: 'Required',
     description: 'Every pin needs a name and artist. Artist can be “Unknown artist” if your file doesn’t have one.',
     fields: ['pin_name', 'artist'],
   },
   {
     id: 'photos',
     title: 'Photos',
+    badge: 'Optional',
     description: 'Optional — skip any you don’t have and add them later with Finish import tasks in the app.',
     fields: ['front_image_url', 'back_image_url'],
   },
   {
     id: 'recommended',
-    title: 'Recommended',
+    title: 'Primary Pin Details',
+    badge: 'Recommended but Optional',
     description: 'Metal finish, grade, and enamel type help your vault look complete on import.',
     fields: ['metal_finish', 'grade', 'enamel_type'],
   },
   {
     id: 'optional',
-    title: 'Optional',
+    title: 'Other Pin Details',
+    badge: 'Optional',
     description: 'Map anything useful from your file. Unmapped columns are ignored.',
     fields: [
       'collaborating_artists',

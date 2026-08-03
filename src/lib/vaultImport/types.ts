@@ -38,6 +38,8 @@ export type VaultImportNormalizedRow = {
   enamel_type?: string;
   num_posts?: number | null;
   notes?: string;
+  /** Rows imported as extra copies share one vault cluster_id. */
+  import_cluster_key?: string;
 };
 
 export type VaultImportJobStatus =
@@ -59,6 +61,18 @@ export type VaultImportJobProgress = {
   error_message: string | null;
   created_at: string;
   completed_at: string | null;
+};
+
+export type VaultImportJobSummary = VaultImportJobProgress & {
+  pins_remaining: number;
+  reverted: boolean;
+};
+
+export type VaultImportStagedRowFailure = {
+  row_number: number;
+  error_code: string | null;
+  error_message: string | null;
+  pin_name: string | null;
 };
 
 export type StartVaultImportResult =

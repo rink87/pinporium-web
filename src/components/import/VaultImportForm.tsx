@@ -1,6 +1,7 @@
 "use client";
 
 import clsx from "clsx";
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { HiArrowUpTray, HiDocumentArrowDown, HiLink } from "react-icons/hi2";
@@ -14,6 +15,7 @@ import {
 } from "@/lib/vaultImport/betaImportTools";
 import { ImportColumnSelect } from "@/components/import/ImportColumnSelect";
 import { ImportReviewPreview } from "@/components/import/ImportReviewPreview";
+import { ImportDuplicatesModal } from "@/components/import/ImportDuplicatesModal";
 import {
   ImportAuthDivider,
   ImportSocialAuthButtons,
@@ -39,7 +41,11 @@ import { sampleValueForColumn, pickRepresentativeImportRow } from "@/lib/vaultIm
 import { normalizeUniqueColumnMapping, setUniqueColumnMapping } from "@/lib/vaultImport/mappingUi";
 import { VAULT_IMPORT_MAPPING_SECTIONS, VAULT_IMPORT_REQUIRED_FIELDS, VAULT_IMPORT_TEMPLATE_CSV } from "@/lib/vaultImport/constants";
 import type { VaultImportColumnMapping, VaultImportFieldKey } from "@/lib/vaultImport/types";
-import { prepareVaultImportRows } from "@/lib/vaultImport/validateRows";
+import {
+  findInFileDuplicateGroups,
+  prepareVaultImportRows,
+  type DuplicateRowPolicy,
+} from "@/lib/vaultImport/validateRows";
 import {
   fetchActiveVaultImportJob,
   fetchVaultImportJobStatus,
@@ -109,6 +115,8 @@ const primaryBtn =
 const secondaryBtn =
   "inline-flex items-center justify-center gap-2 rounded-deco border border-navy/15 bg-white px-5 py-3 text-navy font-bold font-body hover:bg-navy/5 disabled:opacity-60 transition-colors";
 
+const IMPORT_JOB_POLL_MS = 2000;
+
 function resetImportState(setters: {
   setFileName: (v: string) => void;
   setHeaders: (v: string[]) => void;
@@ -119,6 +127,7 @@ function resetImportState(setters: {
   setPresetName: (v: string) => void;
   setActiveJob: (v: VaultImportJobProgress | null) => void;
   setMessage: (v: string) => void;
+  setImportRunMeta: (v: { invalidRows: number } | null) => void;
 }) {
   setters.setFileName("");
   setters.setHeaders([]);
@@ -129,6 +138,7 @@ function resetImportState(setters: {
   setters.setPresetName("");
   setters.setActiveJob(null);
   setters.setMessage("");
+  setters.setImportRunMeta(null);
 }
 
 export function VaultImportForm() {
@@ -156,6 +166,12 @@ export function VaultImportForm() {
   const [activeJob, setActiveJob] = useState<VaultImportJobProgress | null>(null);
   const [betaRowLimitInput, setBetaRowLimitInput] = useState("");
   const [importLink, setImportLink] = useState("");
+  const [duplicatePolicyByRowIndex, setDuplicatePolicyByRowIndex] = useState<
+    Record<number, DuplicateRowPolicy>
+  >({});
+  const [duplicateModalOpen, setDuplicateModalOpen] = useState(false);
+  const [startingImport, setStartingImport] = useState(false);
+  const [importRunMeta, setImportRunMeta] = useState<{ invalidRows: number } | null>(null);
 
   const supabase = supabaseRef.current;
   const copy = STEP_COPY[step];
@@ -189,6 +205,7 @@ export function VaultImportForm() {
         setPresetName,
         setActiveJob,
         setMessage,
+        setImportRunMeta,
       });
       return;
     }
@@ -209,17 +226,36 @@ export function VaultImportForm() {
   }, [step, supabase]);
 
   useEffect(() => {
-    if (!supabase || step !== "progress" || !activeJob) return;
-    if (activeJob.status === "completed" || activeJob.status === "failed") return;
+    const jobId = activeJob?.id;
+    if (!supabase || step !== "progress" || !jobId) return;
+    if (activeJob?.status === "completed" || activeJob?.status === "failed") return;
 
-    const timer = window.setInterval(() => {
-      void fetchVaultImportJobStatus(supabase, activeJob.id).then(next => {
-        if (next) setActiveJob(next);
+    let cancelled = false;
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    const poll = async () => {
+      const next = await fetchVaultImportJobStatus(supabase, jobId);
+      if (cancelled || !next) return next;
+      setActiveJob(next);
+      return next;
+    };
+
+    void poll();
+
+    timer = window.setInterval(() => {
+      void poll().then(next => {
+        if (next && (next.status === "completed" || next.status === "failed") && timer) {
+          window.clearInterval(timer);
+          timer = null;
+        }
       });
-    }, 4000);
+    }, IMPORT_JOB_POLL_MS);
 
-    return () => window.clearInterval(timer);
-  }, [activeJob, step, supabase]);
+    return () => {
+      cancelled = true;
+      if (timer) window.clearInterval(timer);
+    };
+  }, [step, supabase, activeJob?.id, activeJob?.status]);
 
   const previewRow = useMemo(
     () => pickRepresentativeImportRow(rawRows, mapping) ?? rawRows[0] ?? null,
@@ -239,7 +275,14 @@ export function VaultImportForm() {
 
   const prepared = useMemo(() => {
     if (step !== "preview") return null;
-    return prepareVaultImportRows(rawRows, mapping);
+    return prepareVaultImportRows(rawRows, mapping, {
+      duplicatePolicyByRowIndex,
+    });
+  }, [step, rawRows, mapping, duplicatePolicyByRowIndex]);
+
+  const duplicateGroups = useMemo(() => {
+    if (step !== "preview") return [];
+    return findInFileDuplicateGroups(rawRows, mapping);
   }, [step, rawRows, mapping]);
 
   const missingRequired = VAULT_IMPORT_REQUIRED_FIELDS.filter(f => !mapping[f]?.trim());
@@ -259,6 +302,16 @@ export function VaultImportForm() {
     activeJob && activeJob.total_rows > 0
       ? Math.min(100, Math.round((activeJob.processed_rows / activeJob.total_rows) * 100))
       : 0;
+
+  const progressIndeterminate =
+    !!activeJob &&
+    (activeJob.status === "pending" ||
+      (activeJob.status === "processing" && activeJob.processed_rows === 0));
+
+  const progressCountLabel =
+    activeJob && activeJob.total_rows > 0 && !progressIndeterminate
+      ? `${activeJob.processed_rows.toLocaleString()} / ${activeJob.total_rows.toLocaleString()} rows`
+      : null;
 
   const handleSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -387,14 +440,19 @@ export function VaultImportForm() {
 
   const handleStartImport = async () => {
     if (!supabase) return;
-    const result = prepareVaultImportRows(rawRows, mapping);
+    const result = prepareVaultImportRows(rawRows, mapping, {
+      duplicatePolicyByRowIndex,
+    });
     if (!result.ok) {
       setMessage(result.message);
       return;
     }
 
+    setStartingImport(true);
     setBusy(true);
     setMessage("");
+    setImportRunMeta({ invalidRows: result.invalidRowCount });
+    setStep("progress");
     try {
       const rowsToImport = sliceRowsForBetaLimit(result.rows, betaRowLimit);
       const started = await startVaultImportJob(supabase, {
@@ -405,15 +463,31 @@ export function VaultImportForm() {
       });
       if (!started.ok) {
         setMessage(started.message);
+        setStep("preview");
         return;
       }
+
+      setActiveJob({
+        id: started.jobId,
+        status: "pending",
+        file_name: fileName,
+        total_rows: started.totalRows,
+        processed_rows: 0,
+        succeeded_rows: 0,
+        failed_rows: 0,
+        skipped_duplicate_rows: result.skippedDuplicateRows,
+        error_message: null,
+        created_at: new Date().toISOString(),
+        completed_at: null,
+      });
+
       const job = await fetchVaultImportJobStatus(supabase, started.jobId);
       if (job) {
         setActiveJob(job);
-        setStep("progress");
       }
     } finally {
       setBusy(false);
+      setStartingImport(false);
     }
   };
 
@@ -694,15 +768,18 @@ export function VaultImportForm() {
                     >
                       {section.title}
                     </h2>
-                    {section.id === "required" ? (
-                      <span className="rounded-full bg-secondary/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-deco-wide text-secondary-ink font-body">
-                        Required
+                    {section.badge ? (
+                      <span
+                        className={clsx(
+                          "rounded-full px-2 py-0.5 text-[10px] font-bold font-body",
+                          section.id === "required"
+                            ? "uppercase tracking-deco-wide bg-secondary/15 text-secondary-ink"
+                            : "uppercase tracking-deco-wide text-foreground-accent bg-navy/6",
+                        )}
+                      >
+                        {section.badge}
                       </span>
-                    ) : (
-                      <span className="rounded-full bg-navy/6 px-2 py-0.5 text-[10px] font-bold uppercase tracking-deco-wide text-foreground-accent font-body">
-                        Optional
-                      </span>
-                    )}
+                    ) : null}
                   </div>
                   {section.description ? (
                     <p className="mt-1.5 text-sm text-foreground-accent font-body leading-relaxed">
@@ -780,12 +857,35 @@ export function VaultImportForm() {
             totalRows={rawRows.length}
           />
           {prepared?.ok ? (
-            <p className="mt-4 text-sm text-foreground-accent font-body">
-              Ready to import {formatBetaImportRowCount(prepared.rows.length, betaRowLimit)} rows
-              {prepared.skippedDuplicateRows > 0
-                ? ` (${prepared.skippedDuplicateRows} in-file duplicates will be skipped)`
-                : ""}
-              .
+            <p className="mt-4 text-sm text-foreground-accent font-body leading-relaxed">
+              Ready to import {formatBetaImportRowCount(prepared.rows.length, betaRowLimit)} rows.
+              {duplicateGroups.length > 0 ? (
+                <>
+                  {" "}
+                  We found{" "}
+                  <button
+                    type="button"
+                    onClick={() => setDuplicateModalOpen(true)}
+                    className="font-bold text-primary underline underline-offset-2 hover:opacity-80"
+                  >
+                    {duplicateGroups.length} duplicate group{duplicateGroups.length === 1 ? "" : "s"}
+                  </button>
+                  {" "}
+                  ({prepared.skippedDuplicateRows} matching row
+                  {prepared.skippedDuplicateRows === 1 ? "" : "s"} skipped by default
+                  {prepared.skippedDuplicateRows > duplicateGroups.length
+                    ? "; some groups have more than one extra row"
+                    : ""}
+                  ). Open the review if you want any extras as separate pins or additional copies.
+                </>
+              ) : null}
+            </p>
+          ) : null}
+          {prepared?.ok && prepared.invalidRowCount > 0 ? (
+            <p className="mt-2 text-sm text-foreground-accent font-body leading-relaxed">
+              {prepared.invalidRowCount.toLocaleString()} row
+              {prepared.invalidRowCount === 1 ? "" : "s"} with missing pin name/artist or spreadsheet errors
+              (like #REF!) will not be imported.
             </p>
           ) : null}
           {isBetaUser ? (
@@ -808,11 +908,18 @@ export function VaultImportForm() {
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               type="button"
-              disabled={busy || !prepared?.ok}
+              disabled={busy || startingImport || !prepared?.ok}
               onClick={() => void handleStartImport()}
               className={primaryBtn}
             >
-              {busy ? "Starting…" : "Start import"}
+              {startingImport || busy ? (
+                <>
+                  <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                  Starting import…
+                </>
+              ) : (
+                "Start import"
+              )}
             </button>
             <button type="button" onClick={() => setStep("map")} className={secondaryBtn}>
               Edit mapping
@@ -821,55 +928,91 @@ export function VaultImportForm() {
         </ImportCard>
       ) : null}
 
-      {step === "progress" && activeJob ? (
+      {step === "progress" && (activeJob || startingImport) ? (
         <ImportCard className="max-w-lg mx-auto">
           <div className="flex items-center justify-between gap-4 mb-2">
             <p className="text-sm font-bold uppercase tracking-deco-wide text-foreground-accent font-body">
-              {activeJob.status === "completed"
+              {activeJob?.status === "completed"
                 ? "Complete"
-                : activeJob.status === "failed"
+                : activeJob?.status === "failed"
                   ? "Failed"
                   : "Processing"}
             </p>
-            <p className="text-sm font-bold text-navy font-body">{progressPercent}%</p>
+            <p className="text-sm font-bold text-navy font-body">
+              {startingImport && !activeJob
+                ? "Starting…"
+                : progressCountLabel ??
+                  (progressIndeterminate ? "Preparing…" : `${progressPercent}%`)}
+            </p>
           </div>
-          <div className="h-2.5 rounded-full bg-navy/8 overflow-hidden">
-            <div
-              className={clsx(
-                "h-full rounded-full transition-all duration-500",
-                activeJob.status === "failed" ? "bg-red-500" : "bg-secondary",
-              )}
-              style={{ width: `${progressPercent}%` }}
-            />
+          <div className="h-2.5 rounded-full bg-navy/8 overflow-hidden relative">
+            {progressIndeterminate ? (
+              <div
+                className="absolute inset-y-0 left-0 w-1/3 rounded-full bg-secondary"
+                style={{ animation: "import-indeterminate 1.2s ease-in-out infinite" }}
+              />
+            ) : (
+              <div
+                className={clsx(
+                  "h-full rounded-full transition-all duration-500",
+                  activeJob?.status === "failed" ? "bg-red-500" : "bg-secondary",
+                )}
+                style={{ width: `${progressPercent}%` }}
+              />
+            )}
           </div>
+
+          {progressCountLabel && activeJob?.status === "processing" ? (
+            <p className="mt-2 text-xs text-foreground-accent font-body">
+              {progressPercent}% complete — keep this tab open or check progress in the app.
+            </p>
+          ) : null}
 
           <div className="mt-6 grid grid-cols-3 gap-3 text-center">
             <div className="rounded-lg bg-cream-warm/60 px-3 py-3">
-              <p className="text-lg font-bold text-navy font-display">{activeJob.processed_rows.toLocaleString()}</p>
+              <p className="text-lg font-bold text-navy font-display">
+                {(activeJob?.processed_rows ?? 0).toLocaleString()}
+              </p>
               <p className="text-xs uppercase tracking-deco-wide text-foreground-accent font-body">Processed</p>
             </div>
             <div className="rounded-lg bg-cream-warm/60 px-3 py-3">
-              <p className="text-lg font-bold text-secondary-ink font-display">{activeJob.succeeded_rows.toLocaleString()}</p>
+              <p className="text-lg font-bold text-secondary-ink font-display">
+                {(activeJob?.succeeded_rows ?? 0).toLocaleString()}
+              </p>
               <p className="text-xs uppercase tracking-deco-wide text-foreground-accent font-body">Succeeded</p>
             </div>
             <div className="rounded-lg bg-cream-warm/60 px-3 py-3">
-              <p className="text-lg font-bold text-navy font-display">{activeJob.failed_rows.toLocaleString()}</p>
+              <p className="text-lg font-bold text-navy font-display">
+                {(activeJob?.failed_rows ?? 0).toLocaleString()}
+              </p>
               <p className="text-xs uppercase tracking-deco-wide text-foreground-accent font-body">Failed</p>
             </div>
           </div>
 
           <p className="text-sm text-foreground-accent font-body mt-6 leading-relaxed">
-            {activeJob.status === "completed"
+            {activeJob?.status === "completed"
               ? "Import finished. Open the Pinporium app to finish setup tasks and review suggested catalog links."
-              : activeJob.status === "failed"
+              : activeJob?.status === "failed"
                 ? "Something went wrong. Try again or contact support if the problem persists."
-                : copy.subtitle}
+                : startingImport
+                  ? "Starting your import job…"
+                  : copy.subtitle}
           </p>
 
-          {(activeJob.status === "completed" || activeJob.status === "failed") &&
-          activeJob.succeeded_rows > 0 ? (
+          {activeJob?.status === "completed" && (importRunMeta?.invalidRows ?? 0) > 0 ? (
+            <p className="mt-3 text-sm text-foreground-accent font-body leading-relaxed">
+              <span className="font-semibold text-navy">
+                {importRunMeta!.invalidRows.toLocaleString()} row
+                {importRunMeta!.invalidRows === 1 ? "" : "s"}
+              </span>{" "}
+              were not imported — missing pin name/artist or spreadsheet formula errors (e.g. #REF!).
+            </p>
+          ) : null}
+
+          {(activeJob?.status === "completed" || activeJob?.status === "failed") &&
+          (activeJob?.succeeded_rows ?? 0) > 0 ? (
             <div className="mt-6 flex flex-wrap gap-3">
-              {activeJob.status === "completed" ? (
+              {activeJob?.status === "completed" ? (
                 <button
                   type="button"
                   onClick={() => {
@@ -881,31 +1024,52 @@ export function VaultImportForm() {
                   Import another file
                 </button>
               ) : null}
-              {isBetaUser ? (
+              <Link href="/import/history" className={secondaryBtn}>
+                View import history
+              </Link>
+              {(activeJob?.succeeded_rows ?? 0) > 0 ? (
                 <button
                   type="button"
                   disabled={busy}
                   onClick={() => void handleRevertImport()}
                   className="inline-flex items-center justify-center rounded-deco border border-red-200 bg-red-50 px-5 py-3 text-red-800 font-bold font-body hover:bg-red-100 disabled:opacity-60"
                 >
-                  {busy ? "Removing…" : "Remove imported pins (beta)"}
+                  {busy ? "Removing…" : "Remove imported pins"}
                 </button>
               ) : null}
             </div>
-          ) : activeJob.status === "completed" ? (
-            <button
-              type="button"
-              onClick={() => {
-                setActiveJob(null);
-                setStep("pick");
-              }}
-              className={clsx(secondaryBtn, "mt-6")}
-            >
-              Import another file
-            </button>
+          ) : activeJob?.status === "completed" ? (
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveJob(null);
+                  setStep("pick");
+                }}
+                className={secondaryBtn}
+              >
+                Import another file
+              </button>
+              <Link href="/import/history" className={secondaryBtn}>
+                View import history
+              </Link>
+            </div>
           ) : null}
         </ImportCard>
       ) : null}
+
+      <ImportDuplicatesModal
+        open={duplicateModalOpen}
+        groups={duplicateGroups}
+        rawRows={rawRows}
+        mapping={mapping}
+        fieldLabels={FIELD_LABELS}
+        policyByRowIndex={duplicatePolicyByRowIndex}
+        onPolicyChange={(rowIndex, policy) =>
+          setDuplicatePolicyByRowIndex(prev => ({ ...prev, [rowIndex]: policy }))
+        }
+        onClose={() => setDuplicateModalOpen(false)}
+      />
     </ImportShell>
   );
 }

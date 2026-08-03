@@ -19,8 +19,6 @@ function firstName(fullName: string) {
   return trimmed.split(/\s+/)[0] ?? trimmed;
 }
 
-const IMPORT_PAGE_URL = "https://www.pinporium.app/import";
-
 export function betaImportSheetRequestEmailSubject() {
   return "Do you track your pins in a spreadsheet?";
 }
@@ -39,12 +37,12 @@ export function betaImportSheetRequestEmailHtml({
   const assets = getEmailAssetUrls(assetsBaseUrl, { wordmarkSrc });
   const greeting = `Hi ${escapeHtml(firstName(name))},`;
   const previewText =
-    "We're building bulk vault import — would you share your collection tracking sheet?";
+    "We're building bulk vault import — would you share your collection tracking sheet to help us test it?";
 
   const bodyHtml = `
     <p style="margin:0 0 16px;font-family:${t.fontDisplay};font-size:20px;color:${t.foreground};">${greeting}</p>
-    <p style="margin:0 0 16px;color:${t.foreground};font-size:15px;line-height:1.6;">We&apos;re building <strong>bulk vault import</strong> so you can bring an existing pin list into Pinporium in one go. You can try the early version at <a href="${IMPORT_PAGE_URL}" style="color:${t.secondary};font-weight:600;text-decoration:none;">pinporium.app/import</a>.</p>
-    <p style="margin:0 0 16px;color:${t.foreground};font-size:15px;line-height:1.6;">If you keep a <strong>collection tracking sheet</strong> — Google Sheets, Excel, Notion export, Airtable, or anything similar — would you be willing to share it with us? Real-world formats help us test column mapping, edge cases, and import quality before we ship it widely.</p>
+    <p style="margin:0 0 16px;color:${t.foreground};font-size:15px;line-height:1.6;">We&apos;re building <strong>bulk vault import</strong> so you can bring an existing pin list into Pinporium in one go. It isn&apos;t in the beta app yet — we&apos;ll cover it in release notes when it ships — but we&apos;re stress-testing it now against real collection spreadsheets.</p>
+    <p style="margin:0 0 16px;color:${t.foreground};font-size:15px;line-height:1.6;">If you keep a <strong>collection tracking sheet</strong> — Google Sheets, Excel, Notion export, Airtable, or anything similar — would you be willing to share it with us? Every different format helps us test column mapping, edge cases, and import quality with real-world examples before we release it.</p>
     <p style="margin:0 0 20px;color:${t.foregroundAccent};font-size:14px;line-height:1.55;">We only use it to improve import tooling. We won&apos;t publish your data or share it outside the Pinporium team.</p>
 
     ${emailSectionHeading("How to share")}
@@ -66,7 +64,7 @@ export function betaImportSheetRequestEmailHtml({
       <a href="${escapeHtml(BETA_DISCORD_URL)}" style="color:${t.secondary};font-weight:600;text-decoration:none;">${escapeHtml(BETA_DISCORD_URL)}</a>
     </p>
 
-    <p style="margin:20px 0 0;color:${t.foregroundAccent};font-size:14px;line-height:1.55;">No sheet? No problem — you can still try import with a sample CSV anytime. If you do track pins somewhere, even a rough export helps a ton. Thank you for shaping this with us.</p>
+    <p style="margin:20px 0 0;color:${t.foregroundAccent};font-size:14px;line-height:1.55;">No sheet? No problem. If you do track pins somewhere, even a rough export helps a ton. Thank you for shaping this with us.</p>
   `;
 
   const footerHtml = `

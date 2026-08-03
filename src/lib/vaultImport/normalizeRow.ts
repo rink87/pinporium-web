@@ -1,4 +1,5 @@
 import { UNKNOWN_ARTIST_SENTINELS } from './constants';
+import { isIgnoredImportSampleValue } from './columnSamples';
 import type { VaultImportNormalizedRow } from './types';
 
 function splitCollaborators(value: string | undefined): string[] | undefined {
@@ -31,6 +32,7 @@ export function normalizeMappedImportRow(mapped: Record<string, string>): VaultI
   const pin_name = mapped.pin_name?.trim() ?? '';
   const artistRaw = mapped.artist?.trim() ?? '';
   if (!pin_name || !artistRaw) return null;
+  if (isIgnoredImportSampleValue(pin_name) || isIgnoredImportSampleValue(artistRaw)) return null;
 
   const row: VaultImportNormalizedRow = {
     pin_name,

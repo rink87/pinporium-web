@@ -3,7 +3,9 @@ import type {
   StartVaultImportResult,
   VaultImportColumnMapping,
   VaultImportJobProgress,
+  VaultImportJobSummary,
   VaultImportNormalizedRow,
+  VaultImportStagedRowFailure,
 } from "@/lib/vaultImport/types";
 
 function parseJobProgress(raw: Record<string, unknown> | null): VaultImportJobProgress | null {
@@ -128,6 +130,85 @@ export async function saveVaultImportMappingPreset(
 }
 
 /** Delete vault rows created by an import job (beta testing / undo). */
+export async function listVaultImportJobs(
+  supabase: SupabaseClient,
+  limit = 25,
+): Promise<VaultImportJobSummary[]> {
+  const { data: jobs, error } = await supabase
+    .from("vault_import_jobs")
+    .select(
+      "id, status, file_name, total_rows, processed_rows, succeeded_rows, failed_rows, skipped_duplicate_rows, error_message, created_at, completed_at",
+    )
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.warn("[vaultImport] list jobs", error.message);
+    return [];
+  }
+
+  const rows = (jobs ?? []) as Record<string, unknown>[];
+  const jobIds = rows.map(row => String(row.id));
+  const pinCounts = new Map<string, number>();
+
+  if (jobIds.length > 0) {
+    const { data: items, error: countError } = await supabase
+      .from("collection_items")
+      .select("import_job_id")
+      .in("import_job_id", jobIds);
+
+    if (countError) {
+      console.warn("[vaultImport] list job pin counts", countError.message);
+    } else {
+      for (const item of items ?? []) {
+        const jobId = item.import_job_id as string | null;
+        if (!jobId) continue;
+        pinCounts.set(jobId, (pinCounts.get(jobId) ?? 0) + 1);
+      }
+    }
+  }
+
+  return rows
+    .map(row => {
+      const progress = parseJobProgress(row);
+      if (!progress) return null;
+      const pinsRemaining = pinCounts.get(progress.id) ?? 0;
+      return {
+        ...progress,
+        pins_remaining: pinsRemaining,
+        reverted: progress.succeeded_rows > 0 && pinsRemaining === 0,
+      };
+    })
+    .filter((job): job is VaultImportJobSummary => job !== null);
+}
+
+export async function fetchImportJobFailedRows(
+  supabase: SupabaseClient,
+  jobId: string,
+): Promise<VaultImportStagedRowFailure[]> {
+  const { data, error } = await supabase
+    .from("vault_import_staged_rows")
+    .select("row_number, error_code, error_message, normalized_row")
+    .eq("import_job_id", jobId)
+    .eq("status", "failed")
+    .order("row_number", { ascending: true });
+
+  if (error) {
+    console.warn("[vaultImport] fetch failed rows", error.message);
+    return [];
+  }
+
+  return (data ?? []).map(row => {
+    const normalized = row.normalized_row as { pin_name?: string } | null;
+    return {
+      row_number: Number(row.row_number),
+      error_code: typeof row.error_code === "string" ? row.error_code : null,
+      error_message: typeof row.error_message === "string" ? row.error_message : null,
+      pin_name: typeof normalized?.pin_name === "string" ? normalized.pin_name : null,
+    };
+  });
+}
+
 export async function revertVaultImportJob(
   supabase: SupabaseClient,
   jobId: string,

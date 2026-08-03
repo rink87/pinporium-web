@@ -1,7 +1,8 @@
 /** Hosts allowed for import mapping thumbnails (server-side proxy). */
 const IMPORT_IMAGE_PREVIEW_PATTERNS: RegExp[] = [
   /^https:\/\/docs\.google\.com\/sheets-images-rt\//i,
-  /^https:\/\/[^/]+\.s3\.[a-z0-9-]+\.amazonaws\.com\//i,
+  // Baserow file fields use virtual-hosted buckets with or without a region segment.
+  /^https:\/\/[^/]+\.s3(?:\.[a-z0-9-]+)?\.amazonaws\.com\//i,
   /^https:\/\/files\.baserow\.io\//i,
 ];
 
