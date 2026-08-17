@@ -10,16 +10,10 @@ export type RoadmapFeature = {
 };
 
 export const ROADMAP_NEXT_RELEASE = {
-  version: "1.0.4",
+  version: "1.0.5",
   label: "Next release",
-  summary: "Faster vault onboarding and timely offer updates.",
+  summary: "Timely alerts when trades and sales need your attention.",
   features: [
-    {
-      id: "bulk-upload",
-      title: "Bulk upload",
-      description:
-        "Import many pins at once — spreadsheet mapping and batch photo flows so mail-day hauls and backlogs land in your vault without one-by-one entry.",
-    },
     {
       id: "push-notifications",
       title: "Push notifications",

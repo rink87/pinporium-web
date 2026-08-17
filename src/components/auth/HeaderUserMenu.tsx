@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { HiChevronDown } from "react-icons/hi2";
 
@@ -25,6 +26,9 @@ export function HeaderUserMenu() {
       setSigningOut(false);
     }
   };
+
+  const menuLinkClass =
+    "block w-full px-4 py-2.5 text-left text-sm font-semibold text-navy font-body hover:bg-cream-warm";
 
   return (
     <div className="relative">
@@ -59,17 +63,33 @@ export function HeaderUserMenu() {
           />
           <div
             role="menu"
-            className="absolute right-0 top-full z-50 mt-2 min-w-[180px] rounded-deco border border-gold-deco/20 bg-white py-1 shadow-frame"
+            className="absolute right-0 top-full z-50 mt-2 min-w-[200px] rounded-deco border border-gold-deco/20 bg-white py-1 shadow-frame"
           >
             <p className="px-4 py-2 text-xs text-foreground-accent font-body truncate border-b border-navy/5">
               {displayLabel}
             </p>
+            <Link
+              href="/import"
+              role="menuitem"
+              className={menuLinkClass}
+              onClick={() => setOpen(false)}
+            >
+              Import vault
+            </Link>
+            <Link
+              href="/import/history"
+              role="menuitem"
+              className={menuLinkClass}
+              onClick={() => setOpen(false)}
+            >
+              Import history
+            </Link>
             <button
               type="button"
               role="menuitem"
               disabled={signingOut}
               onClick={() => void handleSignOut()}
-              className="w-full px-4 py-2.5 text-left text-sm font-semibold text-navy font-body hover:bg-cream-warm disabled:opacity-60"
+              className={`${menuLinkClass} disabled:opacity-60`}
             >
               {signingOut ? "Signing out…" : "Sign out"}
             </button>

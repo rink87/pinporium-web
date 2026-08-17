@@ -8,6 +8,7 @@ export const tiers: IPricing[] = [
         summary: "Available to beta testers today.",
         features: [
             "Vault, pin boards, and collector score",
+            "Bulk import — spreadsheets on web and in the app",
             "Discover, catalog search, and ISOs / grails",
             "The Hunt — Wants, Offers (trades & sales), and Series",
             "Public profiles, collector search, and listings",
@@ -17,15 +18,14 @@ export const tiers: IPricing[] = [
         exploreLabel: "See what's shipped",
     },
     {
-        name: "Next — v1.0.4",
+        name: "Next — v1.0.5",
         price: "Soon",
-        summary: "Bulk vault onboarding and timely offer alerts.",
+        summary: "Push alerts when offers need your attention.",
         features: [
-            "Bulk upload — spreadsheets and batch photo flows",
             "Push notifications for trade and sale offer events",
         ],
         exploreHref: "/roadmap#next",
-        exploreLabel: "Preview v1.0.4",
+        exploreLabel: "Preview v1.0.5",
     },
     {
         name: "Further out",

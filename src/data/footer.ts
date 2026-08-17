@@ -16,6 +16,7 @@ export const footerDetails: {
         { text: "Features", url: homeSectionAnchor("features") },
         { text: "Roadmap", url: "/roadmap" },
         { text: "Changelog", url: "/changelog" },
+        { text: "Import your vault", url: "/import" },
         { text: "Apply for beta", url: "#" },
         { text: "FAQ", url: homeSectionAnchor("faq") },
     ],

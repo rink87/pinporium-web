@@ -65,18 +65,35 @@ const Header: React.FC = () => {
                 </li>
               ))
             ) : null}
-            <li>
+            <li className="flex items-center gap-4">
               {showUserMenu ? (
                 <HeaderUserMenu />
               ) : (
-                <BetaApplyButton dark compact label="Apply for beta" />
+                <>
+                  <Link
+                    href="/import"
+                    className="text-navy hover:text-primary-ink text-sm uppercase tracking-deco font-body transition-colors whitespace-nowrap"
+                  >
+                    Sign in
+                  </Link>
+                  <BetaApplyButton dark compact label="Apply for beta" />
+                </>
               )}
             </li>
           </ul>
 
           <div className="md:hidden flex items-center shrink-0 gap-2">
             {isImportTool && user ? <ImportToolNav className="mb-0 scale-90 origin-right" /> : null}
-            {showUserMenu ? <HeaderUserMenu /> : null}
+            {showUserMenu ? (
+              <HeaderUserMenu />
+            ) : (
+              <Link
+                href="/import"
+                className="text-navy text-xs uppercase tracking-deco font-body font-semibold whitespace-nowrap"
+              >
+                Sign in
+              </Link>
+            )}
             {showMarketingNav ? (
               <button
                 onClick={toggleMenu}
@@ -126,18 +143,29 @@ const Header: React.FC = () => {
               ))
             )}
             {!showUserMenu ? (
-              <li>
-                <button
-                  type="button"
-                  className="text-cream bg-navy px-5 py-2.5 rounded-full block w-fit text-sm uppercase tracking-deco font-body border border-gold-deco/30"
-                  onClick={() => {
-                    setIsOpen(false);
-                    openBetaApply();
-                  }}
-                >
-                  Apply for beta
-                </button>
-              </li>
+              <>
+                <li>
+                  <Link
+                    href="/import"
+                    className="text-navy hover:text-primary-ink block font-body font-semibold"
+                    onClick={toggleMenu}
+                  >
+                    Sign in
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    className="text-cream bg-navy px-5 py-2.5 rounded-full block w-fit text-sm uppercase tracking-deco font-body border border-gold-deco/30"
+                    onClick={() => {
+                      setIsOpen(false);
+                      openBetaApply();
+                    }}
+                  >
+                    Apply for beta
+                  </button>
+                </li>
+              </>
             ) : null}
           </ul>
         </div>
