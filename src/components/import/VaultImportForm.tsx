@@ -231,7 +231,7 @@ export function VaultImportForm() {
     if (activeJob?.status === "completed" || activeJob?.status === "failed") return;
 
     let cancelled = false;
-    let timer: ReturnType<typeof setInterval> | null = null;
+    let timer: number | null = null;
 
     const poll = async () => {
       const next = await fetchVaultImportJobStatus(supabase, jobId);

@@ -49,7 +49,7 @@ export function findInFileDuplicateGroups(
     }
   }
 
-  return [...groups.entries()]
+  return Array.from(groups.entries())
     .filter(([, group]) => group.indices.length > 1)
     .map(([dedupeKey, group]) => ({
       dedupeKey,
