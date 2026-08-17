@@ -51,6 +51,56 @@ export type ReleaseNotesEntry = {
 /** Newest first. */
 export const RELEASE_NOTES: ReleaseNotesEntry[] = [
   {
+    version: "1.0.4",
+    date: "2026-08-17",
+    headline: "What's new",
+    summary:
+      "Import your collection in bulk, view pins as photos or 3D, finish post-import setup from Home, and list for trade or sale even before you have a back photo.",
+    highlights: [
+      {
+        title: "Bulk vault import",
+        icon: "layers",
+        body: "Import many pins at once from a **spreadsheet or CSV** — map columns, run a **background job**, and watch progress on Home. Same flow on **pinporium.app**, including paste links for **Google Sheets** and **Baserow**.",
+      },
+      {
+        title: "Photos or 3D",
+        icon: "sparkles",
+        body: "View pins as **photos** or **3D models** in your vault. Switch between them in the **pin edit** menu.",
+      },
+      {
+        title: "After you import",
+        icon: "map-pin",
+        body: "Home helps you **finish missing photos and details**, then **swipe** through suggested catalog matches to confirm or reject links — so imported pins get cleaned up at your pace.",
+      },
+      {
+        title: "Import in onboarding",
+        icon: "circle-user",
+        body: "**Bulk import** is part of the onboarding flow so new collectors can bring in a pin collection faster — add one pin, import a spreadsheet, or skip for now.",
+      },
+      {
+        title: "List without a back photo",
+        icon: "arrow-left-right",
+        body: "Pins **without a back photo** can now be listed for **trade** or **sale**. A **back photo** is still required for the listing to show in the marketplace.",
+      },
+    ],
+    changelog: [
+      { kind: "feature", text: "**Vault bulk import** — spreadsheet/CSV mapping, server-side job, and Home progress." },
+      { kind: "feature", text: "**Web import** on pinporium.app with the same signed-in account and mapping rules." },
+      { kind: "improvement", text: "Paste **Google Sheets** or **Baserow** links to import (published/shared sheets; CSV still supported)." },
+      { kind: "improvement", text: "**Import history** on the web for past vault import jobs." },
+      { kind: "improvement", text: "Downloadable **import template** and reusable **mapping presets**." },
+      { kind: "improvement", text: "Partial success: imported rows stay; **retry failed rows** re-queues only failures." },
+      { kind: "feature", text: "**Vault photo view** — show front photos as captured when no cutout exists yet." },
+      { kind: "feature", text: "**Create 3D model** on pin detail — opt-in cutout; **metal finish** on the reverse without a back photo." },
+      { kind: "improvement", text: "Optional **back photo** in Quick Add and on pin detail." },
+      { kind: "improvement", text: "Vault **photo vs 3D** display preference for heroes and grid cards." },
+      { kind: "feature", text: "**Vault setup** on Home — finish missing photos/details and swipe through suggested catalog matches." },
+      { kind: "feature", text: "**Catalog link review** — swipe to confirm or reject suggested catalog matches after bulk import (no auto-link)." },
+      { kind: "feature", text: "**Bulk import** offered in onboarding — add a pin, import a spreadsheet, or skip after welcome." },
+      { kind: "improvement", text: "Mark **for trade** / **for sale** without a back photo; listings need a **back photo** to appear in the marketplace." },
+    ],
+  },
+  {
     version: "1.0.3",
     date: "2026-06-12",
     headline: "What's new",
