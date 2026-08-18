@@ -19,9 +19,9 @@ const sections: LegalSection[] = [
                     These Terms of Service (“Terms”) govern your access to and use of the
                     Pinporium mobile application, website, and related services
                     (collectively, the “Service”) operated by {legal.operatorName} (“we,”
-                    “us”). By creating an account or using the Service, you agree to these
-                    Terms and our{" "}
-                    <a href="/privacy">Privacy Policy</a>.
+                    “us”). By creating an account, continuing from Apple, Google, or email
+                    sign-in, or using the Service, you agree to these Terms and our{" "}
+                    <a href="/privacy">Privacy Policy</a>. There is no extra checkbox.
                 </p>
                 <p>
                     If you do not agree, do not use the Service.
@@ -46,15 +46,19 @@ const sections: LegalSection[] = [
         content: (
             <>
                 <ul className="list-disc pl-6 space-y-2">
-                    <li>Provide accurate registration information and keep it updated.</li>
+                    <li>
+                        Sign in with Apple, Google, or email and password. Provide accurate
+                        registration information and keep it updated.
+                    </li>
                     <li>Keep your login credentials confidential.</li>
                     <li>
                         You are responsible for activity under your account unless you
                         notify us promptly of unauthorized access.
                     </li>
                     <li>
-                        We may suspend or terminate accounts that violate these Terms or
-                        pose risk to the community or Service.
+                        We may remove content or restrict, suspend, or terminate accounts
+                        that violate these Terms, abuse the Service, or pose risk to the
+                        community.
                     </li>
                 </ul>
             </>
@@ -66,15 +70,14 @@ const sections: LegalSection[] = [
         content: (
             <>
                 <p>
-                    Pinporium helps enamel pin collectors organize collections, discover
-                    pins, contribute to a community catalog, track ISOs and grails, coordinate
-                    trades with other collectors, and list pins for sale. Sale and trade
-                    features help you connect and track status; they do not process payments
-                    on your behalf unless we clearly say otherwise in the app.
+                    Pinporium helps enamel pin collectors organize a Vault, contribute to a
+                    community catalog, track ISOs, Grails, and DISOs, use Pin Boards, and
+                    coordinate Offers (trades and for-sale listings) with other collectors.
+                    Offers are collector-to-collector coordination only. Pinporium does not
+                    process payments, hold escrow, or run checkout.
                 </p>
                 <p>
-                    We may add, change, or remove features at any time. Beta or early
-                    features may be incomplete or change without notice.
+                    We may add, change, or remove features at any time.
                 </p>
             </>
         ),
@@ -94,8 +97,9 @@ const sections: LegalSection[] = [
                         You will not submit misleading, duplicate, or malicious entries.
                     </li>
                     <li>
-                        Moderators may approve, edit, merge, reject, or remove submissions
-                        at their discretion.
+                        Pinporium may approve, edit, merge, reject, or remove submissions
+                        at our discretion. Approved catalog entries can outlive your
+                        account as part of the shared community database.
                     </li>
                     <li>
                         Approved catalog data may be used by all users of the Service as
@@ -128,10 +132,10 @@ const sections: LegalSection[] = [
                 <ul className="list-disc pl-6 space-y-2">
                     <li>Violate laws or others’ intellectual property or privacy rights</li>
                     <li>Harass, threaten, or impersonate others</li>
-                    <li>Upload malware, scrape the Service abusively, or attempt unauthorized access</li>
+                    <li>Upload malware, scrape the Service, or attempt unauthorized access</li>
                     <li>
                         List counterfeit pins as authentic without clear disclosure where
-                        applicable
+                        applicable, or post inaccurate listings
                     </li>
                     <li>Spam the catalog or manipulate reviews, scores, or rankings</li>
                     <li>Use the Service for unlawful resale schemes or fraud</li>
@@ -171,72 +175,71 @@ const sections: LegalSection[] = [
         ),
     },
     {
-        id: "trades-sales",
-        title: "Trades and for-sale coordination",
+        id: "moderation",
+        title: "Report and block",
         content: (
             <>
                 <p>
-                    Pinporium may help collectors propose trades, negotiate sale offers,
-                    share contact or shipping details, and record coordination status (for
-                    example shipped, received, or paid). Unless we explicitly state
-                    otherwise in the app:
+                    You can report a collector from their profile menu, and block a
+                    collector so you no longer see each other in new Offers. Reporting
+                    does not automatically block. Pin or catalog data issues use Report an
+                    issue on pin detail.
+                </p>
+                <p>
+                    We may remove content or restrict accounts for abuse, fraud,
+                    harassment, or other violations of these Terms. We are not obligated
+                    to mediate every dispute between collectors.
+                </p>
+            </>
+        ),
+    },
+    {
+        id: "trades-sales",
+        title: "Offers (trade and for sale)",
+        content: (
+            <>
+                <p>
+                    Offers help collectors propose trades, negotiate for-sale listings,
+                    share a shipping address or sale contact email after they agree, and
+                    record coordination status (for example shipped, received, or paid).
+                    Pinporium does not process payments, hold escrow, or run checkout.
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
                     <li>
                         <strong>Between collectors.</strong> Sales and trades are agreements
-                        between the users involved. Pinporium is not a party to those
+                        between the collectors involved. Pinporium is not a party to those
                         transactions and is not the seller, buyer, broker, escrow agent, or
                         shipping carrier.
                     </li>
                     <li>
-                        <strong>No payment processing for collector sales.</strong> We do not
-                        collect sale proceeds, hold funds in escrow, or guarantee that a
-                        buyer pays or that a seller ships. Payment is arranged outside the
-                        app (for example email, Venmo, PayPal, or cash in person) unless a
-                        future feature clearly states that Pinporium processes payment.
+                        <strong>No payment processing.</strong> We do not collect sale
+                        proceeds, hold funds, or guarantee that a buyer pays or that a
+                        seller ships. Payment is arranged outside the app.
                     </li>
                     <li>
-                        <strong>Information you share.</strong> You choose what contact or
-                        shipping information to provide. When you accept a trade or sale, you
-                        may choose to share details with the other collector so you can
-                        complete the exchange off-platform.
+                        <strong>Information you share.</strong> After you agree, you may
+                        share a shipping address and (for sales) a sale contact email so
+                        you can ship to each other.
                     </li>
                     <li>
-                        <strong>Status is user-reported.</strong> Buttons or labels such as
-                        shipped, received, or paid reflect what users report in the app.
-                        Pinporium does not verify delivery, tracking, payment, or item
-                        condition.
+                        <strong>Status is user-reported.</strong> Labels such as shipped,
+                        received, or paid reflect what collectors report. Pinporium does
+                        not verify delivery, tracking, payment, or item condition.
                     </li>
                     <li>
-                        <strong>No guarantees.</strong> We do not guarantee that any user
-                        will complete a trade or sale, ship on time, describe items
-                        accurately, or resolve disputes. Problems such as non-shipment,
-                        non-payment, damaged pins, or misrepresentation are primarily between
-                        the collectors involved.
+                        <strong>No guarantees.</strong> We do not guarantee that any
+                        collector will complete an Offer, ship on time, describe items
+                        accurately, or resolve disputes.
                     </li>
                     <li>
-                        <strong>Pin locks.</strong> A pin may be temporarily locked from other
-                        offers while a sale or trade is pending. That lock is a coordination
-                        aid only; it does not mean the transaction is complete, insured, or
-                        protected by Pinporium.
+                        <strong>Pin locks.</strong> A pin may be temporarily locked from
+                        other Offers while one is pending. That is a coordination aid only.
                     </li>
                     <li>
                         <strong>Your responsibility.</strong> You are responsible for
-                        complying with applicable laws (including taxes, consumer protection,
-                        and restrictions on what you sell or ship), for verifying pins and
-                        counterparty identity, and for using reasonable care when meeting or
-                        mailing items.
-                    </li>
-                    <li>
-                        <strong>Abuse and enforcement.</strong> We may investigate reports,
-                        remove listings, suspend accounts, or take other action for fraud,
-                        harassment, or policy violations, but we are not obligated to mediate
-                        every dispute between collectors.
-                    </li>
-                    <li>
-                        <strong>Future marketplace features.</strong> If we later add in-app
-                        checkout, seller fees, or payment processing, additional terms and
-                        pricing will be disclosed before you are charged.
+                        shipping, customs, taxes, accurate listings, verifying pins and
+                        counterparties, and complying with applicable law. Do not scrape
+                        the Service.
                     </li>
                 </ul>
             </>
@@ -308,7 +311,8 @@ const sections: LegalSection[] = [
         title: "Termination",
         content: (
             <p>
-                You may stop using the Service at any time. We may suspend or terminate
+                You may stop using the Service at any time. Delete your account in the
+                app: Settings → Delete Account (two confirms). We may suspend or terminate
                 access for any reason, including violations of these Terms. Provisions
                 that by nature should survive (licenses for catalog content, disclaimers,
                 liability limits, indemnity, dispute terms) will survive termination.

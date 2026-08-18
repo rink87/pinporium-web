@@ -37,40 +37,91 @@ const sections: LegalSection[] = [
                 <p>Depending on how you use Pinporium, we may collect:</p>
                 <ul className="list-disc pl-6 space-y-2">
                     <li>
-                        <strong>Account information</strong> — email address, username,
-                        profile details, and authentication data when you sign up or sign
-                        in.
+                        <strong>Account information</strong> — email address, authentication
+                        data, and sign-in via Apple, Google, or email and password (Supabase
+                        Auth). Public <strong>username</strong> (<code>@handle</code>),
+                        optional display name, optional location, and optional avatar.
                     </li>
                     <li>
-                        <strong>Collection and vault data</strong> — pins you add, boards,
-                        ISO/grail/DISO/trader or for-sale status, listing prices, notes,
-                        estimated values, and related metadata you choose to store.
+                        <strong>Vault and pin photos</strong> — pins you add (Owns, Traders,
+                        ISOs, Grails, DISOs), Pin Boards, notes, nicknames, grade, artist
+                        and variant details, price paid, and photos you take or pick from
+                        your library (front and back of pins, not only a profile photo).
                     </li>
                     <li>
-                        <strong>Trade and sale coordination</strong> — shipping addresses
-                        you save for trades or sales, optional sale contact email, offer and
-                        counter amounts, negotiation notes, tracking numbers you enter, and
-                        status you report (such as shipped, received, or paid).
+                        <strong>Offers (trade and for sale)</strong> — offer terms, notes,
+                        status you report, shipping address you save for coordination, and
+                        (for sales) a sale contact email. Pinporium does not process
+                        payments.
                     </li>
                     <li>
-                        <strong>Photos and media</strong> — images you upload for your
-                        collection, catalog submissions, or identification features.
+                        <strong>Public profile choices</strong> — what other collectors can
+                        see (stats, Traders gallery, vault pins, Pin Boards). Defaults: stats
+                        and trade pins on; full vault and Pin Boards off.
                     </li>
                     <li>
-                        <strong>Catalog contributions</strong> — submission forms, proposed
-                        pin names, variants, artists, and reviewer feedback tied to
-                        community catalog entries.
+                        <strong>Catalog contributions</strong> — pin data and photos you
+                        submit for the shared community catalog, plus reviewer outcomes.
                     </li>
                     <li>
-                        <strong>Usage and device data</strong> — app interactions, crash
-                        logs, device type, operating system, and general analytics to keep
-                        the Service reliable.
+                        <strong>Push tokens</strong> — Expo Push device identifiers used to
+                        hand off to Apple APNs or Google FCM, stored for signed-in
+                        collectors who allow notifications.
+                    </li>
+                    <li>
+                        <strong>Crash and device context</strong> — crash logs and coarse
+                        device or app context via Sentry. We do not send vault photos to
+                        Sentry as a product feature.
                     </li>
                     <li>
                         <strong>Communications</strong> — messages you send us (support,
-                        feedback, or legal requests).
+                        feedback, or legal requests), and transactional email we send you
+                        (for example catalog submission decisions).
+                    </li>
+                    <li>
+                        <strong>Website usage</strong> — if you visit pinporium.app, standard
+                        web analytics or similar tools we configure for the site.
                     </li>
                 </ul>
+                <p>
+                    <strong>Demo mode</strong> uses local sample data on your device. It
+                    does not create a Pinporium account, profile, or push token.
+                </p>
+            </>
+        ),
+    },
+    {
+        id: "photos",
+        title: "Pin photos, cutouts, and identify",
+        content: (
+            <>
+                <p>
+                    Collectors photograph pins (front and back) or pick images from the
+                    library. Photos are stored in our storage; pin metadata (artist,
+                    variant, grade, notes, price paid, and similar fields) is stored in our
+                    database.
+                </p>
+                <p>
+                    Optional background removal can run <strong>on your device</strong>{" "}
+                    (iOS Vision / Android ML Kit). That processing stays on the device.
+                </p>
+                <p>
+                    If on-device cutout is unavailable, the app may send a pin photo to{" "}
+                    <strong>remove.bg</strong> <strong>through Pinporium servers</strong>.
+                    The app does not ship that vendor API key.
+                </p>
+                <p>
+                    Optional pin identify and catalog-match helpers may send a pin photo to{" "}
+                    <strong>Anthropic Claude Haiku</strong>{" "}
+                    <strong>through Pinporium servers</strong>. The app does not ship that
+                    vendor API key. We send photos for identification or cutout, not to
+                    train our own models. Vendors process data under their own policies —
+                    see{" "}
+                    <a href="https://www.anthropic.com/legal/privacy">Anthropic Privacy</a>{" "}
+                    and{" "}
+                    <a href="https://www.remove.bg/privacy">remove.bg Privacy</a>. We do
+                    not promise how those vendors train their systems.
+                </p>
             </>
         ),
     },
@@ -81,23 +132,24 @@ const sections: LegalSection[] = [
             <>
                 <p>We use information to:</p>
                 <ul className="list-disc pl-6 space-y-2">
-                    <li>Provide and maintain your account, vault, and catalog features</li>
-                    <li>Process and display your collection, boards, and hunt lists</li>
+                    <li>Provide your account, Vault, catalog, Hunt lists, and Pin Boards</li>
                     <li>
-                        Facilitate trade and for-sale coordination between collectors
-                        (matching, offers, status tracking, and sharing details you choose
-                        to provide with a counterparty)
+                        Help collectors coordinate Offers (trades and for-sale listings) —
+                        matching, status, and details you choose to share with a counterparty
                     </li>
-                    <li>Review and moderate community catalog submissions</li>
-                    <li>Send service-related notices (e.g. security, submission outcomes)</li>
+                    <li>Review and moderate catalog submissions and other user content</li>
                     <li>
-                        Send optional notifications you enable (e.g. ISO or drop alerts,
-                        when available)
+                        Send optional push notifications you enable: Offers (trade and for
+                        sale) and catalog submission decisions
                     </li>
-                    <li>Improve performance, fix bugs, and develop new features</li>
-                    <li>Protect against abuse, fraud, and policy violations</li>
+                    <li>Send transactional email (for example catalog review outcomes)</li>
+                    <li>Fix crashes, keep the Service reliable, and prevent abuse</li>
                     <li>Comply with law and enforce our Terms of Service</li>
                 </ul>
+                <p>
+                    We do not send Hunt ISO match alerts, Drop Zone push, or marketing
+                    blasts today.
+                </p>
             </>
         ),
     },
@@ -112,24 +164,18 @@ const sections: LegalSection[] = [
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
                     <li>
-                        <strong>Service providers</strong> — e.g. hosting, database,
-                        authentication, analytics, and email providers that help us run
-                        Pinporium under contractual obligations to protect your data.
+                        <strong>Service providers</strong> — the processors listed below,
+                        under obligations to handle data only as needed to run Pinporium.
                     </li>
                     <li>
-                        <strong>Other users</strong> — information you choose to make
-                        visible (for example a public profile, shared collection features,
-                        or for-sale listings). When you enter into a trade or accepted sale
-                        with another collector, we may show that person information you
-                        provide for coordination (such as username, sale contact email,
-                        shipping address, offer terms, or tracking details) and they may see
-                        similar information you need to complete the exchange.
+                        <strong>Other collectors</strong> — information you choose to make
+                        visible on your public profile, plus coordination details after you
+                        agree to an Offer (username, shipping address, sale contact email,
+                        offer terms, or tracking you enter).
                     </li>
                     <li>
-                        <strong>Moderators and reviewers</strong> — catalog submission
-                        content needed to approve, reject, or normalize entries; trade or
-                        sale records when needed to investigate abuse, fraud, or policy
-                        violations.
+                        <strong>Moderators</strong> — catalog submissions and, when needed,
+                        Offer or report records to investigate abuse.
                     </li>
                     <li>
                         <strong>Legal and safety</strong> — when required by law, court
@@ -144,26 +190,59 @@ const sections: LegalSection[] = [
         ),
     },
     {
-        id: "trades-sales",
-        title: "Trades, sales, and counterparty data",
+        id: "processors",
+        title: "Processors we use",
         content: (
             <>
                 <p>
-                    Trade and for-sale features are designed to help collectors coordinate
-                    off-platform. Pinporium does not process payment for collector-to-collector
-                    sales unless a future feature clearly says otherwise.
+                    These providers help us operate the Service. Each has its own privacy
+                    policy.
+                </p>
+                <ul className="list-disc pl-6 space-y-2">
+                    <li>
+                        <strong>Supabase</strong> (Postgres, Auth, Storage, Edge Functions)
+                        — account, Vault, Offers, catalog, and files
+                    </li>
+                    <li>
+                        <strong>Apple and Google</strong> — sign-in
+                    </li>
+                    <li>
+                        <strong>Expo, Apple APNs, and Google FCM</strong> — push delivery
+                    </li>
+                    <li>
+                        <strong>Anthropic</strong> — optional pin identify (photo via our
+                        server)
+                    </li>
+                    <li>
+                        <strong>remove.bg</strong> — optional cutout fallback (photo via our
+                        server)
+                    </li>
+                    <li>
+                        <strong>Sentry</strong> — crash reports
+                    </li>
+                    <li>
+                        <strong>Resend</strong> — transactional email (catalog decisions and
+                        similar service messages)
+                    </li>
+                </ul>
+            </>
+        ),
+    },
+    {
+        id: "offers",
+        title: "Offers (trade and for sale)",
+        content: (
+            <>
+                <p>
+                    Offers are <strong>coordination only</strong>. Pinporium does not
+                    process payments, hold escrow, or run platform checkout. After
+                    collectors agree, they may share a shipping address and (for sales) a
+                    sale contact email so they can ship to each other. Pinporium is not a
+                    party to the trade or sale.
                 </p>
                 <p>
-                    If you save a shipping address, add a sale contact email, or accept a
-                    trade or sale, that information may be stored in our systems and shown
-                    to the other collector involved so you can complete shipping and payment
-                    outside the app. Do not share more personal information than you are
-                    comfortable providing to another user.
-                </p>
-                <p>
-                    We may retain trade and sale records (including offers, notes, and status
-                    updates) to operate the feature, prevent abuse, and resolve support or
-                    enforcement issues.
+                    Do not share more personal information than you are comfortable
+                    providing to another collector.
                 </p>
             </>
         ),
@@ -174,15 +253,38 @@ const sections: LegalSection[] = [
         content: (
             <>
                 <p>
-                    Content you submit to the community catalog (photos, titles, artist
-                    names, variants) may be stored, displayed to reviewers, and—if
-                    approved—used as part of the shared catalog available to other
-                    collectors. Do not submit content you do not have the right to share.
+                    User-generated content includes vault photos, public profiles, Offer
+                    notes, and catalog submissions. Do not submit content you do not have
+                    the right to share.
                 </p>
                 <p>
-                    Approved catalog contributions may remain in the database even if you
-                    delete your account, where needed to preserve catalog integrity; we will
-                    disassociate personal identifiers where reasonably possible.
+                    The community catalog is a shared reference. Approved catalog entries{" "}
+                    <strong>can remain after account deletion</strong>, with the contributor
+                    id cleared so your name is not shown. That is intentional — the catalog
+                    is a community database.
+                </p>
+            </>
+        ),
+    },
+    {
+        id: "moderation",
+        title: "Report and block",
+        content: (
+            <>
+                <p>
+                    You can <strong>report a collector</strong> from their profile menu
+                    (spam, harassment, scam or trading fraud, inappropriate content, or
+                    other). Reports are reviewed by Pinporium and do not auto-block.
+                </p>
+                <p>
+                    You can <strong>block a collector</strong> to hide both sides from new
+                    Offers. Open unshipped Offer threads are cancelled. Their profile can
+                    still open with a banner and no listing actions. Unblock from the
+                    profile or Settings.
+                </p>
+                <p>
+                    Pin or catalog data issues use <strong>Report an issue</strong> on pin
+                    detail — not the collector report.
                 </p>
             </>
         ),
@@ -192,11 +294,12 @@ const sections: LegalSection[] = [
         title: "How long we keep information",
         content: (
             <p>
-                We retain information for as long as your account is active or as needed
-                to provide the Service, resolve disputes, enforce agreements, and meet
-                legal obligations. You may request deletion of your account and associated
-                personal data subject to exceptions (e.g. fraud prevention, backup
-                cycles, or catalog records that must remain for the community).
+                We retain information while your account is active and as needed to
+                provide the Service, resolve disputes, enforce agreements, and meet legal
+                obligations. See{" "}
+                <a href="/delete-account">Delete your account</a> for what we remove when
+                you delete, and what may remain (approved catalog rows, anonymized Offer
+                history for the other collector, and similar exceptions).
             </p>
         ),
     },
@@ -220,13 +323,14 @@ const sections: LegalSection[] = [
                 <ul className="list-disc pl-6 space-y-2">
                     <li>Access, correct, or delete personal information we hold about you</li>
                     <li>Export your data where the product supports it</li>
-                    <li>Opt out of marketing emails (service emails may still be sent)</li>
+                    <li>Control public profile visibility in Settings</li>
+                    <li>Turn off Push: Offers and Push: Catalog in the app (and OS permission)</li>
                     <li>Withdraw consent where processing is based on consent</li>
                     <li>Lodge a complaint with a supervisory authority</li>
                 </ul>
                 <p>
-                    To delete your account and associated personal data, follow the steps
-                    on our{" "}
+                    To delete your account, use in-app <strong>Settings → Delete Account</strong>{" "}
+                    (two confirms). Steps are also on our{" "}
                     <a href="/delete-account">account deletion page</a>. For other rights,
                     contact{" "}
                     <a href={`mailto:${legal.contactEmail}`}>{legal.contactEmail}</a>.
