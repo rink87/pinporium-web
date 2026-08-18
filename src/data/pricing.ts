@@ -12,6 +12,7 @@ export const tiers: IPricing[] = [
             "Discover, catalog search, and ISOs / grails",
             "The Hunt — Wants, Offers (trades & sales), and Series",
             "Push notifications for Offers and catalog decisions",
+            "Report or block collectors, and delete your account in Settings",
             "Public profiles, collector search, and listings",
             "Achievements, 3D pin viewer, and catalog submissions",
         ],
