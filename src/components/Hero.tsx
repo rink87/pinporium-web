@@ -36,7 +36,7 @@ const Hero: React.FC = () => {
           <BetaApplyButton dark />
         </div>
         <p className="mt-4 text-sm text-foreground-accent font-body">
-          App Store &amp; Google Play — coming soon
+          App Store &amp; Google Play
         </p>
 
         <div className={clsx("mt-14 md:mt-20 min-w-0", DEVICE_MOCKUP_WIDTH_CLASS)}>

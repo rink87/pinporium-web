@@ -10,26 +10,26 @@ export type RoadmapFeature = {
 };
 
 export const ROADMAP_NEXT_RELEASE = {
-  version: "1.0.5",
+  version: "1.0.6",
   label: "Next release",
-  summary: "Timely alerts when trades and sales need your attention.",
+  summary: "Tools for partner artists and alerts when drops go live.",
   features: [
     {
-      id: "push-notifications",
-      title: "Push notifications",
+      id: "artist-tools",
+      title: "Partner artist tools",
       description:
-        "Alerts on The Hunt → Offers — trade and for-sale events like new proposals, counters, accept/decline, expiry, shipping updates, and pending sales.",
+        "Verified catalogs, shop links, and ways for partner studios to seed and manage their official listings.",
+    },
+    {
+      id: "drop-zone",
+      title: "Drop alerts",
+      description:
+        "Remind-me and push when an artist drop goes live — so collectors show up for limited releases.",
     },
   ] satisfies RoadmapFeature[],
 };
 
 export const ROADMAP_FUTURE_FEATURES = [
-  {
-    id: "drop-zone",
-    title: "Drop Zone & reminders",
-    description:
-      "Artist drop pages with countdowns and remind-me — so collectors show up when limited releases go live.",
-  },
   {
     id: "shareable-cards",
     title: "Shareable collection cards",
@@ -77,12 +77,6 @@ export const ROADMAP_FUTURE_FEATURES = [
     title: "Pinporium Pro",
     description:
       "Unlimited vault depth, richer analytics, and reduced marketplace fees when paid tiers launch.",
-  },
-  {
-    id: "artist-tools",
-    title: "Artist & shop tools",
-    description:
-      "Verified catalogs, drop analytics, and fan-facing pages for studios and small shops partnering with Pinporium.",
   },
 ] satisfies RoadmapFeature[];
 

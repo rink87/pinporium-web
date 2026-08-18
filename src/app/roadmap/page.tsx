@@ -20,14 +20,14 @@ import { isValidRoadmapVoterKey, ROADMAP_VOTER_COOKIE } from "@/lib/roadmap/vote
 export const metadata: Metadata = {
   title: `Roadmap — ${siteDetails.siteName}`,
   description:
-    "What shipped in Pinporium, what's next in v1.0.5, and future features you can upvote.",
+    "What shipped in Pinporium, what's next in v1.0.6, and future features you can upvote.",
   alternates: {
     canonical: `${siteDetails.siteUrl}/roadmap`,
   },
   openGraph: {
     title: `Roadmap — ${siteDetails.siteName}`,
     description:
-      "Shipped releases including v1.0.4 bulk import, upcoming push notifications, and a community-voted future backlog.",
+      "Shipped releases including v1.0.5 push notifications, upcoming partner artist tools and drop alerts, and a community-voted future backlog.",
     url: `${siteDetails.siteUrl}/roadmap`,
   },
 };

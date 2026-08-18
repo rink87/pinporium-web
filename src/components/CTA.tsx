@@ -1,6 +1,6 @@
-import { ctaDetails } from "@/data/cta";
+import Link from "next/link";
 
-import BetaApplyButton from "./BetaApplyButton";
+import { ctaDetails } from "@/data/cta";
 
 const CTA: React.FC = () => {
   return (
@@ -43,8 +43,19 @@ const CTA: React.FC = () => {
 
             <p className="mt-4 text-sm text-cream/70 font-body">{ctaDetails.storeNote}</p>
 
-            <div className="mt-8">
-              <BetaApplyButton label="Apply to be a beta tester" />
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                href="/changelog"
+                className="inline-flex items-center justify-center rounded-full min-w-[220px] px-8 h-14 text-sm uppercase tracking-deco font-body text-white bg-primary-ink hover:bg-primary-accent border border-transparent"
+              >
+                What&apos;s new in v1.0.5
+              </Link>
+              <Link
+                href="/roadmap"
+                className="inline-flex items-center justify-center rounded-full min-w-[180px] px-8 h-14 text-sm uppercase tracking-deco font-body text-cream border border-gold-deco/40 hover:bg-cream/10"
+              >
+                Roadmap
+              </Link>
             </div>
           </div>
         </div>

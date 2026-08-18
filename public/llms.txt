@@ -10,16 +10,16 @@
 - Enamel pin collection app: https://pinporium.app/enamel-pin-collection
 - Pin trading: https://pinporium.app/pin-trading
 - Pin wishlist (ISO / grail): https://pinporium.app/pin-wishlist
-- Beta: Apply at https://pinporium.app (iOS via TestFlight, Android via Google Play internal testing after approval)
+- Download: App Store and Google Play (search Pinporium)
 - Support: help@pinporium.app
 - Privacy: https://pinporium.app/privacy
 - Terms: https://pinporium.app/terms
 
 ## Product
 
-- Platforms: iOS and Android (beta)
+- Platforms: iOS and Android (App Store and Google Play)
 - Audience: Enamel pin collectors (artist pins, licensed pins, limited editions, chases, convention pickups)
-- Core features: Collection vault, pin boards, shared catalog, Discover browse/search and collector listings, The Hunt (Wants / Offers / Series), collector search and public profiles, achievements and collector score, 3D pin viewer from photos
+- Core features: Collection vault, pin boards, shared catalog, Discover browse/search and collector listings, The Hunt (Wants / Offers / Series), collector search and public profiles, achievements and collector score, 3D pin viewer from photos, push notifications for Offers and catalog decisions
 
 ## Optional
 

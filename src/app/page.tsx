@@ -36,7 +36,7 @@ const HomePage: React.FC = () => {
         <Section
           id="roadmap"
           title="Where we’re headed"
-          description="Vault, bulk import, The Hunt, Discover, and achievements are in the beta today. v1.0.5 adds push notifications — see the full roadmap and upvote what you want next."
+          description="Vault, bulk import, The Hunt, Discover, and push notifications are in the app today. Next: partner artist tools and drop alerts — see the full roadmap and upvote what you want next."
         >
           <Pricing />
           <p className="mt-8 text-center font-body">

@@ -51,6 +51,50 @@ export type ReleaseNotesEntry = {
 /** Newest first. */
 export const RELEASE_NOTES: ReleaseNotesEntry[] = [
   {
+    version: "1.0.5",
+    date: "2026-08-18",
+    headline: "What's new",
+    summary:
+      "Optional push notifications for Offers and catalog decisions — so you hear about trades, sales, and submission outcomes even when the app is closed.",
+    highlights: [
+      {
+        title: "Push for Offers",
+        icon: "arrow-left-right",
+        body: "Get alerts for **trade and for-sale** events that need you — new proposals, counters, accept or decline, expiry, shipping updates, and pending sales.",
+      },
+      {
+        title: "Catalog decisions",
+        icon: "medal",
+        body: "Know when a **catalog submission** is approved or needs changes, without opening the app to check.",
+      },
+      {
+        title: "You’re in control",
+        icon: "shield",
+        body: "Settings → Notifications: **Push: Offers** and **Push: Catalog** (on by default once you allow notifications). Turn either off anytime.",
+      },
+      {
+        title: "A gentle ask",
+        icon: "sparkles",
+        body: "A one-time **permission prompt** after you start your vault (or on Home if you already collect). Dismiss it and you can enable push later in Settings.",
+      },
+      {
+        title: "Tap to jump in",
+        icon: "map-pin",
+        body: "Open a notification to the **same place** as the in-app Activity row. Your app icon badge is unread Activity.",
+      },
+    ],
+    changelog: [
+      { kind: "feature", text: "**Push notifications** for Offers (trade and for sale) via Expo Push (APNs / FCM)." },
+      { kind: "feature", text: "**Catalog submission** push when a review decision lands." },
+      { kind: "improvement", text: "Settings masters **Push: Offers** and **Push: Catalog** (default on once OS permission is granted)." },
+      { kind: "improvement", text: "Soft **permission prompt** after vault seed (new collectors) or once on Home (existing)." },
+      { kind: "improvement", text: "Tap a push to mark the linked Activity read and open that destination." },
+      { kind: "improvement", text: "App icon **badge** = unread Activity count." },
+      { kind: "improvement", text: "Android notification channels **Offers** and **Catalog**." },
+      { kind: "improvement", text: "**Demo mode** does not prompt, register a token, or send push." },
+    ],
+  },
+  {
     version: "1.0.4",
     date: "2026-08-17",
     headline: "What's new",

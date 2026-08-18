@@ -35,6 +35,6 @@ export const faqs: IFAQ[] = [
     {
         question: "When can I download the app?",
         answer:
-            "Beta is on iOS (TestFlight) and Android (Google Play internal testing). Apply on this site — we’ll email install instructions after we review your request. Public App Store and Google Play listings are coming later. Already in the beta? Use in-app feedback (shake on iOS), our Discord, or email help@pinporium.app.",
+            "Pinporium is on the App Store and Google Play. Search Pinporium on your phone. Questions? Email help@pinporium.app.",
     },
 ];
