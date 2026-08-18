@@ -35,7 +35,7 @@ export function HeaderUserMenu() {
       <button
         type="button"
         onClick={() => setOpen(prev => !prev)}
-        className="flex items-center gap-2 rounded-full border border-gold-deco/25 bg-white/80 pl-1.5 pr-3 py-1.5 shadow-sm hover:bg-white transition-colors"
+        className="flex h-10 items-center gap-2 rounded-full border border-gold-deco/25 bg-white/80 pl-1.5 pr-3 shadow-sm hover:bg-white transition-colors"
         aria-expanded={open}
         aria-haspopup="menu"
       >

@@ -83,7 +83,7 @@ export function ImportPageChrome({
       <div className="absolute inset-0 -z-10 deco-grid opacity-80" aria-hidden />
       <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background pointer-events-none" aria-hidden />
 
-      <Container className="pt-28 md:pt-32">
+      <Container className="pt-32 md:pt-36">
         <div className="mx-auto max-w-3xl text-center mb-8">
           <p className="text-xs uppercase tracking-deco-wide text-foreground-accent font-body mb-3">
             Vault bulk import

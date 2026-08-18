@@ -48,10 +48,10 @@ const Header: React.FC = () => {
             />
           </Link>
 
-          <ul className="hidden md:flex items-center gap-8 shrink-0">
+          <ul className="hidden md:flex items-center gap-6 shrink-0">
             {isImportTool && user ? (
               <li className="flex items-center">
-                <ImportToolNav className="mb-0" />
+                <ImportToolNav />
               </li>
             ) : showMarketingNav ? (
               menuItems.map(item => (
@@ -65,11 +65,11 @@ const Header: React.FC = () => {
                 </li>
               ))
             ) : null}
-            <li className="flex items-center gap-4">
+            <li className="flex items-center">
               {showUserMenu ? (
                 <HeaderUserMenu />
               ) : (
-                <>
+                <div className="flex items-center gap-4">
                   <Link
                     href="/import"
                     className="text-navy hover:text-primary-ink text-sm uppercase tracking-deco font-body transition-colors whitespace-nowrap"
@@ -77,13 +77,13 @@ const Header: React.FC = () => {
                     Sign in
                   </Link>
                   <BetaApplyButton dark compact label="Apply for beta" />
-                </>
+                </div>
               )}
             </li>
           </ul>
 
           <div className="md:hidden flex items-center shrink-0 gap-2">
-            {isImportTool && user ? <ImportToolNav className="mb-0 scale-90 origin-right" /> : null}
+            {isImportTool && user ? <ImportToolNav /> : null}
             {showUserMenu ? (
               <HeaderUserMenu />
             ) : (
@@ -127,7 +127,7 @@ const Header: React.FC = () => {
           <ul className="flex flex-col space-y-4 pt-2 pb-6 px-6">
             {isImportTool && user ? (
               <li>
-                <ImportToolNav className="mb-0 justify-start" />
+                <ImportToolNav className="justify-start" />
               </li>
             ) : (
               menuItems.map(item => (
