@@ -1,7 +1,7 @@
-/** Mobile: wide mockups. Desktop: fixed 320px (matches pre-change layout). */
+/** Phone: capped mockups. Tablet/desktop: fixed 320px beside copy. */
 export const DEVICE_MOCKUP_WIDTH_CLASS =
-  "mx-auto min-w-0 max-lg:w-full max-lg:max-w-[340px] sm:max-lg:max-w-[380px] lg:w-[320px] lg:max-w-[320px]";
+  "mx-auto min-w-0 w-full max-w-[340px] sm:max-w-[380px] md:w-[320px] md:max-w-[320px]";
 
 /** Tighter cap on mobile so Next serves smaller src (LCP + below-fold). */
 export const DEVICE_MOCKUP_IMAGE_SIZES =
-  "(max-width: 640px) 380px, (max-width: 1023px) 420px, 320px";
+  "(max-width: 767px) 380px, 320px";

@@ -73,9 +73,9 @@ const DeviceFrame: React.FC<DeviceFrameProps> = ({
   const desktopFrames = wrapCrop(desktopFrame);
 
   return (
-    <div className={clsx("min-w-0 max-w-full overflow-hidden", className)}>
-      <div className="lg:hidden w-full max-w-full">{frames}</div>
-      <div className="hidden lg:block w-[320px] max-w-full mx-auto">{desktopFrames}</div>
+    <div className={clsx("min-w-0 overflow-hidden", className)}>
+      <div className="md:hidden w-full">{frames}</div>
+      <div className="hidden md:block w-[320px] mx-auto">{desktopFrames}</div>
     </div>
   );
 };

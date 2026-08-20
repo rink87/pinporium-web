@@ -57,10 +57,10 @@ const DeviceVideoFrame: React.FC<DeviceVideoFrameProps> = ({
 
   return (
     <div ref={rootRef} className={className}>
-      <div className="lg:hidden w-full overflow-hidden rounded-2xl shadow-[0_18px_44px_-22px_rgba(26,26,46,0.45)] ring-1 ring-navy/8 bg-navy">
+      <div className="md:hidden w-full overflow-hidden rounded-2xl shadow-[0_18px_44px_-22px_rgba(26, 26, 46, 0.45)] ring-1 ring-navy/8 bg-navy">
         <video ref={mobileVideoRef} {...videoProps} />
       </div>
-      <div className="hidden lg:block w-[320px] max-w-full iphone-frame">
+      <div className="hidden md:block w-[320px] iphone-frame">
         <div className="iphone-screen">
           <video ref={desktopVideoRef} {...videoProps} />
         </div>

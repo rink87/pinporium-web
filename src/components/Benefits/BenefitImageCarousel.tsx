@@ -40,7 +40,7 @@ export function BenefitImageCarousel({ images, alt, className }: Props) {
     width: 472,
     height: 1024,
     sizes: DEVICE_MOCKUP_IMAGE_SIZES,
-    className: clsx("lg:ml-0", DEVICE_MOCKUP_WIDTH_CLASS),
+    className: clsx("md:ml-0", DEVICE_MOCKUP_WIDTH_CLASS),
   };
 
   if (images.length <= 1) {

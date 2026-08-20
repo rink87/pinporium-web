@@ -6,8 +6,8 @@ const BenefitBullet: React.FC<IBenefitBullet> = ({
   icon,
 }: IBenefitBullet) => {
   return (
-    <div className="flex flex-col items-center mt-8 gap-3 lg:gap-5 lg:flex-row lg:items-start">
-      <div className="flex justify-center mx-auto lg:mx-0 flex-shrink-0 mt-3 w-fit">
+    <div className="flex flex-col items-center mt-8 gap-3 md:gap-5 md:flex-row md:items-start">
+      <div className="flex justify-center mx-auto md:mx-0 flex-shrink-0 mt-3 w-fit">
         {icon}
       </div>
       <div>
