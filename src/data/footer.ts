@@ -30,6 +30,7 @@ export const footerDetails: {
     legalLinks: [
         { text: "Privacy Policy", url: "/privacy" },
         { text: "Terms of Service", url: "/terms" },
+        { text: "Copyright Policy", url: "/copyright" },
         { text: "Delete account", url: "/delete-account" },
     ],
     email: "help@pinporium.app",

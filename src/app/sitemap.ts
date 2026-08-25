@@ -36,6 +36,11 @@ const staticRoutes: MetadataRoute.Sitemap = [
     priority: 0.3,
   },
   {
+    url: `${siteDetails.siteUrl}/copyright`,
+    changeFrequency: "yearly",
+    priority: 0.3,
+  },
+  {
     url: `${siteDetails.siteUrl}/delete-account`,
     changeFrequency: "yearly",
     priority: 0.25,

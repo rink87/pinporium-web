@@ -125,7 +125,8 @@ const sections: LegalSection[] = [
             <p>
                 Privacy or deletion questions:{" "}
                 <a href={`mailto:${legal.contactEmail}`}>{legal.contactEmail}</a>. See
-                also our <a href="/privacy">Privacy Policy</a>.
+                also our <a href="/privacy">Privacy Policy</a> and{" "}
+                <a href="/copyright">Copyright Policy</a>.
             </p>
         ),
     },

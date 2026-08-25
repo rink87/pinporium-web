@@ -62,6 +62,10 @@ const LegalDocument: React.FC<LegalDocumentProps> = ({
                         Terms of Service
                     </Link>
                     {" · "}
+                    <Link href="/copyright" className="text-primary-ink hover:text-primary-accent">
+                        Copyright Policy
+                    </Link>
+                    {" · "}
                     <Link href="/delete-account" className="text-primary-ink hover:text-primary-accent">
                         Delete account
                     </Link>

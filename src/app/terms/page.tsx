@@ -154,9 +154,15 @@ const sections: LegalSection[] = [
                 </p>
                 <p>
                     Pinporium is an independent collector platform. We are not affiliated
-                    with, endorsed by, or sponsored by Disney, Lucasfilm, pin artists,
-                    brands, or rights holders unless we expressly say so. Pins, artist
-                    names, and trademarks belong to their respective owners.
+                    with, endorsed by, or sponsored by Disney, Pixar, Lucasfilm, pin
+                    artists, brands, or rights holders unless we expressly say so. Pins,
+                    artist names, and trademarks belong to their respective owners.
+                </p>
+                <p>
+                    <strong>Copyright complaints:</strong> See our{" "}
+                    <a href="/copyright">Copyright Policy</a> for DMCA and other copyright
+                    notices. Email{" "}
+                    <a href={`mailto:${legal.copyrightEmail}`}>{legal.copyrightEmail}</a>.
                 </p>
             </>
         ),

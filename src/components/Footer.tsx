@@ -133,6 +133,10 @@ const Footer: React.FC = () => {
             Terms
           </Link>
           {" · "}
+          <Link href="/copyright" className="hover:text-cream underline">
+            Copyright
+          </Link>
+          {" · "}
           <Link href="/delete-account" className="hover:text-cream underline">
             Delete account
           </Link>
