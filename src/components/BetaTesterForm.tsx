@@ -6,17 +6,15 @@ import { FiCheckCircle } from "react-icons/fi";
 import { FormEvent, useRef, useState } from "react";
 
 import { trackBetaApplySuccess } from "@/lib/analytics";
-import {
-  BETA_PLATFORM_OPTIONS,
-  PIN_COUNT_OPTIONS,
-  type BetaPlatform,
-  validateBetaEmail,
-} from "@/lib/betaTester";
+import { PIN_COUNT_OPTIONS, validateBetaEmail } from "@/lib/betaTester";
 import { siteDetails } from "@/data/siteDetails";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
 const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+
+const SUCCESS_BODY =
+  "You're on the list — check your inbox for a confirmation email. We'll send the Google Play install link after we review your request.";
 
 const fieldClass =
   "w-full rounded-lg border border-navy/10 bg-white px-3.5 py-2.5 text-[15px] text-navy font-body shadow-sm placeholder:text-foreground-accent/75 focus:outline-none focus:border-secondary/50 focus:ring-2 focus:ring-secondary/15 disabled:opacity-60 transition-shadow";
@@ -51,17 +49,6 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
-function successCopy(platform: BetaPlatform): { body: string } {
-  if (platform === "android") {
-    return {
-      body: "You're on the list — check your inbox for a confirmation email. We'll send the Google Play install link after we review your request.",
-    };
-  }
-  return {
-    body: "You're on the list — check your inbox for a confirmation email. We'll send your TestFlight link after we review your request.",
-  };
-}
-
 interface BetaTesterFormProps {
   onClose: () => void;
   onSuccess?: () => void;
@@ -74,8 +61,6 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
   const [errorMessage, setErrorMessage] = useState("");
   const [emailError, setEmailError] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
-  const [platform, setPlatform] = useState<BetaPlatform>("ios");
-  const [successPlatform, setSuccessPlatform] = useState<BetaPlatform>("ios");
 
   function validateForm(): boolean {
     const form = formRef.current;
@@ -92,12 +77,6 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
     const err = validateBetaEmail(email);
     setEmailError(err ?? "");
     if (err) {
-      return false;
-    }
-
-    const selected = data.get("platform");
-    if (typeof selected !== "string" || !BETA_PLATFORM_OPTIONS.some((o) => o.value === selected)) {
-      setErrorMessage("Please choose how you'll test the app.");
       return false;
     }
 
@@ -131,7 +110,6 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
     setErrorMessage("");
 
     const data = new FormData(form);
-    const submittedPlatform = String(data.get("platform")) as BetaPlatform;
 
     try {
       const res = await fetch("/api/beta-tester", {
@@ -142,7 +120,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
           email: data.get("email"),
           pinCount: data.get("pinCount"),
           why: data.get("why"),
-          platform: submittedPlatform,
+          platform: "android",
           company: data.get("company"),
           turnstileToken,
         }),
@@ -158,12 +136,10 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
         return;
       }
 
-      setSuccessPlatform(submittedPlatform);
       setStatus("success");
-      trackBetaApplySuccess(submittedPlatform);
+      trackBetaApplySuccess("android");
       onSuccess?.();
       form.reset();
-      setPlatform("ios");
       setEmailError("");
     } catch {
       setErrorMessage("Something went wrong. Please try again.");
@@ -174,7 +150,6 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
   }
 
   if (status === "success") {
-    const copy = successCopy(successPlatform);
     return (
       <div className="text-center py-2 sm:py-4" role="status">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-secondary/10 text-secondary-ink">
@@ -182,7 +157,7 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
         </div>
         <p className="font-display text-2xl text-navy mb-2">You&apos;re on the list</p>
         <p className="text-[15px] text-foreground-accent font-body leading-relaxed max-w-xs mx-auto">
-          {copy.body}
+          {SUCCESS_BODY}
         </p>
         <p className="mt-3 text-sm text-foreground-accent font-body">
           Questions?{" "}
@@ -250,45 +225,12 @@ const BetaTesterForm: React.FC<BetaTesterFormProps> = ({ onClose, onSuccess }) =
         </label>
       </div>
 
-      <fieldset className="space-y-2">
-        <SectionHeading>How will you test?</SectionHeading>
-        <div className="space-y-2">
-          {BETA_PLATFORM_OPTIONS.map((option) => (
-            <label
-              key={option.value}
-              className={clsx(
-                "flex items-start gap-3 rounded-lg border px-4 py-3 cursor-pointer transition-colors",
-                platform === option.value
-                  ? "border-secondary/40 bg-secondary/[0.06]"
-                  : "border-gold-deco/25 bg-white hover:border-gold-deco/40",
-              )}
-            >
-              <input
-                type="radio"
-                name="platform"
-                value={option.value}
-                checked={platform === option.value}
-                onChange={() => setPlatform(option.value)}
-                required
-                disabled={status === "submitting"}
-                className="mt-1 h-4 w-4 shrink-0 border-navy/20 text-secondary focus:ring-secondary/30"
-              />
-              <span className="min-w-0 flex flex-col">
-                <span className="text-[15px] font-semibold text-navy font-body">
-                  {option.label}
-                </span>
-                <span className="text-sm text-foreground-accent font-body leading-snug mt-0.5">
-                  {option.hint}
-                </span>
-              </span>
-            </label>
-          ))}
-        </div>
-        <p className="rounded-lg border border-gold-deco/25 bg-white/80 px-4 py-3 text-sm text-foreground-accent font-body leading-relaxed">
-          After your request is approved, you will receive an email with a link to download
-          the app (TestFlight for iOS, Play internal testing for Android).
-        </p>
-      </fieldset>
+      <input type="hidden" name="platform" value="android" />
+
+      <p className="rounded-lg border border-gold-deco/25 bg-white/80 px-4 py-3 text-sm text-foreground-accent font-body leading-relaxed">
+        After your request is approved, you will receive an email with a Google Play
+        internal testing link to install Pinporium on Android.
+      </p>
 
       <div className="space-y-4">
         <SectionHeading>Your collection</SectionHeading>

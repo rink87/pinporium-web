@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import AppStoreBadge from "./AppStoreBadge";
+import BetaApplyButton from "./BetaApplyButton";
 import { ctaDetails } from "@/data/cta";
 
 const CTA: React.FC = () => {
@@ -43,16 +45,21 @@ const CTA: React.FC = () => {
 
             <p className="mt-4 text-sm text-cream/70 font-body">{ctaDetails.storeNote}</p>
 
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center">
+              <AppStoreBadge width={168} />
+              <BetaApplyButton label="Join the Android beta" />
+            </div>
+
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/changelog"
-                className="inline-flex items-center justify-center rounded-full min-w-[220px] px-8 h-14 text-sm uppercase tracking-deco font-body text-white bg-primary-ink hover:bg-primary-accent border border-transparent"
+                className="inline-flex items-center justify-center rounded-full min-w-[180px] px-7 h-12 text-sm uppercase tracking-deco font-body text-cream border border-gold-deco/40 hover:bg-cream/10"
               >
-                What&apos;s new in v1.0.5
+                What&apos;s new
               </Link>
               <Link
                 href="/roadmap"
-                className="inline-flex items-center justify-center rounded-full min-w-[180px] px-8 h-14 text-sm uppercase tracking-deco font-body text-cream border border-gold-deco/40 hover:bg-cream/10"
+                className="inline-flex items-center justify-center rounded-full min-w-[140px] px-7 h-12 text-sm uppercase tracking-deco font-body text-cream border border-gold-deco/40 hover:bg-cream/10"
               >
                 Roadmap
               </Link>

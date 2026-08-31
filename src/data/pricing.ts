@@ -5,7 +5,7 @@ export const tiers: IPricing[] = [
     {
         name: "In the app now",
         price: "Live",
-        summary: "On the App Store and Google Play.",
+        summary: "Free on the App Store; Android in beta.",
         features: [
             "Vault, pin boards, and collector score",
             "Bulk import — spreadsheets on web and in the app",

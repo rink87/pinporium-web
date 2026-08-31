@@ -17,7 +17,8 @@ export const footerDetails: {
         { text: "Roadmap", url: "/roadmap" },
         { text: "Changelog", url: "/changelog" },
         { text: "Import your vault", url: "/import" },
-        { text: "Apply for beta", url: "#" },
+        { text: "Download on the App Store", url: "https://apps.apple.com/us/app/pinporium/id6773060260?itscg=30200&itsct=apps_box_badge&mttnsubad=6773060260" },
+        { text: "Android beta", url: "#" },
         { text: "FAQ", url: homeSectionAnchor("faq") },
     ],
     exploreLinks: [

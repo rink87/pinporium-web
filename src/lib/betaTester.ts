@@ -12,14 +12,14 @@ export type PinCountValue = (typeof PIN_COUNT_OPTIONS)[number]["value"];
 
 export const BETA_PLATFORM_OPTIONS = [
   {
-    value: "ios",
-    label: "iPhone",
-    hint: "via TestFlight",
-  },
-  {
     value: "android",
     label: "Android",
     hint: "via Play Internal Testing",
+  },
+  {
+    value: "ios",
+    label: "iPhone",
+    hint: "already on the App Store",
   },
 ] as const;
 

@@ -10,7 +10,7 @@ import { HiOutlineXMark, HiBars3 } from "react-icons/hi2";
 import { HeaderUserMenu } from "./auth/HeaderUserMenu";
 import { ImportToolNav } from "./import/ImportToolNav";
 import { useWebAuth } from "./auth/WebAuthProvider";
-import BetaApplyButton from "./BetaApplyButton";
+import AppStoreBadge from "./AppStoreBadge";
 import { useBetaApply } from "./BetaApplyProvider";
 import Container from "./Container";
 import { siteDetails } from "@/data/siteDetails";
@@ -76,7 +76,7 @@ const Header: React.FC = () => {
                   >
                     Sign in
                   </Link>
-                  <BetaApplyButton dark compact label="Apply for beta" />
+                  <AppStoreBadge width={120} />
                 </div>
               )}
             </li>
@@ -153,6 +153,9 @@ const Header: React.FC = () => {
                     Sign in
                   </Link>
                 </li>
+                <li className="pt-1">
+                  <AppStoreBadge width={140} />
+                </li>
                 <li>
                   <button
                     type="button"
@@ -162,7 +165,7 @@ const Header: React.FC = () => {
                       openBetaApply();
                     }}
                   >
-                    Apply for beta
+                    Join Android beta
                   </button>
                 </li>
               </>

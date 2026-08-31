@@ -59,9 +59,9 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
       },
       {
         id: "partner",
-        title: "Partner early in the beta",
+        title: "Partner with Pinporium",
         paragraphs: [
-          `We’re inviting a small group of artists and shops before public App Store and Google Play launch. Tell us about your releases, claim strategy, and how you want collectors to find you.`,
+          `We’re inviting artists and shops to claim verified listings while Android is still in beta and iOS is live on the App Store. Tell us about your releases, claim strategy, and how you want collectors to find you.`,
           `Email ${support} with your shop name, typical drop cadence, and links to your store or socials. We’ll follow up with next steps for verified listings.`,
         ],
       },
@@ -73,7 +73,7 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
     ],
     ctaHeading: "Collectors are already building vaults",
     ctaSubheading:
-      "Join as a catalog partner while the beta is growing — help shape how artists show up in Pinporium.",
+      "Download Pinporium on the App Store, or join as a catalog partner while Android beta is growing.",
   },
   {
     slug: "for-collectors",
@@ -111,10 +111,10 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
         ],
       },
       {
-        id: "beta",
-        title: "Join the beta",
+        id: "download",
+        title: "Get the app",
         paragraphs: [
-          "Apply on pinporium.app. After we review your request, you’ll get email instructions for TestFlight (iOS) or Google Play internal testing (Android).",
+          "Download free on the App Store for iPhone. Android is still invite-only Google Play beta — apply on pinporium.app and we’ll email your install link after review.",
         ],
       },
     ],
@@ -198,7 +198,7 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
         id: "start",
         title: "Start trading in the beta",
         paragraphs: [
-          "Set trade policy and shipping during onboarding so you’re ready when a match hits. Apply for beta access on the homepage.",
+          "Set trade policy and shipping during onboarding so you’re ready when a match hits. Download on the App Store, or join the Android beta from the homepage.",
         ],
       },
     ],

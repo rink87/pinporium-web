@@ -82,10 +82,11 @@ export function BetaApplyProvider({ children }: { children: React.ReactNode }) {
               ) : (
                 <>
                   <DialogTitle className="font-display text-2xl text-navy pr-10">
-                    Apply for beta
+                    Join the Android beta
                   </DialogTitle>
                   <p className="mt-1.5 text-[15px] text-foreground-accent font-body leading-relaxed max-w-sm">
-                    A few details and we&apos;ll review your request.
+                    Invite-only Google Play testing — a few details and we&apos;ll review your
+                    request.
                   </p>
                 </>
               )}

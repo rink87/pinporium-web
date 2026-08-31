@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import AppStoreBadge from "@/components/AppStoreBadge";
 import BetaApplyButton from "@/components/BetaApplyButton";
 import Container from "@/components/Container";
 import JsonLd from "@/components/JsonLd";
@@ -69,8 +70,9 @@ const LandingPage: React.FC<Props> = ({ page }) => {
             <p className="mt-5 text-foreground-accent font-body leading-relaxed text-lg">
               {page.subheading}
             </p>
-            <div className="mt-8 flex justify-center">
-              <BetaApplyButton label="Apply for beta access" />
+            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+              <AppStoreBadge width={160} />
+              <BetaApplyButton label="Join the Android beta" />
             </div>
           </header>
 
@@ -98,14 +100,15 @@ const LandingPage: React.FC<Props> = ({ page }) => {
 
           <aside className="mt-14 rounded-deco border border-gold-deco/25 bg-cream/90 p-8 md:p-10 text-center shadow-card">
             <h2 className="font-display text-2xl text-navy mb-3">
-              {page.ctaHeading ?? "Join the Pinporium beta"}
+              {page.ctaHeading ?? "Get Pinporium"}
             </h2>
             <p className="text-foreground-accent font-body leading-relaxed max-w-lg mx-auto">
               {page.ctaSubheading ??
-                "Apply for early access on iOS (TestFlight) and Android (Google Play internal testing)."}
+                "Download free on the App Store. Android is still in beta — apply for an invite."}
             </p>
-            <div className="mt-6 flex justify-center">
-              <BetaApplyButton />
+            <div className="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+              <AppStoreBadge width={160} />
+              <BetaApplyButton label="Join the Android beta" />
             </div>
             {siteDetails.supportEmail ? (
               <p className="mt-5 text-sm text-foreground-accent font-body">

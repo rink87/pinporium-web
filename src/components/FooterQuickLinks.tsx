@@ -12,8 +12,17 @@ const FooterQuickLinks: React.FC = () => {
     <ul className="text-cream/75 space-y-2 font-body">
       {footerDetails.quickLinks.map((link) => (
         <li key={link.text}>
-          {link.text === "Apply for beta" ? (
+          {link.text === "Android beta" ? (
             <BetaApplyLink className={linkClass}>{link.text}</BetaApplyLink>
+          ) : link.url.startsWith("http") ? (
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              {link.text}
+            </a>
           ) : (
             <Link href={link.url} className={linkClass}>
               {link.text}
