@@ -12,7 +12,11 @@ export type ReleaseNoteIcon =
   | "sparkles"
   | "map-pin"
   | "medal"
-  | "circle-user";
+  | "circle-user"
+  | "house"
+  | "paintbrush"
+  | "moon"
+  | "scan-search";
 
 export type ReleaseNoteItem = {
   title: string;
@@ -55,32 +59,27 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
     date: "2026-09-21",
     headline: "What's new",
     summary:
-      "Home is a clearer launch pad, you can switch light or dark appearance, and the tab bar and pin screens are tighter in both themes.",
+      "Home is a clearer launch pad, the whole app is easier to read with less clutter, and dark mode is ready when you want it.",
     highlights: [
       {
         title: "Home launch pad",
-        icon: "map-pin",
+        icon: "house",
         body: "**Home** is rebuilt as a dashboard — Keep Going plus **Go to** tiles for Vault, Discover, Hunt, Offers, Boards, Badges, Profile, Activity, and Settings.",
       },
       {
-        title: "Light or dark",
-        icon: "sparkles",
-        body: "Choose **light**, **dark**, or **system** appearance in Settings. Brand accents and screens are retuned for both.",
+        title: "Full UI revamp",
+        icon: "paintbrush",
+        body: "**Larger type**, stronger **color contrast**, and less chrome clutter across Home, Hunt, Offers, and pin screens — so the app feels calmer and easier to scan.",
       },
       {
-        title: "Tab bar and create",
-        icon: "layers",
-        body: "The bottom **tab bar** sits cleaner against the home indicator, with **+** create peeking above the chrome.",
+        title: "Dark mode",
+        icon: "moon",
+        body: "Choose **light**, **dark**, or **system** in Settings. Screens, badges, and accents stay readable after dark.",
       },
       {
-        title: "Go to and Profile",
-        icon: "circle-user",
-        body: "Shortcut tiles use the **same icons** as the tab bar. Open **Profile** from Home and return with a clear back control.",
-      },
-      {
-        title: "Pin screens in dark mode",
-        icon: "shield",
-        body: "Catalog and vault pin detail, badges, and offer chrome stay readable in **dark mode**, with a smaller **Viewing** chip on Variants.",
+        title: "Smarter pin matching",
+        icon: "scan-search",
+        body: "Tighter matching when you link pins to the **catalog** or find **existing vault copies** — less guesswork when you add or connect a pin.",
       },
     ],
     changelog: [
@@ -88,10 +87,14 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
       { kind: "feature", text: "**Appearance** setting — light, dark, or follow system." },
       {
         kind: "improvement",
-        text: "Go to tiles for **Profile**, **Activity**, and **Settings**; tab-matching icons for Vault, Discover, and Hunt.",
+        text: "App-wide readability pass — larger type, stronger contrast, quieter chrome.",
       },
       { kind: "improvement", text: "Bottom **tab bar** geometry, safe area, and create button placement." },
       { kind: "improvement", text: "Archive Vault chrome and quieter Hunt / offer presentation." },
+      {
+        kind: "improvement",
+        text: "Clearer **catalog / vault pin matching** when linking or finding existing copies.",
+      },
       {
         kind: "improvement",
         text: "**Viewing** badge sizes on variant cards; shortcut destinations open scrolled to the top.",

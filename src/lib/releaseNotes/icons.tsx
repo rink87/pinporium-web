@@ -1,14 +1,18 @@
 import type { IconType } from "react-icons";
 import {
   FiAward,
+  FiHome,
   FiLayers,
   FiMapPin,
+  FiMoon,
   FiPackage,
   FiRepeat,
+  FiSearch,
   FiShield,
   FiStar,
   FiUser,
 } from "react-icons/fi";
+import { LuPaintbrush } from "react-icons/lu";
 
 import type { ReleaseNoteIcon } from "@/content/release-notes";
 
@@ -21,6 +25,10 @@ const RELEASE_NOTE_ICONS: Record<ReleaseNoteIcon, IconType> = {
   "map-pin": FiMapPin,
   medal: FiAward,
   "circle-user": FiUser,
+  house: FiHome,
+  paintbrush: LuPaintbrush,
+  moon: FiMoon,
+  "scan-search": FiSearch,
 };
 
 type Props = {
