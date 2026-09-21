@@ -51,6 +51,57 @@ export type ReleaseNotesEntry = {
 /** Newest first. */
 export const RELEASE_NOTES: ReleaseNotesEntry[] = [
   {
+    version: "1.0.6",
+    date: "2026-09-21",
+    headline: "What's new",
+    summary:
+      "Home is a clearer launch pad, you can switch light or dark appearance, and the tab bar and pin screens are tighter in both themes.",
+    highlights: [
+      {
+        title: "Home launch pad",
+        icon: "map-pin",
+        body: "**Home** is rebuilt as a dashboard — Keep Going plus **Go to** tiles for Vault, Discover, Hunt, Offers, Boards, Badges, Profile, Activity, and Settings.",
+      },
+      {
+        title: "Light or dark",
+        icon: "sparkles",
+        body: "Choose **light**, **dark**, or **system** appearance in Settings. Brand accents and screens are retuned for both.",
+      },
+      {
+        title: "Tab bar and create",
+        icon: "layers",
+        body: "The bottom **tab bar** sits cleaner against the home indicator, with **+** create peeking above the chrome.",
+      },
+      {
+        title: "Go to and Profile",
+        icon: "circle-user",
+        body: "Shortcut tiles use the **same icons** as the tab bar. Open **Profile** from Home and return with a clear back control.",
+      },
+      {
+        title: "Pin screens in dark mode",
+        icon: "shield",
+        body: "Catalog and vault pin detail, badges, and offer chrome stay readable in **dark mode**, with a smaller **Viewing** chip on Variants.",
+      },
+    ],
+    changelog: [
+      { kind: "feature", text: "**Home dashboard** launch pad with Keep Going and Go to destinations." },
+      { kind: "feature", text: "**Appearance** setting — light, dark, or follow system." },
+      {
+        kind: "improvement",
+        text: "Go to tiles for **Profile**, **Activity**, and **Settings**; tab-matching icons for Vault, Discover, and Hunt.",
+      },
+      { kind: "improvement", text: "Bottom **tab bar** geometry, safe area, and create button placement." },
+      { kind: "improvement", text: "Archive Vault chrome and quieter Hunt / offer presentation." },
+      {
+        kind: "improvement",
+        text: "**Viewing** badge sizes on variant cards; shortcut destinations open scrolled to the top.",
+      },
+      { kind: "improvement", text: "Profile **back** control returns to Home." },
+      { kind: "fix", text: "Dark-mode contrast on badges, catalog CTAs, and pin detail chrome." },
+      { kind: "fix", text: "ISO, DISO, and Grail corner badge sizing." },
+    ],
+  },
+  {
     version: "1.0.5",
     date: "2026-08-18",
     headline: "What's new",
