@@ -74,6 +74,16 @@ const sections: LegalSection[] = [
                         Sentry as a product feature.
                     </li>
                     <li>
+                        <strong>App usage analytics</strong> — which screens you view and
+                        which features you use (for example filters applied, search length,
+                        buttons tapped, and pins added), linked to your account ID and
+                        username, plus app version and basic device info, via PostHog. Our
+                        analytics provider may receive your IP address, which can be used to
+                        estimate approximate location (such as country or city). We do not
+                        record your screen, capture what you type into search, or use
+                        analytics for advertising.
+                    </li>
+                    <li>
                         <strong>Communications</strong> — messages you send us (support,
                         feedback, or legal requests), and transactional email we send you
                         (for example catalog submission decisions).
@@ -85,7 +95,8 @@ const sections: LegalSection[] = [
                 </ul>
                 <p>
                     <strong>Demo mode</strong> uses local sample data on your device. It
-                    does not create a Pinporium account, profile, or push token.
+                    does not create a Pinporium account, profile, or push token, and app
+                    usage analytics are turned off.
                 </p>
             </>
         ),
@@ -144,6 +155,9 @@ const sections: LegalSection[] = [
                     </li>
                     <li>Send transactional email (for example catalog review outcomes)</li>
                     <li>Fix crashes, keep the Service reliable, and prevent abuse</li>
+                    <li>
+                        Understand which features collectors use so we can improve the app
+                    </li>
                     <li>Comply with law and enforce our Terms of Service</li>
                 </ul>
                 <p>
@@ -219,6 +233,9 @@ const sections: LegalSection[] = [
                     </li>
                     <li>
                         <strong>Sentry</strong> — crash reports
+                    </li>
+                    <li>
+                        <strong>PostHog</strong> — in-app usage analytics
                     </li>
                     <li>
                         <strong>Resend</strong> — transactional email (catalog decisions and
@@ -392,7 +409,7 @@ export default function PrivacyPage() {
     return (
         <LegalDocument
             title="Privacy Policy"
-            effectiveDate={legal.effectiveDate}
+            effectiveDate={legal.privacyEffectiveDate}
             intro="This policy describes how Pinporium handles personal information when you use our app and website. We built Pinporium for collectors — your trust matters as much as your vault."
             sections={sections}
         />
