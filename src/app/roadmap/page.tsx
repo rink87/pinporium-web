@@ -12,7 +12,7 @@ import {
   ROADMAP_NEXT_RELEASE,
   type RoadmapFeature,
 } from "@/content/roadmap";
-import { RELEASE_NOTES } from "@/content/release-notes";
+import { getPublishedReleaseNotes } from "@/content/release-notes";
 import { siteDetails } from "@/data/siteDetails";
 import { fetchRoadmapVotes } from "@/lib/roadmap/votes";
 import { isValidRoadmapVoterKey, ROADMAP_VOTER_COOKIE } from "@/lib/roadmap/voterCookie";
@@ -54,7 +54,7 @@ export default async function RoadmapPage() {
     isValidRoadmapVoterKey(voterKey) ? voterKey : null,
   );
   const voted = new Set(votedFeatureIds);
-  const shipped = RELEASE_NOTES.slice(0, 3);
+  const shipped = getPublishedReleaseNotes().slice(0, 3);
   const futureSorted = sortByVotes(ROADMAP_FUTURE_FEATURES, counts);
 
   return (

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { RELEASE_NOTES } from "@/content/release-notes";
+import { getPublishedReleaseNotes } from "@/content/release-notes";
 import { SEO_LANDING_PAGES } from "@/data/seoLandings";
 import { siteDetails } from "@/data/siteDetails";
 
@@ -48,7 +48,7 @@ const staticRoutes: MetadataRoute.Sitemap = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const latestNoteDate = RELEASE_NOTES[0]?.date;
+  const latestNoteDate = getPublishedReleaseNotes()[0]?.date;
 
   return staticRoutes.map((entry) => {
     const isHome = entry.url === siteDetails.siteUrl;

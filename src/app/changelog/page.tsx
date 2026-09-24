@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChangelogTimeline } from "@/components/changelog/ChangelogTimeline";
 import Container from "@/components/Container";
 import JsonLd from "@/components/JsonLd";
-import { RELEASE_NOTES } from "@/content/release-notes";
+import { getPublishedReleaseNotes } from "@/content/release-notes";
 import { siteDetails } from "@/data/siteDetails";
 
 export const metadata: Metadata = {
@@ -25,6 +25,7 @@ export const metadata: Metadata = {
 
 export default function ChangelogPage() {
   const url = `${siteDetails.siteUrl}/changelog`;
+  const entries = getPublishedReleaseNotes();
 
   return (
     <div className="relative overflow-hidden min-h-screen">
@@ -72,12 +73,12 @@ export default function ChangelogPage() {
           </header>
 
           <div className="mt-12 md:mt-16">
-            {RELEASE_NOTES.length === 0 ? (
+            {entries.length === 0 ? (
               <p className="text-foreground-accent font-body text-center">
                 No release notes yet.
               </p>
             ) : (
-              <ChangelogTimeline entries={RELEASE_NOTES} />
+              <ChangelogTimeline entries={entries} />
             )}
           </div>
 

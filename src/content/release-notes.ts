@@ -50,6 +50,12 @@ export type ReleaseNotesEntry = {
   highlights: ReleaseNoteItem[];
   /** Granular items for /changelog — features, improvements, and fixes. */
   changelog?: ChangelogItem[];
+  /**
+   * When false, hide from /changelog, roadmap “shipped”, and latest-release emails
+   * until the build is live on the App Store / Google Play.
+   * Default: true.
+   */
+  published?: boolean;
 };
 
 /** Newest first. */
@@ -57,6 +63,7 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
   {
     version: "1.0.6",
     date: "2026-09-21",
+    published: false,
     headline: "What's new",
     summary:
       "Home is a clearer launch pad, the whole app is easier to read with less clutter, and dark mode is ready when you want it.",
@@ -346,8 +353,13 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
   },
 ];
 
+/** Newest first. */
+export function getPublishedReleaseNotes(): ReleaseNotesEntry[] {
+  return RELEASE_NOTES.filter((entry) => entry.published !== false);
+}
+
 export function getLatestReleaseNotes(): ReleaseNotesEntry | null {
-  return RELEASE_NOTES[0] ?? null;
+  return getPublishedReleaseNotes()[0] ?? null;
 }
 
 export function stripReleaseNoteMarkdown(text: string): string {
