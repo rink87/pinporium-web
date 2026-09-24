@@ -9,16 +9,19 @@ import {
 
 interface GooglePlayBadgeProps {
   className?: string;
-  /** Display width in CSS pixels (height scales with aspect). Default 160. */
-  width?: number;
+  /**
+   * Display height in CSS pixels (width scales with aspect).
+   * Prefer height over width when pairing with App Store — badges must match height.
+   */
+  height?: number;
 }
 
 const GooglePlayBadge: React.FC<GooglePlayBadgeProps> = ({
   className,
-  width = 160,
+  height = 40,
 }) => {
-  const height = Math.round(
-    (width * GOOGLE_PLAY_BADGE_HEIGHT) / GOOGLE_PLAY_BADGE_WIDTH,
+  const width = Math.round(
+    (height * GOOGLE_PLAY_BADGE_WIDTH) / GOOGLE_PLAY_BADGE_HEIGHT,
   );
 
   return (
@@ -26,7 +29,7 @@ const GooglePlayBadge: React.FC<GooglePlayBadgeProps> = ({
       href={GOOGLE_PLAY_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className={clsx("inline-block shrink-0", className)}
+      className={clsx("inline-block shrink-0 leading-none", className)}
       aria-label="Get it on Google Play"
     >
       {/* SVG badge — plain img so we don’t need Next SVG config */}
@@ -36,7 +39,7 @@ const GooglePlayBadge: React.FC<GooglePlayBadgeProps> = ({
         alt="Get it on Google Play"
         width={width}
         height={height}
-        className="block h-auto w-full object-contain"
+        className="block object-contain"
         style={{ width, height }}
       />
     </a>

@@ -9,16 +9,19 @@ import {
 
 interface AppStoreBadgeProps {
   className?: string;
-  /** Display width in CSS pixels (height scales with aspect). Default 160. */
-  width?: number;
+  /**
+   * Display height in CSS pixels (width scales with aspect).
+   * Prefer height over width when pairing with Google Play — badges must match height.
+   */
+  height?: number;
 }
 
 const AppStoreBadge: React.FC<AppStoreBadgeProps> = ({
   className,
-  width = 160,
+  height = 40,
 }) => {
-  const height = Math.round(
-    (width * APP_STORE_BADGE_HEIGHT) / APP_STORE_BADGE_WIDTH,
+  const width = Math.round(
+    (height * APP_STORE_BADGE_WIDTH) / APP_STORE_BADGE_HEIGHT,
   );
 
   return (
@@ -26,7 +29,7 @@ const AppStoreBadge: React.FC<AppStoreBadgeProps> = ({
       href={APP_STORE_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className={clsx("inline-block shrink-0", className)}
+      className={clsx("inline-block shrink-0 leading-none", className)}
       aria-label="Download on the App Store"
     >
       {/* SVG badge — plain img so we don’t need Next SVG config */}
@@ -36,7 +39,7 @@ const AppStoreBadge: React.FC<AppStoreBadgeProps> = ({
         alt="Download on the App Store"
         width={width}
         height={height}
-        className="block h-auto w-full object-contain"
+        className="block object-contain"
         style={{ width, height }}
       />
     </a>

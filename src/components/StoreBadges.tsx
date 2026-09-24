@@ -5,24 +5,27 @@ import GooglePlayBadge from "./GooglePlayBadge";
 
 interface StoreBadgesProps {
   className?: string;
-  /** Display width for each badge in CSS pixels. Default 168. */
-  width?: number;
+  /**
+   * Shared display height for both badges (Google requires equal height when paired).
+   * Default 48.
+   */
+  height?: number;
 }
 
-/** App Store + Google Play badges in a responsive row. */
+/** App Store + Google Play badges in a responsive row — same height. */
 const StoreBadges: React.FC<StoreBadgesProps> = ({
   className,
-  width = 168,
+  height = 48,
 }) => {
   return (
     <div
       className={clsx(
-        "flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-5",
+        "flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center sm:items-center sm:gap-5",
         className,
       )}
     >
-      <AppStoreBadge width={width} />
-      <GooglePlayBadge width={width} />
+      <AppStoreBadge height={height} />
+      <GooglePlayBadge height={height} />
     </div>
   );
 };

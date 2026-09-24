@@ -33,7 +33,7 @@ const Hero: React.FC = () => {
           {heroDetails.subheading}
         </p>
         <div className="mt-8 w-full">
-          <StoreBadges width={168} />
+          <StoreBadges height={48} />
         </div>
         <p className="mt-4 text-sm text-foreground-accent font-body">
           Free on the App Store and Google Play

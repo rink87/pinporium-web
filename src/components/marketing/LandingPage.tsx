@@ -70,7 +70,7 @@ const LandingPage: React.FC<Props> = ({ page }) => {
               {page.subheading}
             </p>
             <div className="mt-8">
-              <StoreBadges width={160} />
+              <StoreBadges height={48} />
             </div>
           </header>
 
@@ -105,7 +105,7 @@ const LandingPage: React.FC<Props> = ({ page }) => {
                 "Download free on the App Store and Google Play."}
             </p>
             <div className="mt-6">
-              <StoreBadges width={160} />
+              <StoreBadges height={48} />
             </div>
             {siteDetails.supportEmail ? (
               <p className="mt-5 text-sm text-foreground-accent font-body">

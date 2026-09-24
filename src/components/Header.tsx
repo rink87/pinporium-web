@@ -75,8 +75,8 @@ const Header: React.FC = () => {
                   >
                     Sign in
                   </Link>
-                  <AppStoreBadge width={112} />
-                  <GooglePlayBadge width={112} />
+                  <AppStoreBadge height={36} />
+                  <GooglePlayBadge height={36} />
                 </div>
               )}
             </li>
@@ -154,8 +154,8 @@ const Header: React.FC = () => {
                   </Link>
                 </li>
                 <li className="pt-1 flex flex-col gap-3">
-                  <AppStoreBadge width={140} />
-                  <GooglePlayBadge width={140} />
+                  <AppStoreBadge height={40} />
+                  <GooglePlayBadge height={40} />
                 </li>
               </>
             ) : null}

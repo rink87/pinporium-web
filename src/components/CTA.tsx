@@ -45,7 +45,7 @@ const CTA: React.FC = () => {
             <p className="mt-4 text-sm text-cream/70 font-body">{ctaDetails.storeNote}</p>
 
             <div className="mt-8">
-              <StoreBadges width={168} />
+              <StoreBadges height={48} />
             </div>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
