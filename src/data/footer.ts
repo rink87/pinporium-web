@@ -1,4 +1,5 @@
 import { homeSectionAnchor } from "@/lib/homeNav";
+import { APP_STORE_URL, GOOGLE_PLAY_URL } from "@/data/storeLinks";
 import { IMenuItem, ISocials } from "@/types";
 
 export const footerDetails: {
@@ -17,8 +18,8 @@ export const footerDetails: {
         { text: "Roadmap", url: "/roadmap" },
         { text: "Changelog", url: "/changelog" },
         { text: "Import your vault", url: "/import" },
-        { text: "Download on the App Store", url: "https://apps.apple.com/us/app/pinporium/id6773060260?itscg=30200&itsct=apps_box_badge&mttnsubad=6773060260" },
-        { text: "Android beta", url: "#" },
+        { text: "Download on the App Store", url: APP_STORE_URL },
+        { text: "Get it on Google Play", url: GOOGLE_PLAY_URL },
         { text: "FAQ", url: homeSectionAnchor("faq") },
     ],
     exploreLinks: [

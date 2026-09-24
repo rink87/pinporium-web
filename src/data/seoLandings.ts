@@ -61,7 +61,7 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
         id: "partner",
         title: "Partner with Pinporium",
         paragraphs: [
-          `We’re inviting artists and shops to claim verified listings while Android is still in beta and iOS is live on the App Store. Tell us about your releases, claim strategy, and how you want collectors to find you.`,
+          `We’re inviting artists and shops to claim verified listings — Pinporium is live on the App Store and Google Play. Tell us about your releases, claim strategy, and how you want collectors to find you.`,
           `Email ${support} with your shop name, typical drop cadence, and links to your store or socials. We’ll follow up with next steps for verified listings.`,
         ],
       },
@@ -73,7 +73,7 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
     ],
     ctaHeading: "Collectors are already building vaults",
     ctaSubheading:
-      "Download Pinporium on the App Store, or join as a catalog partner while Android beta is growing.",
+      "Download Pinporium on the App Store or Google Play, or join as a catalog partner.",
   },
   {
     slug: "for-collectors",
@@ -114,7 +114,7 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
         id: "download",
         title: "Get the app",
         paragraphs: [
-          "Download free on the App Store for iPhone. Android is still invite-only Google Play beta — apply on pinporium.app and we’ll email your install link after review.",
+          "Download free on the App Store for iPhone or on Google Play for Android.",
         ],
       },
     ],
@@ -196,9 +196,9 @@ export const SEO_LANDING_PAGES: SeoLandingPage[] = [
       },
       {
         id: "start",
-        title: "Start trading in the beta",
+        title: "Start trading",
         paragraphs: [
-          "Set trade policy and shipping during onboarding so you’re ready when a match hits. Download on the App Store, or join the Android beta from the homepage.",
+          "Set trade policy and shipping during onboarding so you’re ready when a match hits. Download free on the App Store or Google Play.",
         ],
       },
     ],

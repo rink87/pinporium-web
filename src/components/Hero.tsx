@@ -1,9 +1,8 @@
 import React from "react";
 import clsx from "clsx";
 
-import AppStoreBadge from "./AppStoreBadge";
-import BetaApplyButton from "./BetaApplyButton";
 import DeviceFrame from "./DeviceFrame";
+import StoreBadges from "./StoreBadges";
 import { DEVICE_MOCKUP_IMAGE_SIZES, DEVICE_MOCKUP_WIDTH_CLASS } from "@/lib/deviceFrame";
 
 import { heroDetails } from "@/data/hero";
@@ -33,12 +32,11 @@ const Hero: React.FC = () => {
         <p className="mt-5 w-full max-w-xl text-foreground-accent font-body leading-relaxed">
           {heroDetails.subheading}
         </p>
-        <div className="mt-8 flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5">
-          <AppStoreBadge width={168} />
-          <BetaApplyButton dark label="Join the Android beta" />
+        <div className="mt-8 w-full">
+          <StoreBadges width={168} />
         </div>
         <p className="mt-4 text-sm text-foreground-accent font-body">
-          Free on the App Store · Android beta by invite
+          Free on the App Store and Google Play
         </p>
 
         <div className={clsx("mt-14 md:mt-20 min-w-0", DEVICE_MOCKUP_WIDTH_CLASS)}>

@@ -9,7 +9,6 @@ const Analytics = dynamic(
 import { Nunito, Playfair_Display } from "next/font/google";
 
 import { WebAuthProvider } from "@/components/auth/WebAuthProvider";
-import { BetaApplyProvider } from "@/components/BetaApplyProvider";
 import Header from "@/components/Header";
 import SiteFooter from "@/components/SiteFooter";
 import JsonLd from "@/components/JsonLd";
@@ -72,11 +71,9 @@ export default function RootLayout({
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         {gaMeasurementId ? <GoogleAnalytics gaId={gaMeasurementId} /> : null}
         <WebAuthProvider>
-          <BetaApplyProvider>
-            <Header />
-            <main className="overflow-x-hidden">{children}</main>
-            <SiteFooter />
-          </BetaApplyProvider>
+          <Header />
+          <main className="overflow-x-hidden">{children}</main>
+          <SiteFooter />
         </WebAuthProvider>
         <Analytics />
       </body>

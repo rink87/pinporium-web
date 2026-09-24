@@ -11,7 +11,7 @@ import { HeaderUserMenu } from "./auth/HeaderUserMenu";
 import { ImportToolNav } from "./import/ImportToolNav";
 import { useWebAuth } from "./auth/WebAuthProvider";
 import AppStoreBadge from "./AppStoreBadge";
-import { useBetaApply } from "./BetaApplyProvider";
+import GooglePlayBadge from "./GooglePlayBadge";
 import Container from "./Container";
 import { siteDetails } from "@/data/siteDetails";
 import { menuItems } from "@/data/menuItems";
@@ -19,7 +19,6 @@ import { menuItems } from "@/data/menuItems";
 const Header: React.FC = () => {
   const pathname = usePathname();
   const { user, loading: authLoading } = useWebAuth();
-  const { openBetaApply } = useBetaApply();
   const [isOpen, setIsOpen] = useState(false);
 
   const isImportTool = pathname.startsWith("/import");
@@ -69,14 +68,15 @@ const Header: React.FC = () => {
               {showUserMenu ? (
                 <HeaderUserMenu />
               ) : (
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <Link
                     href="/import"
                     className="text-navy hover:text-primary-ink text-sm uppercase tracking-deco font-body transition-colors whitespace-nowrap"
                   >
                     Sign in
                   </Link>
-                  <AppStoreBadge width={120} />
+                  <AppStoreBadge width={112} />
+                  <GooglePlayBadge width={112} />
                 </div>
               )}
             </li>
@@ -153,20 +153,9 @@ const Header: React.FC = () => {
                     Sign in
                   </Link>
                 </li>
-                <li className="pt-1">
+                <li className="pt-1 flex flex-col gap-3">
                   <AppStoreBadge width={140} />
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    className="text-cream bg-navy px-5 py-2.5 rounded-full block w-fit text-sm uppercase tracking-deco font-body border border-gold-deco/30"
-                    onClick={() => {
-                      setIsOpen(false);
-                      openBetaApply();
-                    }}
-                  >
-                    Join Android beta
-                  </button>
+                  <GooglePlayBadge width={140} />
                 </li>
               </>
             ) : null}

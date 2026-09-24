@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-import AppStoreBadge from "@/components/AppStoreBadge";
-import BetaApplyButton from "@/components/BetaApplyButton";
+import StoreBadges from "@/components/StoreBadges";
 import Container from "@/components/Container";
 import JsonLd from "@/components/JsonLd";
 import type { SeoLandingPage } from "@/data/seoLandings";
@@ -70,9 +69,8 @@ const LandingPage: React.FC<Props> = ({ page }) => {
             <p className="mt-5 text-foreground-accent font-body leading-relaxed text-lg">
               {page.subheading}
             </p>
-            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <AppStoreBadge width={160} />
-              <BetaApplyButton label="Join the Android beta" />
+            <div className="mt-8">
+              <StoreBadges width={160} />
             </div>
           </header>
 
@@ -104,11 +102,10 @@ const LandingPage: React.FC<Props> = ({ page }) => {
             </h2>
             <p className="text-foreground-accent font-body leading-relaxed max-w-lg mx-auto">
               {page.ctaSubheading ??
-                "Download free on the App Store. Android is still in beta — apply for an invite."}
+                "Download free on the App Store and Google Play."}
             </p>
-            <div className="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <AppStoreBadge width={160} />
-              <BetaApplyButton label="Join the Android beta" />
+            <div className="mt-6">
+              <StoreBadges width={160} />
             </div>
             {siteDetails.supportEmail ? (
               <p className="mt-5 text-sm text-foreground-accent font-body">

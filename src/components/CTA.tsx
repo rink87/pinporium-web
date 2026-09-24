@@ -1,12 +1,11 @@
 import Link from "next/link";
 
-import AppStoreBadge from "./AppStoreBadge";
-import BetaApplyButton from "./BetaApplyButton";
+import StoreBadges from "./StoreBadges";
 import { ctaDetails } from "@/data/cta";
 
 const CTA: React.FC = () => {
   return (
-    <section id="beta" className="mt-10 mb-5 lg:my-20 scroll-mt-28">
+    <section id="download" className="mt-10 mb-5 lg:my-20 scroll-mt-28">
       <div className="relative h-full w-full z-10 mx-auto py-12 sm:py-20 px-4">
         <div className="h-full w-full">
           <div className="rounded-deco opacity-[0.98] absolute inset-0 -z-10 h-full w-full bg-deco-dark overflow-hidden border border-gold-deco/25">
@@ -45,9 +44,8 @@ const CTA: React.FC = () => {
 
             <p className="mt-4 text-sm text-cream/70 font-body">{ctaDetails.storeNote}</p>
 
-            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center">
-              <AppStoreBadge width={168} />
-              <BetaApplyButton label="Join the Android beta" />
+            <div className="mt-8">
+              <StoreBadges width={168} />
             </div>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">

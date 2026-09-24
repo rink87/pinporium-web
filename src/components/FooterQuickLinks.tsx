@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 
-import BetaApplyLink from "./BetaApplyLink";
 import { footerDetails } from "@/data/footer";
 
 const linkClass = "hover:text-gold transition-colors";
@@ -12,9 +11,7 @@ const FooterQuickLinks: React.FC = () => {
     <ul className="text-cream/75 space-y-2 font-body">
       {footerDetails.quickLinks.map((link) => (
         <li key={link.text}>
-          {link.text === "Android beta" ? (
-            <BetaApplyLink className={linkClass}>{link.text}</BetaApplyLink>
-          ) : link.url.startsWith("http") ? (
+          {link.url.startsWith("http") ? (
             <a
               href={link.url}
               target="_blank"

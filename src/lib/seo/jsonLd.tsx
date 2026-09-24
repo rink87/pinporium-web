@@ -1,5 +1,5 @@
 import { siteDetails } from "@/data/siteDetails";
-import { APP_STORE_URL } from "@/data/storeLinks";
+import { APP_STORE_URL, GOOGLE_PLAY_URL } from "@/data/storeLinks";
 
 type JsonLdNode = Record<string, unknown>;
 
@@ -42,8 +42,8 @@ export function mobileApplicationJsonLd(): JsonLdNode {
     applicationCategory: "LifestyleApplication",
     operatingSystem: "iOS, Android",
     description: siteDetails.metadata.description,
-    downloadUrl: APP_STORE_URL,
-    installUrl: APP_STORE_URL,
+    downloadUrl: [APP_STORE_URL, GOOGLE_PLAY_URL],
+    installUrl: [APP_STORE_URL, GOOGLE_PLAY_URL],
     offers: {
       "@type": "Offer",
       price: "0",
@@ -51,7 +51,7 @@ export function mobileApplicationJsonLd(): JsonLdNode {
       availability: "https://schema.org/InStock",
       url: APP_STORE_URL,
       description:
-        "Free on the App Store for iPhone. Android is invite-only Google Play beta.",
+        "Free on the App Store for iPhone and on Google Play for Android.",
     },
     publisher: { "@id": `${siteDetails.siteUrl}/#organization` },
   };

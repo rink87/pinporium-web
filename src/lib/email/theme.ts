@@ -28,9 +28,9 @@ const GOOGLE_PLAY_BADGE_PATH = "/images/get-it-on-google-play.png";
 export const EMAIL_DISCORD_BUTTON_WIDTH = 220;
 export const EMAIL_DISCORD_BUTTON_HEIGHT = 75;
 
-/** Official “Get it on Google Play” badge (646×250) */
+/** Official “Get it on Google Play” badge (478×142 English web PNG) */
 export const EMAIL_GOOGLE_PLAY_BADGE_WIDTH = 200;
-export const EMAIL_GOOGLE_PLAY_BADGE_HEIGHT = 77;
+export const EMAIL_GOOGLE_PLAY_BADGE_HEIGHT = 59;
 
 /**
  * Public HTTPS origin for email images (must be absolute — not a filesystem path).

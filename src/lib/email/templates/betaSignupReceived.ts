@@ -21,7 +21,7 @@ function bodyCopy(platform: BetaPlatform, name: string) {
   const installLine =
     platform === "ios"
       ? "We&apos;ll email you a <strong>TestFlight</strong> download link at this address after we review your request — usually within a few days."
-      : "We&apos;ll email you a <strong>Google Play</strong> internal testing link at this address after we review your request — usually within a few days.";
+      : "We&apos;ll email you when you&apos;re in — Pinporium is free on <strong>Google Play</strong> at this address after we review your request — usually within a few days.";
 
   return `
     <p style="margin:0 0 16px;font-family:${t.fontDisplay};font-size:20px;color:${t.foreground};">${greeting}</p>

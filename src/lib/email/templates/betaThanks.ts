@@ -96,8 +96,8 @@ function androidBetaWelcomeBody(name: string, assetsBaseUrl?: string) {
 
   return `
     <p style="margin:0 0 16px;font-family:${t.fontDisplay};font-size:20px;color:${t.foreground};">${greeting}</p>
-    <p style="margin:0 0 16px;color:${t.foreground};">Welcome to the <strong>Pinporium beta</strong> on Android — thank you for helping us build the pin collection app collectors actually want to use.</p>
-    <p style="margin:0 0 12px;color:${t.foreground};">Install the beta from <strong>Google Play</strong> (internal testing). On your Android phone, open this link, sign in with the <strong>same Google account</strong> as this email if you can, accept the invite, then install <strong>Pinporium</strong> from the Play Store:</p>
+    <p style="margin:0 0 16px;color:${t.foreground};">Welcome to <strong>Pinporium</strong> on Android — thank you for helping us build the pin collection app collectors actually want to use.</p>
+    <p style="margin:0 0 12px;color:${t.foreground};">Install Pinporium from <strong>Google Play</strong>. On your Android phone, open this link and install <strong>Pinporium</strong>:</p>
     ${emailGooglePlayBadgeButton(
       BETA_PLAY_INTERNAL_URL,
       assets.googlePlayBadgeUrl,

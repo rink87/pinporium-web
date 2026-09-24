@@ -78,7 +78,7 @@ function bodyCopy(
     ${emailAppleTestFlightButton(BETA_TESTFLIGHT_URL)}
   `
       : `
-    <p style="margin:0 0 12px;color:${t.foreground};">If you&apos;re ready to try Pinporium, open this link on your Android phone and install from <strong>Google Play</strong> internal testing (use the same Google account as this email if you can):</p>
+    <p style="margin:0 0 12px;color:${t.foreground};">If you&apos;re ready to try Pinporium, open this link on your Android phone and install from <strong>Google Play</strong>:</p>
     ${emailGooglePlayBadgeButton(
       BETA_PLAY_INTERNAL_URL,
       assets.googlePlayBadgeUrl,

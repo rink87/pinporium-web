@@ -14,12 +14,12 @@ export const BETA_PLATFORM_OPTIONS = [
   {
     value: "android",
     label: "Android",
-    hint: "via Play Internal Testing",
+    hint: "Google Play",
   },
   {
     value: "ios",
     label: "iPhone",
-    hint: "already on the App Store",
+    hint: "App Store",
   },
 ] as const;
 
