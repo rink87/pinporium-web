@@ -48,7 +48,7 @@ const Hero: React.FC = () => {
             priority
             quality={82}
             cropTopPercent={60}
-            alt="Pinporium: My Collection home screen with pins, value, and collection stats"
+            alt="Pinporium: Home dashboard with pin count, collector score, and hunt stats"
           />
         </div>
       </div>

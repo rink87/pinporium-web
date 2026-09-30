@@ -63,7 +63,6 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
   {
     version: "1.0.6",
     date: "2026-09-21",
-    published: false,
     headline: "What's new",
     summary:
       "Home is a clearer launch pad, the whole app is easier to read with less clutter, and dark mode is ready when you want it.",

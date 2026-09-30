@@ -116,7 +116,7 @@ export const benefits: IBenefit[] = [
         imageSrc: "/images/feature-hunt.png",
         imageSrcs: [
             "/images/feature-hunt.png",
-            "/images/feature-offer-sent.png",
+            "/images/feature-hunt-offers.png",
             "/images/feature-sale-complete.png",
         ],
     },
