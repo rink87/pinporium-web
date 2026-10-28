@@ -33,11 +33,9 @@ function hmacSha256(secret: string, message: string): Buffer {
   return createHmac("sha256", secret).update(message, "utf8").digest();
 }
 
+/** Same shared secret as the submission-email Edge Function (`SUBMISSION_EMAIL_SECRET`). */
 export function resolveAuthenticityAppealSecret(): string | null {
-  const primary = process.env.AUTHENTICITY_APPEAL_SECRET?.trim();
-  if (primary) return primary;
-  const fallback = process.env.SUBMISSION_EMAIL_SECRET?.trim();
-  return fallback || null;
+  return process.env.SUBMISSION_EMAIL_SECRET?.trim() || null;
 }
 
 export function signAuthenticityAppealToken(
