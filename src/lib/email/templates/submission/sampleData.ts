@@ -107,3 +107,45 @@ export const sampleLinkRejectedSubmission: SubmissionEmailRow & {
   submitter_message:
     "The pin in your photos does not match the catalog listing you selected. Try linking to a different variant or retake with the pin flat and centered.",
 };
+
+/** Original catalog pin used when a submission is classified as an unofficial copy. */
+export const sampleUnofficialCopyOriginal: CatalogVariantSnapshot = {
+  front_image_url: sampleImages.front,
+  back_image_url: sampleImages.back,
+  variant_name: "Standard",
+  design_name: "I Panic at Discos",
+  artist_name: "Sugar & Sloth",
+  pin_type: "standard",
+  pin_features: null,
+};
+
+export const sampleUnofficialCopySubmission: SubmissionEmailRow & {
+  submission_type: string;
+} = {
+  id: "00000000-0000-0000-0000-000000000003",
+  submission_type: "new_pin",
+  proposed_artist_name: "Sugar & Sloth",
+  proposed_design_name: "I Panic at Discos",
+  proposed_variant_name: "Standard",
+  proposed_edition: null,
+  proposed_enamel_type: "soft_enamel",
+  proposed_metal_finish: "Gold",
+  proposed_pin_type: "standard",
+  proposed_pin_features: null,
+  proposed_series_name: null,
+  canonical_artist_name: "Sugar & Sloth",
+  canonical_design_name: "I Panic at Discos",
+  canonical_variant_name: "Standard",
+  canonical_enamel_type: "soft_enamel",
+  canonical_metal_finish: "Gold",
+  canonical_series_name: null,
+  canonical_edition_size: null,
+  canonical_edition_type: null,
+  processed_front_url: sampleImages.front,
+  processed_back_url: sampleImages.back,
+  front_image_url: null,
+  back_image_url: null,
+  reviewed_at: reviewedAt,
+  submitter_message:
+    "These are often sold as originals — not on you. Your vault pin is unchanged.",
+};
