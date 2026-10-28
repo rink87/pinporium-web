@@ -41,6 +41,8 @@ import {
   sampleLinkVerificationSubmission,
   sampleNewPinSubmissionWithAdjustments,
   sampleRejectedSubmission,
+  sampleUnofficialCopyOriginal,
+  sampleUnofficialCopySubmission,
 } from "@/lib/email/templates/submission/sampleData";
 import {
   submissionApprovedEmailHtml,
@@ -50,6 +52,10 @@ import {
   submissionRejectedEmailHtml,
   submissionRejectedEmailSubject,
 } from "@/lib/email/templates/submission/submissionRejected";
+import {
+  unofficialCopyResolvedEmailHtml,
+  unofficialCopyResolvedEmailSubject,
+} from "@/lib/email/templates/submission/unofficialCopyResolved";
 import {
   RELEASE_NOTES,
   releaseNotesEmailHtml,
@@ -281,6 +287,27 @@ function buildTabs(): TabConfig[] {
       render: ctx =>
         submissionRejectedEmailHtml({
           row: sampleLinkRejectedSubmission,
+          recipientFirstName: ctx.name,
+          assetsBaseUrl: ctx.assetsBaseUrl,
+          wordmarkSrc: ctx.wordmarkSrc,
+        }),
+    },
+    {
+      id: "submission-unofficial-copy",
+      group: "Submissions",
+      label: "Unofficial copy",
+      subject: unofficialCopyResolvedEmailSubject(
+        sampleUnofficialCopySubmission,
+        sampleUnofficialCopyOriginal,
+      ),
+      description:
+        "Submission classified as an unofficial copy — includes I think mine is authentic re-review CTA (web form).",
+      minHeight: 1020,
+      render: ctx =>
+        unofficialCopyResolvedEmailHtml({
+          row: sampleUnofficialCopySubmission,
+          original: sampleUnofficialCopyOriginal,
+          kind: "new_pin",
           recipientFirstName: ctx.name,
           assetsBaseUrl: ctx.assetsBaseUrl,
           wordmarkSrc: ctx.wordmarkSrc,
