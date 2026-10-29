@@ -1,29 +1,27 @@
 import { NextResponse } from "next/server";
 
+import { siteDetails } from "@/data/siteDetails";
 import {
+  AUTHENTICITY_APPEAL_KIND,
+  authenticityAppealPinReferenceId,
   resolveAuthenticityAppealSecret,
   verifyAuthenticityAppealToken,
 } from "@/lib/authenticityAppealToken";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { turnstileRequired, verifyTurnstileToken } from "@/lib/turnstile";
 
-const AUTHENTICITY_APPEAL_KIND = "authenticity_rereview";
+const UNAVAILABLE_ERROR = `Form is temporarily unavailable. Email ${siteDetails.supportEmail} instead.`;
+const MAX_MESSAGE_LENGTH = 4000;
 
 export async function POST(request: Request) {
   const secret = resolveAuthenticityAppealSecret();
   if (!secret) {
-    return NextResponse.json(
-      { error: "Form is temporarily unavailable. Email help@pinporium.app instead." },
-      { status: 503 },
-    );
+    return NextResponse.json({ error: UNAVAILABLE_ERROR }, { status: 503 });
   }
 
   const admin = getSupabaseAdmin();
   if (!admin) {
-    return NextResponse.json(
-      { error: "Form is temporarily unavailable. Email help@pinporium.app instead." },
-      { status: 503 },
-    );
+    return NextResponse.json({ error: UNAVAILABLE_ERROR }, { status: 503 });
   }
 
   let body: unknown;
@@ -35,7 +33,8 @@ export async function POST(request: Request) {
 
   const record = body && typeof body === "object" ? (body as Record<string, unknown>) : {};
   const token = typeof record.token === "string" ? record.token.trim() : "";
-  const message = typeof record.message === "string" ? record.message.trim() : "";
+  const rawMessage = typeof record.message === "string" ? record.message.trim() : "";
+  const message = rawMessage.slice(0, MAX_MESSAGE_LENGTH);
   const turnstileToken =
     typeof record.turnstileToken === "string" ? record.turnstileToken.trim() : "";
 
@@ -68,9 +67,24 @@ export async function POST(request: Request) {
   const payload = verifyAuthenticityAppealToken(token, secret);
   if (!payload) {
     return NextResponse.json(
-      { error: "This link is invalid or has expired. Use I think mine is authentic in the app instead." },
+      {
+        error:
+          "This link is invalid or has expired. Use I think mine is authentic in the app instead.",
+      },
       { status: 400 },
     );
+  }
+
+  let username: string | null = null;
+  try {
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("username")
+      .eq("id", payload.u)
+      .maybeSingle();
+    username = typeof profile?.username === "string" ? profile.username.trim() || null : null;
+  } catch (err) {
+    console.warn("authenticity-appeal profile lookup failed", err);
   }
 
   const metadata = {
@@ -82,13 +96,9 @@ export async function POST(request: Request) {
     route: "/authenticity-appeal",
     crashRoute: null,
     errorComponent: null,
-    username: null,
+    username,
     isDemoMode: false,
-    pinReferenceId: (() => {
-      const id = payload.v ?? payload.o;
-      if (!id) return null;
-      return `V-${id.replace(/-/g, "").slice(0, 8).toUpperCase()}`;
-    })(),
+    pinReferenceId: authenticityAppealPinReferenceId(payload.v ?? payload.o),
     variantReferenceId: payload.v ?? payload.o,
     pinContext: "vault",
     issueCategory: "authenticity",
@@ -118,7 +128,9 @@ export async function POST(request: Request) {
   if (error) {
     console.error("authenticity-appeal insert failed", error.message);
     return NextResponse.json(
-      { error: "Could not submit your request. Please try again or email help@pinporium.app." },
+      {
+        error: `Could not submit your request. Please try again or email ${siteDetails.supportEmail}.`,
+      },
       { status: 502 },
     );
   }

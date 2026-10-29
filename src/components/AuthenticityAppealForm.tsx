@@ -79,7 +79,7 @@ export function AuthenticityAppealForm({
       setStatus("success");
     } catch {
       setStatus("error");
-      setErrorMessage("Could not submit. Please try again or email help@pinporium.app.");
+      setErrorMessage(`Could not submit. Please try again or email ${siteDetails.supportEmail}.`);
       turnstileRef.current?.reset();
       setTurnstileToken("");
     }
@@ -117,6 +117,7 @@ export function AuthenticityAppealForm({
           rows={5}
           required
           minLength={3}
+          maxLength={4000}
           disabled={status === "submitting"}
           className={fieldClass}
           placeholder="Backstamp text, packaging, where you bought it, comparison to known originals…"
@@ -149,7 +150,7 @@ export function AuthenticityAppealForm({
 
       <p className="text-xs text-foreground-accent leading-relaxed text-center">
         Same request as <strong>I think mine is authentic</strong> in the app. Questions?{" "}
-        <a href={`mailto:${siteDetails.supportEmail}`} className="text-secondary underline">
+        <a href={`mailto:${siteDetails.supportEmail}`} className="text-secondary-ink underline">
           {siteDetails.supportEmail}
         </a>
       </p>

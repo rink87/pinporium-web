@@ -1,6 +1,9 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-/** Keep in sync with pinporium/supabase/functions/_shared/email/authenticityAppealToken.ts */
+/** Keep in sync with pinporium-app `supabase/functions/_shared/email/authenticityAppealToken.ts`. */
+
+/** Same `app_feedback.metadata.appealKind` as the in-app re-review sheet. */
+export const AUTHENTICITY_APPEAL_KIND = "authenticity_rereview" as const;
 
 export type AuthenticityAppealTokenPayload = {
   u: string;
@@ -108,4 +111,10 @@ export function verifyAuthenticityAppealToken(
 export function authenticityAppealPageUrl(args: { siteUrl: string; token: string }): string {
   const base = args.siteUrl.replace(/\/$/, "");
   return `${base}/authenticity-appeal?t=${encodeURIComponent(args.token)}`;
+}
+
+/** Short support ref matching pinporium-app `catalogReferenceId(id, 'variant')`. */
+export function authenticityAppealPinReferenceId(variantId: string | null): string | null {
+  if (!variantId) return null;
+  return `V-${variantId.replace(/-/g, "").slice(0, 8).toUpperCase()}`;
 }

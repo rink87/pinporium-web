@@ -46,7 +46,7 @@ export default function AuthenticityAppealPage({ searchParams }: PageProps) {
               This form is temporarily unavailable. Email{" "}
               <a
                 href={`mailto:${siteDetails.supportEmail}`}
-                className="text-secondary font-medium underline"
+                className="text-secondary-ink font-semibold underline"
               >
                 {siteDetails.supportEmail}
               </a>{" "}
@@ -59,13 +59,13 @@ export default function AuthenticityAppealPage({ searchParams }: PageProps) {
                 app and tap <strong>I think mine is authentic</strong>, or email{" "}
                 <a
                   href={`mailto:${siteDetails.supportEmail}`}
-                  className="text-secondary font-medium underline"
+                  className="text-secondary-ink font-semibold underline"
                 >
                   {siteDetails.supportEmail}
                 </a>
                 .
               </p>
-              <Link href="/" className="inline-block text-sm text-secondary underline">
+              <Link href="/" className="inline-block text-sm text-secondary-ink underline">
                 Back to Pinporium
               </Link>
             </div>
