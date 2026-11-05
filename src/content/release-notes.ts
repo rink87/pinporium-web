@@ -61,6 +61,48 @@ export type ReleaseNotesEntry = {
 /** Newest first. */
 export const RELEASE_NOTES: ReleaseNotesEntry[] = [
   {
+    version: "1.0.7",
+    date: "2026-11-05",
+    headline: "What's new",
+    summary:
+      "Catalog accuracy updates: when a vault pin is marked Unofficial copy after review, you can request a re-review from the pin or from email. Share a short note (backstamp, packaging, where you bought it) and we’ll look again. Also: choose Picture or 3D as your default pin view.",
+    highlights: [
+      {
+        title: "Authenticity re-review",
+        icon: "shield",
+        body: "If catalog review marks a vault pin **Unofficial copy** and you believe yours is an original, tap **I think mine is authentic**. Add a short note — and optional **proof photos** of a backstamp, packaging, or receipt — then **Request re-review**. Unofficial-copy decision emails include the same path.",
+      },
+      {
+        title: "Catalog accuracy",
+        icon: "scan-search",
+        body: "**Unofficial copy** is a calm catalog label so the next collector knows what they’re getting — common, and not a reflection on you. You can still keep, trade, or sell the pin. We’re focused on **catalog accuracy**, not blame.",
+      },
+      {
+        title: "Default pin view",
+        icon: "sparkles",
+        body: "Prefer how you look at pins day to day? Set your default pin view to **Picture** or **3D** and we’ll remember it.",
+      },
+    ],
+    changelog: [
+      {
+        kind: "feature",
+        text: "**Authenticity re-review** from Vault (**I think mine is authentic**) or unofficial-copy decision email.",
+      },
+      {
+        kind: "improvement",
+        text: "Optional **proof photos** (backstamp, packaging, receipt) on authenticity re-review.",
+      },
+      {
+        kind: "improvement",
+        text: "**Unofficial copy** vault outcome card and calmer catalog surfaces so originals stay easy to find.",
+      },
+      {
+        kind: "feature",
+        text: "Default pin view — **Picture** or **3D** in Settings (and onboarding).",
+      },
+    ],
+  },
+  {
     version: "1.0.6",
     date: "2026-09-21",
     headline: "What's new",
