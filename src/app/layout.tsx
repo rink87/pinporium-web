@@ -6,7 +6,7 @@ const Analytics = dynamic(
   () => import("@vercel/analytics/react").then((m) => m.Analytics),
   { ssr: false },
 );
-import { Nunito, Playfair_Display } from "next/font/google";
+import localFont from "next/font/local";
 
 import { WebAuthProvider } from "@/components/auth/WebAuthProvider";
 import Header from "@/components/Header";
@@ -17,20 +17,27 @@ import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/jsonLd";
 
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
+// Self-hosted to avoid Vercel build failures when fonts.gstatic.com is unreachable
+// during `next/font/google` fetches (preview deploy type_error on Google loader).
+const playfair = localFont({
+  src: [
+    { path: "../fonts/PlayfairDisplay-SemiBold.woff2", weight: "600", style: "normal" },
+    { path: "../fonts/PlayfairDisplay-Bold.woff2", weight: "700", style: "normal" },
+  ],
   variable: "--font-display",
   display: "optional",
-  weight: ["600", "700"],
-  adjustFontFallback: true,
+  adjustFontFallback: "Times New Roman",
 });
 
-const nunito = Nunito({
-  subsets: ["latin"],
+const nunito = localFont({
+  src: [
+    { path: "../fonts/Nunito-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/Nunito-SemiBold.woff2", weight: "600", style: "normal" },
+    { path: "../fonts/Nunito-Bold.woff2", weight: "700", style: "normal" },
+  ],
   variable: "--font-body",
   display: "swap",
-  weight: ["400", "600", "700"],
-  adjustFontFallback: true,
+  adjustFontFallback: "Arial",
 });
 
 export const metadata: Metadata = {
