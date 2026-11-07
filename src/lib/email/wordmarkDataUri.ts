@@ -3,7 +3,11 @@ import path from "path";
 
 let cached: string | null = null;
 
-/** Inline wordmark for local email preview (email clients need hosted HTTPS URLs). */
+/**
+ * Inline wordmark for **local browser preview only** (iframe sandbox).
+ * Never put data: URIs in outbound Resend HTML — Gmail/Outlook strip them
+ * (empty box + alt text). Sent mail must use hosted HTTPS PNGs on www.pinporium.app.
+ */
 export function getWordmarkDataUri(): string {
   if (cached) {
     return cached;
