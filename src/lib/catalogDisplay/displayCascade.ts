@@ -1,7 +1,9 @@
 /**
- * Catalog card/thumbnail image preference:
- * approved cutout → original front photo → design primary → placeholder.
- * Callers advance the chain on onError; never retry the same URL.
+ * Catalog card/thumbnail **Picture** preference (flat image):
+ * original front photo → approved cutout PNG → design primary → placeholder.
+ *
+ * Cutout is secondary for flat image (3D-style viewer uses it separately).
+ * Approving a cutout does not generate a mesh. Callers advance on onError; never retry the same URL.
  */
 
 export type CatalogDisplayImageInput = {
@@ -9,7 +11,7 @@ export type CatalogDisplayImageInput = {
   frontImageUrl?: string | null;
   designPrimaryImageUrl?: string | null;
   placeholderUrl?: string | null;
-  /** Only use cutout when approved for catalog display. */
+  /** Include cutout only when approved into the canonical cutout slot. */
   cutoutApproved?: boolean;
 };
 
@@ -31,10 +33,10 @@ export function catalogDisplayCandidates(
     out.push({ layer, url });
   };
 
+  push("front", input.frontImageUrl);
   if (input.cutoutApproved !== false) {
     push("cutout", input.cutoutImageUrl);
   }
-  push("front", input.frontImageUrl);
   push("design", input.designPrimaryImageUrl);
   push("placeholder", input.placeholderUrl);
   return out;
