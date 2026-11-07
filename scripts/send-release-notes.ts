@@ -10,10 +10,16 @@
  * Send v1.0.3 to all Android beta testers:
  *   npx tsx --env-file=.env.local scripts/send-release-notes.ts --all --platform android
  *
+ * Catch-up with approved HTML + dual version logging:
+ *   npx tsx --env-file=.env.local scripts/send-release-notes.ts --all --platform ios \
+ *     --html-file /path/to/ios-preview.html \
+ *     --subject "What's new in Pinporium — v1.0.5 & v1.0.6" \
+ *     --versions 1.0.5,1.0.6 --dry-run
+ *
  * Send test to yourself:
  *   npx tsx --env-file=.env.local scripts/send-release-notes.ts rink87@gmail.com
  */
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { getLatestReleaseNotes } from "../src/content/release-notes";
@@ -42,9 +48,27 @@ function parseArgs(args: string[]) {
     platformRaw === "android" ? "android" : platformRaw === "ios" ? "ios" : undefined;
   const versionFlagIndex = args.indexOf("--version");
   const version = versionFlagIndex >= 0 ? args[versionFlagIndex + 1] : undefined;
+  const versionsFlagIndex = args.indexOf("--versions");
+  const versionsRaw = versionsFlagIndex >= 0 ? args[versionsFlagIndex + 1] : undefined;
+  const versions = versionsRaw
+    ? versionsRaw
+        .split(",")
+        .map(v => v.trim())
+        .filter(Boolean)
+    : undefined;
+  const htmlFileFlagIndex = args.indexOf("--html-file");
+  const htmlFile = htmlFileFlagIndex >= 0 ? args[htmlFileFlagIndex + 1] : undefined;
+  const subjectFlagIndex = args.indexOf("--subject");
+  const subject = subjectFlagIndex >= 0 ? args[subjectFlagIndex + 1] : undefined;
 
   const consumed = new Set<number>();
-  for (const index of [platformFlagIndex, versionFlagIndex]) {
+  for (const index of [
+    platformFlagIndex,
+    versionFlagIndex,
+    versionsFlagIndex,
+    htmlFileFlagIndex,
+    subjectFlagIndex,
+  ]) {
     if (index >= 0) {
       consumed.add(index);
       consumed.add(index + 1);
@@ -53,7 +77,14 @@ function parseArgs(args: string[]) {
 
   const to = args.find((arg, index) => !arg.startsWith("--") && !consumed.has(index));
 
-  return { preview, all, dryRun, platform, version, to };
+  return { preview, all, dryRun, platform, version, versions, htmlFile, subject, to };
+}
+
+function needsCatchUp(
+  sent: Record<string, string>,
+  versions: string[],
+): boolean {
+  return versions.some(version => !sent[version]);
 }
 
 async function listBetaRecipients(platform?: BetaPlatform): Promise<BetaRecipient[]> {
@@ -79,30 +110,70 @@ async function listBetaRecipients(platform?: BetaPlatform): Promise<BetaRecipien
     throw new Error(`Failed to load beta_applications: ${error.message}`);
   }
 
-  return (data ?? []).map(row => ({
-    email: normalizeBetaEmail(String(row.email ?? "")),
-    platform: row.platform === "android" ? "android" : "ios",
-    releaseNotesSent: parseReleaseNotesSent(row.release_notes_sent),
-  }));
+  return (data ?? []).map(row => {
+    const rawPlatform = String(row.platform ?? "").trim().toLowerCase();
+    if (rawPlatform !== "ios" && rawPlatform !== "android") {
+      throw new Error(
+        `Ambiguous beta_applications.platform for ${String(row.email)}: ${JSON.stringify(row.platform)}`,
+      );
+    }
+    return {
+      email: normalizeBetaEmail(String(row.email ?? "")),
+      platform: rawPlatform,
+      releaseNotesSent: parseReleaseNotesSent(row.release_notes_sent),
+    };
+  });
 }
 
 async function main() {
   const args = process.argv.slice(2);
-  const { preview, all, dryRun, platform, version: versionArg, to } = parseArgs(args);
+  const {
+    preview,
+    all,
+    dryRun,
+    platform,
+    version: versionArg,
+    versions: versionsArg,
+    htmlFile,
+    subject: subjectArg,
+    to,
+  } = parseArgs(args);
 
   const assetsBaseUrl =
     process.env.NEXT_PUBLIC_SITE_URL ??
     process.env.SITE_URL ??
     "https://pinporium.app";
 
-  const version = versionArg ?? getLatestReleaseNotes()?.version;
-  if (!version) {
+  const customHtml = htmlFile ? readFileSync(htmlFile, "utf8") : undefined;
+  if (htmlFile && !subjectArg) {
+    throw new Error("--html-file requires --subject");
+  }
+  if (htmlFile && !(versionsArg?.length)) {
+    throw new Error("--html-file requires --versions (comma-separated) for logging");
+  }
+
+  const version = versionArg ?? (customHtml ? undefined : getLatestReleaseNotes()?.version);
+  const recordVersions =
+    versionsArg?.length
+      ? versionsArg
+      : version
+        ? [version]
+        : [];
+
+  if (!customHtml && !version) {
     throw new Error("No release notes version found.");
   }
 
-  const { entry, subject, html } = buildReleaseNotesEmailHtml(version, {
-    assetsBaseUrl,
-  });
+  const built = customHtml
+    ? {
+        entry: { version: recordVersions[0] ?? "custom" },
+        subject: subjectArg!,
+        html: customHtml,
+      }
+    : buildReleaseNotesEmailHtml(version!, { assetsBaseUrl });
+
+  const subject = subjectArg ?? built.subject;
+  const html = customHtml ?? built.html;
 
   if (all) {
     const recipients = await listBetaRecipients(platform);
@@ -114,19 +185,22 @@ async function main() {
       );
     }
 
-    const pending = recipients.filter(r => !r.releaseNotesSent[version]);
-    const alreadySent = recipients.filter(r => r.releaseNotesSent[version]);
+    const pending = recipients.filter(r => needsCatchUp(r.releaseNotesSent, recordVersions));
+    const alreadySent = recipients.filter(r => !needsCatchUp(r.releaseNotesSent, recordVersions));
 
     console.log(
       JSON.stringify(
         {
           mode: dryRun ? "dry_run" : "broadcast",
-          version,
+          version: version ?? recordVersions.join("+"),
+          versions: recordVersions,
           platform: platform ?? "all",
+          htmlFile: htmlFile ?? null,
+          subject,
           total: recipients.length,
           pending: pending.length,
           alreadySent: alreadySent.length,
-          recipients: pending.map(r => r.email),
+          recipients: pending.map(r => ({ email: r.email, platform: r.platform })),
         },
         null,
         2,
@@ -148,6 +222,9 @@ async function main() {
       const result = await sendReleaseNotesEmail({
         to: recipient.email,
         version,
+        versions: recordVersions,
+        subject,
+        html,
         assetsBaseUrl,
         recordToBetaApplication: true,
       });
@@ -161,7 +238,8 @@ async function main() {
       JSON.stringify(
         {
           mode: "broadcast_complete",
-          version,
+          version: version ?? recordVersions.join("+"),
+          versions: recordVersions,
           platform: platform ?? "all",
           total: pending.length,
           sent,
@@ -179,17 +257,19 @@ async function main() {
   if (preview || !to) {
     const outDir = join(import.meta.dirname, "out");
     mkdirSync(outDir, { recursive: true });
-    const filename = `release-notes-v${entry.version}.html`;
+    const filename = customHtml
+      ? `release-notes-catchup-${recordVersions.join("-")}.html`
+      : `release-notes-v${built.entry.version}.html`;
     const outPath = join(outDir, filename);
     writeFileSync(outPath, html, "utf8");
     console.log(
       JSON.stringify(
         {
           mode: "preview",
-          version: entry.version,
+          version: built.entry.version,
+          versions: recordVersions,
           subject,
           writtenTo: outPath,
-          plaintextSummary: entry.summary,
         },
         null,
         2,
@@ -207,6 +287,9 @@ async function main() {
   const result = await sendReleaseNotesEmail({
     to,
     version,
+    versions: recordVersions,
+    subject,
+    html,
     assetsBaseUrl,
     recordToBetaApplication: true,
   });
