@@ -69,7 +69,7 @@ function bodyCopy(
     <p style="margin:16px 0 0;color:${t.foregroundAccent};font-size:14px;line-height:1.5;">Prefer one page? <a href="${escapeHtml(checkInUrl)}" target="_blank" rel="noopener noreferrer" style="color:${t.secondary};font-weight:600;">Open the check-in form</a> and pick from the list.</p>
 
     ${emailSectionHeading("Try adding one pin")}
-    <p style="margin:0 0 12px;color:${t.foreground};font-size:15px;line-height:1.6;">When you&apos;re ready: open the app, add a pin with front and back photos, and link it to the catalog if you can find a match. That unlocks your vault and 3D preview.</p>
+    <p style="margin:0 0 12px;color:${t.foreground};font-size:15px;line-height:1.6;">When you&apos;re ready: open the app, add a pin with a front photo, and link it to the catalog if you can find a match — to start adding your collection to your vault.</p>
 
     ${betaMoreFeedbackSection(assetsBaseUrl)}
     <p style="margin:0;color:${t.foregroundAccent};font-size:14px;line-height:1.5;">Questions? Reply to this email or write to <a href="mailto:${support}" style="color:${t.secondary};font-weight:600;">${support}</a>.</p>
