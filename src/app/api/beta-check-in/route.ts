@@ -8,8 +8,10 @@ import {
 import {
   formatBetaCheckInSlackMessage,
   parseBetaCheckInBody,
+  type BetaCheckInAudience,
   type BetaCheckInPayload,
 } from "@/lib/betaCheckIn";
+import { recordCheckInSurveyResponse } from "@/lib/checkInSurveyDb";
 import { turnstileRequired, verifyTurnstileToken } from "@/lib/turnstile";
 
 export async function POST(request: Request) {
@@ -85,6 +87,46 @@ export async function POST(request: Request) {
       { error: "Could not submit your response. Please try again or email help@pinporium.app." },
       { status: 502 },
     );
+  }
+
+  // Persist for admin collector profiles (best-effort; do not fail the user if table missing).
+  if (isActive) {
+    const active = parsed.data as BetaActiveFeedbackPayload;
+    const detailParts = [
+      `Features: ${active.featuresUsed.join(", ")}`,
+      `Add pin: ${active.addPinFlow}`,
+      active.addPinNotes ? `Add pin notes: ${active.addPinNotes}` : null,
+      `Catalog submit: ${active.catalogSubmitFlow}`,
+      active.catalogSubmitNotes ? `Catalog notes: ${active.catalogSubmitNotes}` : null,
+      active.likedBest ? `Liked: ${active.likedBest}` : null,
+      active.confusing ? `Confusing: ${active.confusing}` : null,
+      active.wishFeature ? `Wish: ${active.wishFeature}` : null,
+    ].filter(Boolean);
+    const persist = await recordCheckInSurveyResponse({
+      email: active.email,
+      audience: "active",
+      reason: "active_feedback",
+      platform: active.platform,
+      name: active.name,
+      details: detailParts.join("\n"),
+    });
+    if (!persist.ok && !persist.skipped) {
+      console.warn("check-in survey DB persist failed (Slack already delivered)", persist.message);
+    }
+  } else {
+    const checkIn = parsed.data as BetaCheckInPayload;
+    const audience: BetaCheckInAudience = checkIn.audience ?? "not_started";
+    const persist = await recordCheckInSurveyResponse({
+      email: checkIn.email,
+      audience,
+      reason: checkIn.reason,
+      platform: checkIn.platform,
+      name: checkIn.name,
+      details: checkIn.details,
+    });
+    if (!persist.ok && !persist.skipped) {
+      console.warn("check-in survey DB persist failed (Slack already delivered)", persist.message);
+    }
   }
 
   return NextResponse.json({ ok: true });
