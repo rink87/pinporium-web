@@ -92,7 +92,7 @@ Submissions post to `SLACK_BETA_WEBHOOK_URL` with header **Beta check-in (not st
 
 For testers who **signed into the app** but have **not added a vault pin** yet. Same shape as the not-started email: reason links + short form (not the full feature survey).
 
-**Opener:** Thanks for downloading the app — we hope you're enjoying it so far. We built it for collectors like you, and your feedback is greatly appreciated. Then the empty-vault “We noticed you…” body.
+**Opener:** Thanks for downloading the app. We hope you're enjoying it so far. We built it for collectors like you, and your feedback is greatly appreciated. Then the empty-vault “We noticed you…” body.
 
 ### Send
 
@@ -108,7 +108,7 @@ await sendBetaActiveNoPinsCheckInEmail({
 
 ### Subject
 
-`Quick check-in — haven't added a pin yet`
+`Quick check-in: haven't added a pin yet`
 
 ### Check-in page (signed in, no pins)
 
