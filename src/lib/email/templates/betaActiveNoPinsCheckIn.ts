@@ -60,7 +60,7 @@ function bodyCopy(
 
   return `
     <p style="margin:0 0 16px;font-family:${t.fontDisplay};font-size:20px;color:${t.foreground};">${greeting}</p>
-    <p style="margin:0 0 16px;color:${t.foreground};">Thanks for signing into the <strong>Pinporium beta</strong> — we&apos;re glad you&apos;re in.</p>
+    <p style="margin:0 0 16px;color:${t.foreground};">Thanks for downloading the app — we hope you&apos;re enjoying it so far. We built it for collectors like you, and your feedback is greatly appreciated.</p>
     <p style="margin:0 0 16px;color:${t.foreground};">We noticed you haven&apos;t added a pin to your vault yet. That&apos;s okay — we&apos;d love to know what&apos;s in the way so we can make the first pin easier.</p>
 
     ${emailSectionHeading("What's blocking your first pin?")}
