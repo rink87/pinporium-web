@@ -100,6 +100,14 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
         kind: "feature",
         text: "Default pin view — **Picture** or **3D** in Settings (and onboarding).",
       },
+      {
+        kind: "fix",
+        text: "**Quick Add** pin processing no longer waits forever — times out with **Try again**, or continue with the original photo.",
+      },
+      {
+        kind: "fix",
+        text: "**3D** cutout pin viewer zoom stays centered instead of drifting off-screen.",
+      },
     ],
   },
   {
