@@ -147,5 +147,5 @@ export const sampleUnofficialCopySubmission: SubmissionEmailRow & {
   back_image_url: null,
   reviewed_at: reviewedAt,
   submitter_message:
-    "These are often sold as originals — not on you. Your vault pin is unchanged.",
+    "These are often sold as originals, so this is not on you. Your vault pin is unchanged.",
 };

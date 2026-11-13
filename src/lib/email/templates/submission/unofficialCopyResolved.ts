@@ -116,7 +116,7 @@ export function unofficialCopyResolvedEmailHtml(args: {
   recipientFirstName?: string;
   assetsBaseUrl?: string;
   wordmarkSrc?: string;
-  /** Signed web form URL — same admin re-review as the in-app CTA. */
+  /** Signed web form URL. Same admin re-review as the in-app CTA. */
   authenticityAppealUrl?: string | null;
 }): string {
   const t = transactionalEmailTheme;
@@ -139,7 +139,7 @@ export function unofficialCopyResolvedEmailHtml(args: {
   const intro =
     kind === "new_pin"
       ? `Thanks for adding this pin to Pinporium. While reviewing it, we found it closely matches <strong>${escapeHtml(originalLabel)}</strong>, but it looks like an unofficial copy rather than a release from the original artist.`
-      : `Thanks for linking this pin. While reviewing it, we found it closely matches <strong>${escapeHtml(originalLabel)}</strong>, but it looks like an unofficial copy rather than a release from the original artist. We linked your vault pin to the unofficial copy listing instead.`;
+      : `Thanks for linking this pin. While reviewing it, we found it closely matches <strong>${escapeHtml(originalLabel)}</strong>, but it looks like an unofficial copy rather than a release from the original artist. We linked your vault pin to the original in the catalog for reference, and marked that link as an unofficial copy.`;
 
   const bodyHtml = `
     <p style="margin:0 0 16px;font-family:${t.fontDisplay};font-size:20px;color:${t.foreground};">Hi ${escapeHtml(greetingName)},</p>
@@ -153,20 +153,20 @@ export function unofficialCopyResolvedEmailHtml(args: {
       title: "What this means",
       bodyHtml: `
         <p style="margin:0 0 10px;">Unofficial copies are common, and they are often sold as originals, so this is not on you.</p>
-        <p style="margin:0 0 10px;">Your pin <strong>stays in your vault</strong> with your photos and notes. It is listed in the catalog as <strong>${escapeHtml(UNOFFICIAL_COPY_LABEL)}</strong> so other collectors know what they are looking at.</p>
-        <p style="margin:0;">You can still trade or sell it. The ${escapeHtml(UNOFFICIAL_COPY_LABEL.toLowerCase())} label travels with it.</p>
+        <p style="margin:0 0 10px;">Your pin <strong>stays in your vault</strong> with your photos and notes. It is linked to the original in the catalog for reference, so collectors can see the linked official pin.</p>
+        <p style="margin:0;">You can still trade or sell it. Your vault shows it as an ${escapeHtml(UNOFFICIAL_COPY_LABEL.toLowerCase())} of the linked official pin.</p>
       `,
     })}
 
     <p style="margin:0 0 4px;font-family:${t.fontDisplay};font-size:18px;font-weight:600;color:${t.foreground};">Think yours is authentic?</p>
-    <p style="margin:0 0 8px;font-size:15px;line-height:1.55;color:${t.foreground};">Request a re-review — clear notes about the backstamp, packaging, or where you bought it help us take another look. The same request is available from your vault pin in the app.</p>
+    <p style="margin:0 0 8px;font-size:15px;line-height:1.55;color:${t.foreground};">Request a re-review. Clear notes about the backstamp, packaging, or where you bought it help us take another look. The same request is available from your vault pin in the app.</p>
     ${emailButton(appealUrl, "I think mine is authentic")}
     <p style="margin:0;font-size:13px;line-height:1.5;color:${t.foregroundAccent};text-align:center;">Opens a short form in your browser. We&rsquo;ll notify you in Activity when it&rsquo;s reviewed.</p>
   `;
 
   const footerHtml = `
     <p style="margin:20px 0 0;padding-top:20px;font-size:13px;line-height:1.5;color:${t.foregroundAccent};">
-      Pinporium — one vault for your whole pin collection.
+      Pinporium, one vault for your whole pin collection.
     </p>
   `;
 
