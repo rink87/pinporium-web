@@ -10,7 +10,7 @@ export type RoadmapFeature = {
 };
 
 export const ROADMAP_NEXT_RELEASE = {
-  version: "1.0.7",
+  version: "1.0.8",
   label: "Next release",
   summary: "Tools for partner artists and alerts when drops go live.",
   features: [

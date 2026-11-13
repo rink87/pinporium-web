@@ -8,6 +8,8 @@ export const tiers: IPricing[] = [
         summary: "Free on the App Store and Google Play.",
         features: [
             "Home dashboard, dark mode, and a full readability revamp",
+            "Authenticity re-review and unofficial-copy catalog accuracy",
+            "Default pin view — Picture or 3D",
             "Vault, pin boards, and collector score",
             "Bulk import — spreadsheets on web and in the app",
             "Discover, catalog search, and ISOs / grails",
@@ -21,7 +23,7 @@ export const tiers: IPricing[] = [
         exploreLabel: "See what's shipped",
     },
     {
-        name: "Next — v1.0.7",
+        name: "Next — v1.0.8",
         price: "Soon",
         summary: "Partner studios and drop-day alerts.",
         features: [
@@ -29,7 +31,7 @@ export const tiers: IPricing[] = [
             "Drop alerts when limited releases go live",
         ],
         exploreHref: "/roadmap#next",
-        exploreLabel: "Preview v1.0.7",
+        exploreLabel: "Preview v1.0.8",
     },
     {
         name: "Further out",
