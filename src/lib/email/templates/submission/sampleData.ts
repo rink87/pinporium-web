@@ -5,11 +5,24 @@ import type {
 
 const reviewedAt = "2026-05-28T18:30:00.000Z";
 
+/**
+ * Stable public HTTPS pin-images (not data: URIs). Must exist in storage with
+ * matching `-thumb` siblings — `pinImageEmailPreviewUrl` rewrites to thumbs for email.
+ * The old `pin-images/sample/preview-*.jpg` paths 404 (empty sample/ prefix).
+ */
 const sampleImages = {
   front:
-    "https://ffcrjkumvydeyqirxgnm.supabase.co/storage/v1/object/public/pin-images/sample/preview-front.jpg",
-  back: "https://ffcrjkumvydeyqirxgnm.supabase.co/storage/v1/object/public/pin-images/sample/preview-back.jpg",
+    "https://ffcrjkumvydeyqirxgnm.supabase.co/storage/v1/object/public/pin-images/41a7d16c-f636-4f6f-8b63-1478a7b79f06/processed-front-1779209869707.png",
+  back: "https://ffcrjkumvydeyqirxgnm.supabase.co/storage/v1/object/public/pin-images/41a7d16c-f636-4f6f-8b63-1478a7b79f06/processed-back-1779209870356.png",
+  /** Distinct front for unofficial-copy "Original" comparison cell. */
+  originalFront:
+    "https://ffcrjkumvydeyqirxgnm.supabase.co/storage/v1/object/public/pin-images/730c36b5-94fa-45d9-be84-fd390f2f86bc/processed-front-1780235488324.png",
 };
+
+/** Prefill / "From our team" copy for unofficial-copy decisions (no em dashes). */
+export const UNOFFICIAL_COPY_SUBMITTER_MESSAGE =
+  "Unofficial copies are common, and they are often sold as originals, so this is not on you. Your pin stays in your vault with your photos and notes. It is linked to the original in the catalog for reference, so collectors can see the linked official pin. You can still trade or sell it. Your vault shows it as an unofficial copy of the linked official pin.";
+
 
 export const sampleCatalogVariant: CatalogVariantSnapshot = {
   front_image_url: sampleImages.front,
@@ -110,7 +123,7 @@ export const sampleLinkRejectedSubmission: SubmissionEmailRow & {
 
 /** Original catalog pin used when a submission is classified as an unofficial copy. */
 export const sampleUnofficialCopyOriginal: CatalogVariantSnapshot = {
-  front_image_url: sampleImages.front,
+  front_image_url: sampleImages.originalFront,
   back_image_url: sampleImages.back,
   variant_name: "Standard",
   design_name: "I Panic at Discos",
@@ -146,6 +159,5 @@ export const sampleUnofficialCopySubmission: SubmissionEmailRow & {
   front_image_url: null,
   back_image_url: null,
   reviewed_at: reviewedAt,
-  submitter_message:
-    "These are often sold as originals, so this is not on you. Your vault pin is unchanged.",
+  submitter_message: UNOFFICIAL_COPY_SUBMITTER_MESSAGE,
 };
