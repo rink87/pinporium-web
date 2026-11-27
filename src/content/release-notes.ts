@@ -61,6 +61,40 @@ export type ReleaseNotesEntry = {
 /** Newest first. */
 export const RELEASE_NOTES: ReleaseNotesEntry[] = [
   {
+    version: "1.0.8",
+    date: "2026-11-27",
+    published: false,
+    headline: "What's new",
+    summary:
+      "Pins that aren’t from the original artist are marked Unofficial copy, so you know what you’re looking at before you trade or buy. Think yours is the real deal? Request a re-review.",
+    highlights: [
+      {
+        title: "Clearer unofficial labels",
+        icon: "shield",
+        body: "Pins that aren’t from the original artist are now marked **Unofficial copy**, so you know what you’re looking at before you trade or buy.",
+      },
+      {
+        title: "Think yours is the real deal?",
+        icon: "scan-search",
+        body: "On a pin marked **Unofficial copy**, tap **I think mine is authentic**, add a quick note, and we’ll take another look.",
+      },
+    ],
+    changelog: [
+      {
+        kind: "improvement",
+        text: "Pins that aren’t from the original artist are marked **Unofficial copy** before you trade or buy.",
+      },
+      {
+        kind: "improvement",
+        text: "**I think mine is authentic** on Unofficial copy pins: add a quick note and we’ll take another look.",
+      },
+      {
+        kind: "fix",
+        text: "**Continue with Google** label contrast in dark mode.",
+      },
+    ],
+  },
+  {
     version: "1.0.7",
     date: "2026-11-05",
     headline: "What's new",
