@@ -66,27 +66,27 @@ export const RELEASE_NOTES: ReleaseNotesEntry[] = [
     published: false,
     headline: "What's new",
     summary:
-      "Clearer Unofficial copy labels so you know what you’re looking at before you trade or buy. About catalog accuracy, not blame.",
+      "Pins that aren’t from the original artist are marked Unofficial copy, so you know what you’re looking at before you trade or buy. Think yours is the real deal? Request a re-review.",
     highlights: [
       {
         title: "Clearer unofficial labels",
         icon: "shield",
-        body: "When a pin is an **Unofficial copy**, we label it clearly so you know what you’re looking at before you trade or buy. Common, calm, and not a reflection on you. We’re focused on **catalog accuracy**, not blame.",
+        body: "Pins that aren’t from the original artist are now marked **Unofficial copy**, so you know what you’re looking at before you trade or buy.",
       },
       {
-        title: "Request a re-review",
+        title: "Think yours is the real deal?",
         icon: "scan-search",
-        body: "If a vault pin is marked **Unofficial copy** and you believe yours is original, tap **I think mine is authentic** to share a short note and **Request re-review**.",
+        body: "On a pin marked **Unofficial copy**, tap **I think mine is authentic**, add a quick note, and we’ll take another look.",
       },
     ],
     changelog: [
       {
         kind: "improvement",
-        text: "Clearer **Unofficial copy** labels so collectors can trust what they’re looking at.",
+        text: "Pins that aren’t from the original artist are marked **Unofficial copy** before you trade or buy.",
       },
       {
         kind: "improvement",
-        text: "**Authenticity re-review** from Vault when you believe a pin marked Unofficial copy is original.",
+        text: "**I think mine is authentic** on Unofficial copy pins: add a quick note and we’ll take another look.",
       },
       {
         kind: "fix",
