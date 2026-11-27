@@ -10,3 +10,7 @@ export const BETA_PLAY_INTERNAL_URL =
 
 /** Alias for marketing / email templates that should use the live Play Store URL. */
 export const GOOGLE_PLAY_STORE_URL = BETA_PLAY_INTERNAL_URL;
+
+/** App Store public listing — open on iPhone */
+export const APP_STORE_URL =
+  "https://apps.apple.com/us/app/pinporium/id6773060260?itscg=30200&itsct=apps_box_badge&mttnsubad=6773060260";

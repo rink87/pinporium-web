@@ -82,7 +82,7 @@ export function emailImageLink({
     </table>`;
 }
 
-/** Official “Get it on Google Play” badge (image) linking to internal testing opt-in. */
+/** Official “Get it on Google Play” badge (hosted HTTPS PNG — never data: or SVG in email). */
 export function emailGooglePlayBadgeButton(
   href: string,
   imageUrl: string,
@@ -93,6 +93,22 @@ export function emailGooglePlayBadgeButton(
     href,
     imageUrl,
     alt: "Get it on Google Play",
+    width,
+    height,
+  });
+}
+
+/** Official “Download on the App Store” badge (hosted HTTPS PNG — never data: or SVG in email). */
+export function emailAppStoreBadgeButton(
+  href: string,
+  imageUrl: string,
+  width: number,
+  height: number,
+) {
+  return emailImageLink({
+    href,
+    imageUrl,
+    alt: "Download on the App Store",
     width,
     height,
   });

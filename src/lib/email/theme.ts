@@ -23,6 +23,8 @@ export const EMAIL_WORDMARK_HEIGHT = 56;
 const WORDMARK_PATH = "/images/logo-wordmark.png";
 const DISCORD_JOIN_BUTTON_PATH = "/images/discord-join-button.png";
 const GOOGLE_PLAY_BADGE_PATH = "/images/get-it-on-google-play.png";
+/** Official black “Download on the App Store” badge PNG (email-safe; do not use SVG or data: URIs). */
+const APP_STORE_BADGE_PATH = "/images/download-on-the-app-store.png";
 
 /** discord-join-button.png intrinsic size (800×272) — display size in email */
 export const EMAIL_DISCORD_BUTTON_WIDTH = 220;
@@ -31,6 +33,10 @@ export const EMAIL_DISCORD_BUTTON_HEIGHT = 75;
 /** Official “Get it on Google Play” badge (478×142 English web PNG) */
 export const EMAIL_GOOGLE_PLAY_BADGE_WIDTH = 200;
 export const EMAIL_GOOGLE_PLAY_BADGE_HEIGHT = 59;
+
+/** Official “Download on the App Store” badge (120×40 PNG) — display size in email */
+export const EMAIL_APP_STORE_BADGE_WIDTH = 120;
+export const EMAIL_APP_STORE_BADGE_HEIGHT = 40;
 
 /**
  * Public HTTPS origin for email images (must be absolute — not a filesystem path).
@@ -58,6 +64,7 @@ export function getEmailAssetUrls(
       options?.wordmarkSrc ?? `${origin}${WORDMARK_PATH}`,
     discordJoinButtonUrl: `${origin}${DISCORD_JOIN_BUTTON_PATH}`,
     googlePlayBadgeUrl: `${origin}${GOOGLE_PLAY_BADGE_PATH}`,
+    appStoreBadgeUrl: `${origin}${APP_STORE_BADGE_PATH}`,
     siteUrl: siteDetails.siteUrl.replace(/\/$/, ""),
   };
 }
