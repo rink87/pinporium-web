@@ -10,7 +10,13 @@ import {
   RELEASE_NOTES,
 } from "./templates/releaseNotes";
 
-type SendResult = { sent: boolean; skipped?: boolean; error?: string; version?: string };
+type SendResult = {
+  sent: boolean;
+  skipped?: boolean;
+  error?: string;
+  version?: string;
+  versions?: string[];
+};
 
 export function buildReleaseNotesEmailHtml(
   version: string,
@@ -41,25 +47,64 @@ export async function sendReleaseNotesEmail({
   to,
   assetsBaseUrl,
   version,
+  versions,
+  subject: subjectOverride,
+  html: htmlOverride,
   recordToBetaApplication = false,
 }: {
   to: string;
   assetsBaseUrl?: string;
+  /** Single release-notes version (builds HTML from content unless html override). */
   version?: string;
+  /** Versions to stamp on beta_applications.release_notes_sent after a successful send. */
+  versions?: string[];
+  subject?: string;
+  html?: string;
   recordToBetaApplication?: boolean;
 }): Promise<SendResult> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM;
 
-  const { entry, subject, html } = version
-    ? buildReleaseNotesEmailHtml(version, { assetsBaseUrl })
-    : buildLatestReleaseNotesEmailHtml({ assetsBaseUrl });
+  const recordVersions: string[] = (
+    versions?.length
+      ? versions
+      : version
+        ? [version]
+        : []
+  )
+    .map(v => v.trim())
+    .filter(Boolean);
+
+  let subject: string;
+  let html: string;
+  let primaryVersion: string | undefined;
+
+  if (htmlOverride && subjectOverride) {
+    subject = subjectOverride;
+    html = htmlOverride;
+    primaryVersion = recordVersions[0];
+  } else {
+    const built = version
+      ? buildReleaseNotesEmailHtml(version, { assetsBaseUrl })
+      : buildLatestReleaseNotesEmailHtml({ assetsBaseUrl });
+    subject = subjectOverride ?? built.subject;
+    html = htmlOverride ?? built.html;
+    primaryVersion = built.entry.version;
+    if (recordVersions.length === 0) {
+      recordVersions.push(built.entry.version);
+    }
+  }
 
   if (!apiKey || !from) {
     console.warn(
       "Release notes email skipped: set RESEND_API_KEY and RESEND_FROM (e.g. Pinporium <beta@pinporium.app>).",
     );
-    return { sent: false, skipped: true, version: entry.version };
+    return {
+      sent: false,
+      skipped: true,
+      version: primaryVersion,
+      versions: recordVersions,
+    };
   }
 
   const resend = new Resend(apiKey);
@@ -74,12 +119,21 @@ export async function sendReleaseNotesEmail({
 
   if (error) {
     console.error("Release notes email failed", error);
-    return { sent: false, error: error.message, version: entry.version };
+    return {
+      sent: false,
+      error: error.message,
+      version: primaryVersion,
+      versions: recordVersions,
+    };
   }
 
-  if (recordToBetaApplication) {
-    await recordBetaReleaseNotesSent(to, entry.version);
+  if (recordToBetaApplication && recordVersions.length > 0) {
+    await recordBetaReleaseNotesSent(to, recordVersions);
   }
 
-  return { sent: true, version: entry.version };
+  return {
+    sent: true,
+    version: primaryVersion,
+    versions: recordVersions,
+  };
 }

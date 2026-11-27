@@ -47,10 +47,20 @@ export async function recordBetaImportSheetRequestSent(email: string): Promise<v
 
 export async function recordBetaReleaseNotesSent(
   email: string,
-  version: string,
+  versionOrVersions: string | string[],
 ): Promise<void> {
   const admin = getSupabaseAdmin();
   if (!admin) {
+    return;
+  }
+
+  const versions = (Array.isArray(versionOrVersions)
+    ? versionOrVersions
+    : [versionOrVersions]
+  )
+    .map(v => v.trim())
+    .filter(Boolean);
+  if (versions.length === 0) {
     return;
   }
 
@@ -64,7 +74,10 @@ export async function recordBetaReleaseNotesSent(
     .maybeSingle();
 
   const current = parseReleaseNotesSent(existing?.release_notes_sent);
-  const next = { ...current, [version]: now };
+  const next = { ...current };
+  for (const version of versions) {
+    next[version] = now;
+  }
 
   const { error } = await admin
     .from("beta_applications")
