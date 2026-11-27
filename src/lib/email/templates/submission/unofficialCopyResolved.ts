@@ -116,7 +116,7 @@ export function unofficialCopyResolvedEmailHtml(args: {
   recipientFirstName?: string;
   assetsBaseUrl?: string;
   wordmarkSrc?: string;
-  /** Signed web form URL. Same admin re-review as the in-app CTA. */
+  /** Signed web form URL. Same catalog authenticity re-review queue as the in-app CTA. */
   authenticityAppealUrl?: string | null;
 }): string {
   const t = transactionalEmailTheme;

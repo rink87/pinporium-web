@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 
 import { siteDetails } from "@/data/siteDetails";
 import {
-  AUTHENTICITY_APPEAL_KIND,
-  authenticityAppealPinReferenceId,
   resolveAuthenticityAppealSecret,
   verifyAuthenticityAppealToken,
 } from "@/lib/authenticityAppealToken";
@@ -14,6 +12,7 @@ import {
   isAllowedProofImageMime,
   normalizeProofImageUrls,
 } from "@/lib/authenticityAppealProof";
+import { mapAuthenticityRereviewRpcError } from "@/lib/authenticityAppealRpcErrors";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { turnstileRequired, verifyTurnstileToken } from "@/lib/turnstile";
 
@@ -126,6 +125,16 @@ export async function POST(request: Request) {
     );
   }
 
+  if (!payload.c) {
+    return NextResponse.json(
+      {
+        error:
+          "This link is missing vault pin details. Use I think mine is authentic in the app instead.",
+      },
+      { status: 400 },
+    );
+  }
+
   for (const file of proofFiles) {
     const mime = (file.type || "application/octet-stream").toLowerCase();
     if (!isAllowedProofImageMime(mime)) {
@@ -166,59 +175,26 @@ export async function POST(request: Request) {
   }
   const proofImageUrls = normalizeProofImageUrls(uploadedUrls);
 
-  let username: string | null = null;
-  try {
-    const { data: profile } = await admin
-      .from("profiles")
-      .select("username")
-      .eq("id", payload.u)
-      .maybeSingle();
-    username = typeof profile?.username === "string" ? profile.username.trim() || null : null;
-  } catch (err) {
-    console.warn("authenticity-appeal profile lookup failed", err);
-  }
-
-  const metadata = {
-    appVersion: "web-appeal",
-    buildNumber: null,
-    platform: "web",
-    osVersion: null,
-    deviceModel: null,
-    route: "/authenticity-appeal",
-    crashRoute: null,
-    errorComponent: null,
-    username,
-    isDemoMode: false,
-    pinReferenceId: authenticityAppealPinReferenceId(payload.v ?? payload.o),
-    variantReferenceId: payload.v ?? payload.o,
-    pinContext: "vault",
-    issueCategory: "authenticity",
-    collectionItemId: payload.c,
-    catalogVariantId: payload.v,
-    designName: payload.d || null,
-    variantName: null,
-    artistName: payload.a || null,
-    thumbnailUrl: null,
-    appealKind: AUTHENTICITY_APPEAL_KIND,
-    appealSource: "email",
-    submissionId: payload.s,
-    originalVariantId: payload.o,
-    ...(proofImageUrls.length > 0 ? { proofImageUrls } : {}),
-  };
-
-  const { data, error } = await admin
-    .from("app_feedback")
-    .insert({
-      user_id: payload.u,
-      feedback_type: "pin_issue",
-      message,
-      metadata,
-    })
-    .select("id")
-    .single();
+  // Creates a catalog_submissions link_verification row (authenticity_rereview).
+  // Legacy app binaries still write app_feedback; this web path goes direct via RPC.
+  const { data: submissionId, error } = await admin.rpc("create_authenticity_rereview_submission", {
+    p_user_id: payload.u,
+    p_collection_item_id: payload.c,
+    p_note: message,
+    p_proof_urls: proofImageUrls,
+  });
 
   if (error) {
-    console.error("authenticity-appeal insert failed", error.message);
+    console.error("authenticity-appeal rpc failed", error.message);
+    const mapped = mapAuthenticityRereviewRpcError(
+      error.message ?? "",
+      siteDetails.supportEmail,
+    );
+    return NextResponse.json({ error: mapped.error }, { status: mapped.status });
+  }
+
+  if (typeof submissionId !== "string" || !submissionId) {
+    console.error("authenticity-appeal rpc returned no submission id", submissionId);
     return NextResponse.json(
       {
         error: `Could not submit your request. Please try again or email ${siteDetails.supportEmail}.`,
@@ -227,5 +203,5 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({ ok: true, id: data.id });
+  return NextResponse.json({ ok: true, submissionId });
 }
