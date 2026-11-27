@@ -2,7 +2,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 
 /** Keep in sync with pinporium-app `supabase/functions/_shared/email/authenticityAppealToken.ts`. */
 
-/** Same `app_feedback.metadata.appealKind` as the in-app re-review sheet. */
+/** Catalog `link_review_kind` / legacy appeal kind for authenticity re-review. */
 export const AUTHENTICITY_APPEAL_KIND = "authenticity_rereview" as const;
 
 export type AuthenticityAppealTokenPayload = {
