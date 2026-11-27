@@ -61,6 +61,40 @@ export type ReleaseNotesEntry = {
 /** Newest first. */
 export const RELEASE_NOTES: ReleaseNotesEntry[] = [
   {
+    version: "1.0.8",
+    date: "2026-11-27",
+    published: false,
+    headline: "What's new",
+    summary:
+      "Clearer Unofficial copy labels so you know what you’re looking at before you trade or buy. About catalog accuracy, not blame.",
+    highlights: [
+      {
+        title: "Clearer unofficial labels",
+        icon: "shield",
+        body: "When a pin is an **Unofficial copy**, we label it clearly so you know what you’re looking at before you trade or buy. Common, calm, and not a reflection on you. We’re focused on **catalog accuracy**, not blame.",
+      },
+      {
+        title: "Request a re-review",
+        icon: "scan-search",
+        body: "If a vault pin is marked **Unofficial copy** and you believe yours is original, tap **I think mine is authentic** to share a short note and **Request re-review**.",
+      },
+    ],
+    changelog: [
+      {
+        kind: "improvement",
+        text: "Clearer **Unofficial copy** labels so collectors can trust what they’re looking at.",
+      },
+      {
+        kind: "improvement",
+        text: "**Authenticity re-review** from Vault when you believe a pin marked Unofficial copy is original.",
+      },
+      {
+        kind: "fix",
+        text: "**Continue with Google** label contrast in dark mode.",
+      },
+    ],
+  },
+  {
     version: "1.0.7",
     date: "2026-11-05",
     headline: "What's new",
