@@ -40,7 +40,10 @@ export function betaEmailKindFromSubject(subject: string | undefined): BetaEmail
   ) {
     return "check_in_active";
   }
-  if (normalized === CHECK_IN_ACTIVE_NO_PINS_SUBJECT) {
+  if (
+    normalized === CHECK_IN_ACTIVE_NO_PINS_SUBJECT ||
+    normalized === "Quick check-in — haven't added a pin yet"
+  ) {
     return "check_in_active";
   }
   if (normalized === WELCOME_IOS_SUBJECT || normalized === WELCOME_ANDROID_SUBJECT) {
